@@ -13,7 +13,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import ToDelete.Client;
+
 import domain.Artist;
 import domain.Artwork;
 import domain.Exhibition;
@@ -34,7 +34,6 @@ public class RunIAServer {
 
     private static final Logger logger = LoggerFactory.getLogger(RunIAServer.class);
     public static void main(String[] args) {
-
 
         // Default port is 4567, hence we're running at http://localhost:4567/<endpoint>
 
@@ -150,7 +149,6 @@ public class RunIAServer {
             });
 
         });
-
         // ARTWORK
         path("/artworks", () -> {
 
@@ -427,10 +425,6 @@ public class RunIAServer {
 
         });
 
-
-
-
-
         // global exception handler
         exception(Exception.class, (e, request, response) -> {
             logger.error("{} : Got an exception for request : {}  ", e.getLocalizedMessage(), request.url());
@@ -438,9 +432,5 @@ public class RunIAServer {
             response.body(new MessageResponse(e).toString());
         });
     }
-
-
-
-
 
 }

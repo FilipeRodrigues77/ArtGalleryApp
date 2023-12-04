@@ -10,14 +10,14 @@ public class Exhibition {
     private LocalDate endDate;
     private String Exdescription;
     private String Exstatus;
-    private String referencePartner;
+    private String idGallery;
 
     public Exhibition() {
 
     }
 
     public Exhibition(int id, String nameExhibition, LocalDate startDate, LocalDate endDate,
-                      String exdescription, String exstatus, String referencePartner) {
+                      String exdescription, String exstatus, String idGallery) {
 
         this.id = id;
         this.nameExhibition = nameExhibition;
@@ -25,7 +25,7 @@ public class Exhibition {
         this.endDate = endDate;
         Exdescription = exdescription;
         Exstatus = exstatus;
-        this.referencePartner = referencePartner;
+        this.idGallery = idGallery;
     }
 
     public int getId() {
@@ -52,8 +52,8 @@ public class Exhibition {
         return Exstatus;
     }
 
-    public String getReferencePartner() {
-        return referencePartner;
+    public String getIdGallery() {
+        return idGallery;
     }
 
     public void setId(int id) {
@@ -80,8 +80,8 @@ public class Exhibition {
         Exstatus = exstatus;
     }
 
-    public void setReferencePartner(String referencePartner) {
-        this.referencePartner = referencePartner;
+    public void setIdGallery(String idGallery) {
+        this.idGallery = idGallery;
     }
 
     @Override
@@ -93,7 +93,7 @@ public class Exhibition {
                 ", endDate=" + endDate +
                 ", Exdescription='" + Exdescription + '\'' +
                 ", Exstatus='" + Exstatus + '\'' +
-                ", referencePartner='" + referencePartner + '\'' +
+                ", referencePartner='" + idGallery + '\'' +
                 '}';
     }
 }

@@ -89,6 +89,6 @@ public class Artist {
                 ", birthdate='" + birthdate + '\'' +
                 ", deathdate='" + deathdate + '\'' +
                 ", slug='" + slug + '\'' +
-                '}'+ "\n\n";
+                '}'+ "\n";
     }
 }

@@ -16,19 +16,21 @@ public class Artwork {
     private String category;
     private String collectingInstitution;
     private String slugReferenceArtist;
-    private String referencePartner;
-    private String referenceArtist;
     private String referenceImage;
     private int idGallery;
+    private int idArtist;
+
+
 
 
     public Artwork() {
 
     }
 
-    public Artwork(int id, double price, String dimensionCm, String dimensionIN, String name, String medium,
-                   String creationDate, String category, String collectingInstitution, String slugReferenceArtist,
-                   String referencePartner, String referenceArtist, String referenceImage, int idGallery) {
+    public Artwork(int id, double price, String dimensionCm, String dimensionIN,
+                   String name, String medium, String creationDate, String category,
+                   String collectingInstitution, String slugReferenceArtist,
+                   String referenceImage, int idGallery, int idArtist) {
 
         this.id = id;
         this.price = price;
@@ -40,10 +42,9 @@ public class Artwork {
         this.category = category;
         this.collectingInstitution = collectingInstitution;
         this.slugReferenceArtist = slugReferenceArtist;
-        this.referencePartner = referencePartner;
-        this.referenceArtist = referenceArtist;
         this.referenceImage = referenceImage;
         this.idGallery = idGallery;
+        this.idArtist = idArtist;
     }
 
     public int getId() {
@@ -86,20 +87,20 @@ public class Artwork {
         return slugReferenceArtist;
     }
 
-    public String getReferencePartner() {
-        return referencePartner;
-    }
-
-    public String getReferenceArtist() {
-        return referenceArtist;
-    }
-
     public String getReferenceImage() {
         return referenceImage;
     }
 
     public int getIdGallery() {
         return idGallery;
+    }
+
+    public int getIdArtist() {
+        return idArtist;
+    }
+
+    public void setIdArtist(int idArtist) {
+        this.idArtist = idArtist;
     }
 
     public void setId(int id) {
@@ -142,14 +143,6 @@ public class Artwork {
         this.slugReferenceArtist = slugReferenceArtist;
     }
 
-    public void setReferencePartner(String referencePartner) {
-        this.referencePartner = referencePartner;
-    }
-
-    public void setReferenceArtist(String referenceArtist) {
-        this.referenceArtist = referenceArtist;
-    }
-
     public void setReferenceImage(String referenceImage) {
         this.referenceImage = referenceImage;
     }
@@ -171,10 +164,9 @@ public class Artwork {
                 ", category='" + category + '\'' +
                 ", collectingInstitution='" + collectingInstitution + '\'' +
                 ", slugReferenceArtist='" + slugReferenceArtist + '\'' +
-                ", referencePartner='" + referencePartner + '\'' +
-                ", referenceArtist='" + referenceArtist + '\'' +
                 ", referenceImage='" + referenceImage + '\'' +
                 ", idGallery='" + idGallery + '\'' +
-                '}';
+                ", idArtist='" + idArtist + '\'' +
+                '}' + "\n";
     }
 }

@@ -7,6 +7,8 @@ import domain.Artwork;
 import domain.Exhibition;
 import domain.Gallery;
 import services.*;
+import util.ArtworkUtils;
+import util.ExhibitionUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -224,9 +226,9 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
                 artwork.setCategory(resultSet.getString("category"));
                 artwork.setCollectingInstitution(resultSet.getString("collectingInstitution"));
                 artwork.setSlugReferenceArtist(resultSet.getString("slugReferenceArtist"));
-                artwork.setReferencePartner(resultSet.getString("referencePartner"));
-                artwork.setReferenceArtist(resultSet.getString("referenceArtist"));
                 artwork.setReferenceImage(resultSet.getString("referenceImage"));
+                artwork.setIdArtist(resultSet.getInt("idArtist"));
+                artwork.setIdGallery(resultSet.getInt("idGallery"));
 
                 // add a single artwork to the list of artworks
                 artworks.add(artwork);
@@ -262,10 +264,10 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
                 artwork.setCategory(resultSet.getString("category"));
                 artwork.setCollectingInstitution(resultSet.getString("collectingInstitution"));
                 artwork.setSlugReferenceArtist(resultSet.getString("slugReferenceArtist"));
-                artwork.setReferencePartner(resultSet.getString("referencePartner"));
-                artwork.setReferenceArtist(resultSet.getString("referenceArtist"));
                 artwork.setReferenceImage(resultSet.getString("referenceImage"));
+                artwork.setIdArtist(resultSet.getInt("idArtist"));
                 artwork.setIdGallery(resultSet.getInt("idGallery"));
+
 
             }
 
@@ -278,38 +280,43 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
 
     @Override
     public Artwork createArtwork(Artwork artwork) throws ServiceException {
-        String commandSql = "INSERT INTO Artwork (nameArtwork, dimensionCm, dimensionIN, mediumArtwork, " +
-                "creationDate, category, collectingInstitution, slugReferenceArtist, referencePartner," +
-                "referenceArtist, referenceImage, idGallery) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String commandSql = "INSERT INTO Artwork (nameArtwork, price, dimensionCm, dimensionIN, mediumArtwork, " +
+                "creationDate, category, collectingInstitution, slugReferenceArtist," +
+                " referenceImage, idArtist, idGallery) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement preparedStatement = conn.prepareStatement(commandSql, Statement.RETURN_GENERATED_KEYS)) {
 
             preparedStatement.setString(1, artwork.getName());
-            preparedStatement.setString(2, artwork.getDimensionCm() );
-            preparedStatement.setString(3, artwork.getDimensionIN());
-            preparedStatement.setString(4, artwork.getMedium());
-            preparedStatement.setString(5, artwork.getCreationDate());
-            preparedStatement.setString(6, artwork.getCategory());
-            preparedStatement.setString(7, artwork.getCollectingInstitution());
-            preparedStatement.setString(8, artwork.getSlugReferenceArtist());
-            preparedStatement.setString(9, artwork.getReferencePartner());
-            preparedStatement.setString(10, artwork.getReferenceArtist());
-            preparedStatement.setString(11, artwork.getReferenceImage());
+            preparedStatement.setDouble(2, artwork.getPrice());
+            preparedStatement.setString(3, artwork.getDimensionCm() );
+            preparedStatement.setString(4, artwork.getDimensionIN());
+            preparedStatement.setString(5, artwork.getMedium());
+            preparedStatement.setString(6, artwork.getCreationDate());
+            preparedStatement.setString(7, artwork.getCategory());
+
+            //-------------------- The following 2 values are set automatically, using the artists id and gallery's id --------------------//
+            // get the collectingInstitute with gallery's id:
+            preparedStatement.setString(8, getGalleryByID(artwork.getIdGallery()).getNameGallery());
+            // get the slugReferenceArtist;
+            String slugReferenceArtist = ArtworkUtils.mergeArtistAndArtwork(getArtistByID(artwork.getIdArtist()).getName(), artwork.getName());
+            preparedStatement.setString(9, slugReferenceArtist);
+            //---------------------------------------------------------------------------------------------------------------------------------
+
+            preparedStatement.setString(10, artwork.getReferenceImage());
+            preparedStatement.setInt(11, artwork.getIdArtist());
             preparedStatement.setInt(12, artwork.getIdGallery());
 
             int affectedRows = preparedStatement.executeUpdate();
-
             // check with teachers for a more suitable solution;
             if (affectedRows > 0) {
                 ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     artwork.setId(generatedKeys.getInt(1));
+
                 }
             }
-
-
-            return artwork;
+            return getArtworkByID(artwork.getId());
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -319,9 +326,8 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
     @Override
     public Artwork updateArtwork(Artwork artwork) throws ServiceException {
         String commandSql = "UPDATE Artwork\n" +
-                "SET nameArtwork = ?, price = ?, dimensionCm = ?, dimensionIN = ?, mediumArtwork = ?, creationDate = ?," +
-                "category = ?, collectingInstitution = ?, slugReferenceArtist = ?, referencePartner = ?, " +
-                "referenceArtist = ?, referenceImage = ?, idGallery = ? " +
+                "SET nameArtwork = ?, price = ?, dimensionCm = ?, dimensionIN = ?, mediumArtwork = ?, creationDate = ?, " +
+                "category = ?, collectingInstitution = ?, slugReferenceArtist = ?, referenceImage = ?, idArtist = ?, idGallery = ? " +
                 "WHERE idArtwork = " + artwork.getId();
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
@@ -334,16 +340,22 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
             preparedStatement.setString(5, artwork.getMedium());
             preparedStatement.setString(6, artwork.getCreationDate());
             preparedStatement.setString(7, artwork.getCategory());
-            preparedStatement.setString(8, artwork.getCollectingInstitution());
-            preparedStatement.setString(9, artwork.getSlugReferenceArtist());
-            preparedStatement.setString(10, artwork.getReferencePartner());
-            preparedStatement.setString(11, artwork.getReferenceArtist());
-            preparedStatement.setString(12, artwork.getReferenceImage());
-            preparedStatement.setInt(13, artwork.getIdGallery());
+
+            //-------------------- The following 2 values are set automatically, using the artists id and gallery's id --------------------//
+            // get the collectingInstitute with gallery's id:
+            preparedStatement.setString(8, getGalleryByID(artwork.getIdGallery()).getNameGallery());
+            // get the slugReferenceArtist;
+            String slugReferenceArtist = ArtworkUtils.mergeArtistAndArtwork(getArtistByID(artwork.getIdArtist()).getName(), artwork.getName());
+            preparedStatement.setString(9, slugReferenceArtist);
+            //---------------------------------------------------------------------------------------------------------------------------------
+
+            preparedStatement.setString(10, artwork.getReferenceImage());
+            preparedStatement.setInt(11, artwork.getIdArtist());
+            preparedStatement.setInt(12, artwork.getIdGallery());
 
             int affectedRows = preparedStatement.executeUpdate();
 
-            return artwork;
+            return getArtworkByID(artwork.getId());
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -374,7 +386,6 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
         }
     }
 
-
     //Gallery methods
     @Override
     public List<Gallery> getAllGalleries() throws ServiceException {
@@ -392,7 +403,6 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
                 gallery.setNameGallery(resultSet.getString("nameGallery"));
                 gallery.setEmail(resultSet.getString("email"));
                 gallery.setRegionName(resultSet.getString("regionName"));
-                gallery.setReferenceShows(resultSet.getString("referenceShows"));
 
                 // add a single gallery to the list of galleries
                 galleries.add(gallery);
@@ -419,7 +429,7 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
                 gallery.setNameGallery(resultSet.getString("nameGallery"));
                 gallery.setEmail(resultSet.getString("email"));
                 gallery.setRegionName(resultSet.getString("regionName"));
-                gallery.setReferenceShows(resultSet.getString("referenceShows"));
+
             }
 
         } catch (SQLException e) {
@@ -430,8 +440,8 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
 
     @Override
     public Gallery createGallery(Gallery gallery) throws ServiceException {
-        String commandSql = "INSERT INTO Gallery (nameGallery, email, regionName, referenceShows) " +
-                "VALUES (?, ?, ?, ?)";
+        String commandSql = "INSERT INTO Gallery (nameGallery, email, regionName) " +
+                "VALUES (?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement preparedStatement = conn.prepareStatement(commandSql, Statement.RETURN_GENERATED_KEYS)) {
@@ -439,7 +449,6 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
             preparedStatement.setString(1, gallery.getNameGallery());
             preparedStatement.setString(2, gallery.getEmail());
             preparedStatement.setString(3, gallery.getRegionName());
-            preparedStatement.setString(4, gallery.getReferenceShows());
 
             int affectedRows = preparedStatement.executeUpdate();
 
@@ -459,7 +468,7 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
 
     @Override
     public Gallery updateGallery(Gallery gallery) throws ServiceException {
-        String commandSql = "UPDATE Gallery SET nameGallery = ?, email = ?, regionName = ?, referenceShows = ? " +
+        String commandSql = "UPDATE Gallery SET nameGallery = ?, email = ?, regionName = ?" +
                 "WHERE idGallery = " + gallery.getId();
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
@@ -468,7 +477,6 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
             preparedStatement.setString(1, gallery.getNameGallery());
             preparedStatement.setString(2, gallery.getEmail());
             preparedStatement.setString(3, gallery.getRegionName());
-            preparedStatement.setString(4, gallery.getReferenceShows());
 
             int affectedRows = preparedStatement.executeUpdate();
 
@@ -521,7 +529,7 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
                 exhibition.setEndDate(resultSet.getDate("endDate").toLocalDate());
                 exhibition.setExdescription(resultSet.getString("Exdescription"));
                 exhibition.setExstatus(resultSet.getString("Exstatus"));
-                exhibition.setReferencePartner(resultSet.getString("referencePartner"));
+                exhibition.setIdGallery(resultSet.getString("idGallery"));
 
                 // add a single exhibition to the list of exhibitions
                 exhibitions.add(exhibition);
@@ -550,7 +558,7 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
                 exhibition.setEndDate(resultSet.getDate("endDate").toLocalDate());
                 exhibition.setExdescription(resultSet.getString("Exdescription"));
                 exhibition.setExstatus(resultSet.getString("Exstatus"));
-                exhibition.setReferencePartner(resultSet.getString("referencePartner"));
+                exhibition.setIdGallery(resultSet.getString("idGallery"));
             }
 
         } catch (SQLException e) {
@@ -561,18 +569,29 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
 
     @Override
     public Exhibition createExhibition(Exhibition exhibition) throws ServiceException {
-        String commandSql = "INSERT INTO Exhibition (nameExhibition, startDate, endDate, Exdescription, Exstatus, referencePartner) " +
+        String commandSql = "INSERT INTO Exhibition (nameExhibition, startDate, endDate, Exdescription, Exstatus, idGallery ) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement preparedStatement = conn.prepareStatement(commandSql, Statement.RETURN_GENERATED_KEYS)) {
 
             preparedStatement.setString(1, exhibition.getNameExhibition());
+            // check if the dates are okay
+            if (ExhibitionUtils.isEndDateBeforeStartDate(exhibition.getStartDate(), exhibition.getEndDate())) {
+                throw new ServiceException("End date must be after start date");
+            }
             preparedStatement.setDate(2, Date.valueOf(exhibition.getStartDate()));
             preparedStatement.setDate(3, Date.valueOf(exhibition.getEndDate()));
             preparedStatement.setString(4, exhibition.getExdescription());
-            preparedStatement.setString(5, exhibition.getExstatus());
-            preparedStatement.setString(6, exhibition.getReferencePartner());
+
+            // If dates are okay, then we need to check if the exhibition is opened or closed according to the endDate
+            if(ExhibitionUtils.isEndDateBeforeToday(exhibition.getEndDate())){
+                preparedStatement.setString(5, "closed");
+            }else{
+                preparedStatement.setString(5, "open");
+            }
+            //---------------------------------------------------------------------------------------------------------
+            preparedStatement.setString(6, exhibition.getIdGallery());
 
             int affectedRows = preparedStatement.executeUpdate();
 
@@ -583,7 +602,7 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
                 }
             }
 
-            return exhibition;
+            return getExhibitionByID(exhibition.getId());
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -593,17 +612,28 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
     @Override
     public Exhibition updateExhibition(Exhibition exhibition) throws ServiceException {
         String commandSql = "UPDATE Exhibition SET nameExhibition = ?, startDate = ?, endDate = ?, Exdescription = ?, " +
-                "Exstatus = ?, referencePartner = ? WHERE idExhibition = " + exhibition.getId();
+                "Exstatus = ?, idGallery = ? WHERE idExhibition = " + exhibition.getId();
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement preparedStatement = conn.prepareStatement(commandSql)) {
 
             preparedStatement.setString(1, exhibition.getNameExhibition());
+
+            // Verify that the dates are correct
+            if (ExhibitionUtils.isEndDateBeforeStartDate(exhibition.getStartDate(), exhibition.getEndDate())) {
+                throw new ServiceException("End date must be after start date");
+            }
             preparedStatement.setDate(2, Date.valueOf(exhibition.getStartDate()));
             preparedStatement.setDate(3, Date.valueOf(exhibition.getEndDate()));
             preparedStatement.setString(4, exhibition.getExdescription());
-            preparedStatement.setString(5, exhibition.getExstatus());
-            preparedStatement.setString(6, exhibition.getReferencePartner());
+
+            // If dates are okay, then we need to check if the exhibition is opened or closed according to the endDate
+            if(ExhibitionUtils.isEndDateBeforeToday(exhibition.getEndDate())){
+                preparedStatement.setString(5, "closed");
+            }else{
+                preparedStatement.setString(5, "open");
+            }
+            preparedStatement.setString(6, exhibition.getIdGallery());
 
             int affectedRows = preparedStatement.executeUpdate();
 
