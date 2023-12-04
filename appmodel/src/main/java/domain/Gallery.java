@@ -63,11 +63,11 @@ public class Gallery {
 
     @Override
     public String toString() {
-        return "Gallery{" +
-                "nameGallery='" + nameGallery + '\'' +
-                ", email='" + email + '\'' +
-                ", regionName='" + regionName + '\'' +
-                ", referenceShows='" + referenceShows + '\'' +
-                '}';
+        return "Gallery{" + "\n" +
+                "  id='"+ id + '\'' + "\n" +
+                ", nameGallery='" + nameGallery + '\'' + "\n" +
+                ", email='" + email + '\'' + "\n" +
+                ", regionName='" + regionName + '\'' + "\n" +
+                '}'+"\n\n";
     }
 }
