@@ -2,14 +2,13 @@ import adapters.LocalDateAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import ToDelete.Client;
+import domain.Artist;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,33 +20,40 @@ public class MainGetAllArtists {
 
         // DESERIALIZATION
         OkHttpClient httpClient = new OkHttpClient();
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
-                .create();
+        Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:4567/clients")
+                .url("http://localhost:4567/artists")
                 .build();
 
         try {
             Response response = httpClient.newCall(getRequest).execute();
-            System.out.println("Response code: " + response.code());
-            System.out.println("Response content type: " + response.header("content-type"));
+            System.out.println("Response code: " + response.code()+"\n");
+            // System.out.println("Response content type: " + response.header("content-type"));
 
             if(response.code() == 200) {
                 // Deserialize a list of clients
-                Type listType = new TypeToken<ArrayList<Client>>(){}.getType();
-                List<Client> all = gson.fromJson(response.body().string(), listType);
-                for (Client client : all) {
-                    System.out.println(client);
+                Type listType = new TypeToken<ArrayList<Artist>>(){}.getType();
+
+                List<Artist> listArtist = null;
+                if (response.body() != null) {
+                    listArtist = gson.fromJson(response.body().string(), listType);
+                }
+                if (listArtist != null) {
+                    for (Artist artist : listArtist) {
+                        System.out.println(artist);
+                    }
                 }
             } else {
-                // Something failed, maybe client does not exist
-                System.out.println(response.body().string());
+                // Something failed, maybe the artist does not exist
+                if (response.body() != null) {
+                    System.out.println(response.body().string());
+                }
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
+            // e.printStackTrace();
         }
     }
 }
