@@ -633,10 +633,10 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
             }else{
                 preparedStatement.setString(5, "open");
             }
+            //--------------------------------------------------------------------------------------------------------
             preparedStatement.setString(6, exhibition.getIdGallery());
 
             int affectedRows = preparedStatement.executeUpdate();
-
             return exhibition;
 
         } catch (SQLException e) {

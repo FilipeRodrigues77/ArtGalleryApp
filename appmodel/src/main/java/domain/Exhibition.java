@@ -86,14 +86,14 @@ public class Exhibition {
 
     @Override
     public String toString() {
-        return "Exhibition{" +
-                "id=" + id +
-                ", nameExhibition='" + nameExhibition + '\'' +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", Exdescription='" + Exdescription + '\'' +
-                ", Exstatus='" + Exstatus + '\'' +
-                ", referencePartner='" + idGallery + '\'' +
-                '}';
+        return "Exhibition{\n" +
+                "  id=" + id + "\n"+
+                ", nameExhibition='" + nameExhibition + '\'' + "\n"+
+                ", startDate='" + startDate + '\'' + "\n"+
+                ", endDate='" + endDate + '\'' + "\n"+
+                ", Exdescription='" + Exdescription + '\'' + "\n"+
+                ", Exstatus='" + Exstatus + '\'' + "\n"+
+                ", referencePartner='" + idGallery + '\'' + "\n"+
+                '}' + "\n\n";
     }
 }

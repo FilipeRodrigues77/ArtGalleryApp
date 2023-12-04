@@ -19,18 +19,16 @@ public class MainGetAllArtworks {
 
         // DESERIALIZATION
         OkHttpClient httpClient = new OkHttpClient();
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
-                .create();
+        Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:4567/artworks")  // Change the endpoint to /artworks
+                .url("http://localhost:4567/artworks")
                 .build();
 
         try {
             Response response = httpClient.newCall(getRequest).execute();
-            System.out.println("Response code: " + response.code());
-            System.out.println("Response content type: " + response.header("content-type"));
+            System.out.println("Response code: " + response.code()+"\n");
+
 
             if (response.code() == 200) {
                 // Deserialize a list of artworks

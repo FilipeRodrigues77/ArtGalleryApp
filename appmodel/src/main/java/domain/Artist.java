@@ -81,14 +81,14 @@ public class Artist {
 
     @Override
     public String toString() {
-        return "Artist{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", nationality='" + nationality + '\'' +
-                ", biography='" + biography + '\'' +
-                ", birthdate='" + birthdate + '\'' +
-                ", deathdate='" + deathdate + '\'' +
-                ", slug='" + slug + '\'' +
-                '}'+ "\n";
+        return "Artist{" + "\n" +
+                "  id='" + id + '\'' + "\n" +
+                ", name='" + name + '\'' + "\n" +
+                ", nationality='" + nationality + '\'' + "\n" +
+                ", biography='" + biography + '\'' + "\n" +
+                ", birthdate='" + birthdate + '\'' + "\n" +
+                ", deathdate='" + deathdate + '\'' + "\n" +
+                ", slug='" + slug + '\'' + "\n" +
+                '}'+ "\n\n";
     }
 }

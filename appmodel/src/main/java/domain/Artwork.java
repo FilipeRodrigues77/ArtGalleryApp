@@ -153,20 +153,20 @@ public class Artwork {
 
     @Override
     public String toString() {
-        return "Artwork{" +
-                "id=" + id +
+        return "Artwork{\n" +
+                "  id=" + id + "\n" +
                 ", price=" + price +
-                ", dimensionCm='" + dimensionCm + '\'' +
-                ", dimensionIN='" + dimensionIN + '\'' +
-                ", name='" + name + '\'' +
-                ", medium='" + medium + '\'' +
-                ", creationDate='" + creationDate + '\'' +
-                ", category='" + category + '\'' +
-                ", collectingInstitution='" + collectingInstitution + '\'' +
-                ", slugReferenceArtist='" + slugReferenceArtist + '\'' +
-                ", referenceImage='" + referenceImage + '\'' +
-                ", idGallery='" + idGallery + '\'' +
-                ", idArtist='" + idArtist + '\'' +
-                '}' + "\n";
+                ", dimensionCm='" + dimensionCm + '\'' +"\n" +
+                ", dimensionIN='" + dimensionIN + '\'' + "\n" +
+                ", name='" + name + '\'' + "\n" +
+                ", medium='" + medium + '\'' + "\n" +
+                ", creationDate='" + creationDate + '\'' + "\n" +
+                ", category='" + category + '\'' + "\n" +
+                ", collectingInstitution='" + collectingInstitution + '\'' + "\n" +
+                ", slugReferenceArtist='" + slugReferenceArtist + '\'' + "\n" +
+                ", referenceImage='" + referenceImage + '\'' + "\n" +
+                ", idGallery='" + idGallery + '\'' + "\n" +
+                ", idArtist='" + idArtist + '\'' + "\n" +
+                '}' + "\n\n";
     }
 }
