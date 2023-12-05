@@ -535,7 +535,205 @@ two keys plus the artwork's id.
 
 ---------------------------------------------------------------------------------------------------------------
 
+# Exhibitions
 
+### Get All Exhibitions
+#### Endpoint: /exhibitions
+- Method: GET
+- Description: Retrieve a list of all exhibitions.
+- Response: JSON array containing exhibition information.
+
+###  Response Sample
+````
+[
+  {
+    "id": 1,
+    "nameExhibition": "Georges de La Tour 1593 - 1652",
+    "startDate": {
+      "day": 23,
+      "month": 2,
+      "year": 2016
+    },
+    "endDate": {
+      "day": 12,
+      "month": 6,
+      "year": 2016
+    },
+    "Exdescription": "Rediscovered during the 20th century, Georges de la Tour is now recognized as a 
+    leading figure in 17th-century French art. He was one of the leading Caravaggesque painters, 
+    a style he may have discovered through the Utrecht school painters, who used the same chiaroscuro effects.",
+    "Exstatus": "closed",
+    "idGallery": "1"
+  },
+  {
+    "id": 2,
+    "nameExhibition": "Bosch. The 5th Centenary Exhibition",
+    "startDate": {
+      "day": 31,
+      "month": 5,
+      "year": 2016
+    },
+    "endDate": {
+      "day": 11,
+      "month": 9,
+      "year": 2016
+    },
+    "Exdescription": "To celebrate the 5th centenary of the death of Hieronymus Bosch, 
+    The Museo del Prado and Fundación BBVA is staging the first monographic exhibition 
+    to be devoted to the artist in Spain, the most complete and the one of the highest 
+    quality organised to date. ",
+    "Exstatus": "closed",
+    "idGallery": "1"
+  }
+  
+]
+````
+
+### Get Exhibition by ID
+#### Endpoint: /exhibitions/:id
+- Method: GET
+- Description: Retrieve details of a specific exhibition by ID.
+- Parameters:
+- id (integer): Exhibition ID
+- Response: JSON object containing exhibition details
+
+###  Response Sample
+````
+{
+    "id": 1,
+    "nameExhibition": "Georges de La Tour 1593 - 1652",
+    "startDate": {
+      "day": 23,
+      "month": 2,
+      "year": 2016
+    },
+    "endDate": {
+      "day": 12,
+      "month": 6,
+      "year": 2016
+    },
+    "Exdescription": "Rediscovered during the 20th century, Georges de la Tour is now recognized as a 
+    leading figure in 17th-century French art. He was one of the leading Caravaggesque painters, 
+    a style he may have discovered through the Utrecht school painters, who used the same chiaroscuro effects.",
+    "Exstatus": "closed",
+    "idGallery": "1"
+}
+````
+
+### Create New Exhibition
+#### Endpoint: /exhibitions
+- Method: POST
+- Description: Create a new exhibition.
+- Request Body: JSON object representing the new exhibition.
+- Response: JSON object containing details of the created exhibition.
+
+
+###  Sample Request body
+** id is auto generated.
+````
+{
+    "nameExhibition": "Creating an exhibition",
+    "startDate": {
+      "day": 23,
+      "month": 11,
+      "year": 2023
+    },
+    "endDate": {
+      "day": 12,
+      "month": 1,
+      "year": 2024
+    },
+    "Exdescription": "Sample on how to create an exhibition",
+    "idGallery": "1"
+}
+````
+
+###  Response Sample
+** The value for exhibition status (Exstatus) is assigned automatically according to the entered dates.
+````
+{
+    "id": 15,
+    "nameExhibition": "Creating an exhibition",
+     "startDate": {
+      "day": 23,
+      "month": 11,
+      "year": 2023
+    },
+    "endDate": {
+      "day": 12,
+      "month": 1,
+      "year": 2024
+    },
+    "Exdescription": "Sample on how to create an exhibition",
+    "Exstatus": "open",
+    "idGallery": "1"
+}
+````
+### Update Exhibition
+#### Endpoint: /exhibitions/:id
+- Method: PUT
+- Description: Update details of a specific exhibition by ID.
+- Parameters: id (integer): Exhibition ID
+- Request Body: JSON object representing the updated exhibition.
+- Response: JSON object containing details of the updated exhibition.
+
+###  Sample Request body
+** id is auto generated.
+````
+{
+    "nameExhibition": "Update an exhibition",
+    "startDate": {
+      "day": 23,
+      "month": 11,
+      "year": 2023
+    },
+    "endDate": {
+      "day": 12,
+      "month": 1,
+      "year": 2023
+    },
+    "Exdescription": "Sample on how to update an exhibition",
+    "idGallery": "1"
+}
+````
+
+###  Response Sample
+** The value for exhibition status (Exstatus) is assigned automatically according to the entered dates.
+````
+{
+    "id": 15,
+     "nameExhibition": "Update an exhibition",
+    "startDate": {
+      "day": 23,
+      "month": 11,
+      "year": 2023
+    },
+    "endDate": {
+      "day": 1,
+      "month": 12,
+      "year": 2023
+    },
+    "Exdescription": "Sample on how to update an exhibition",
+    "Exstatus": "closed",
+    "idGallery": "1"
+}
+````
+
+### Delete Exhibition
+#### Endpoint: /exhibitions/:id
+- Method: DELETE
+- Description: Delete a specific exhibition by ID.
+- Parameters: id (integer): Exhibition ID
+- Response: JSON object containing details of the deleted exhibition or an error message.
+
+###  Response Sample
+````
+{
+  "id": 15
+}
+
+-> The response will be a simple JSON containng only the id for the deleted object.
+````
 
 
 
