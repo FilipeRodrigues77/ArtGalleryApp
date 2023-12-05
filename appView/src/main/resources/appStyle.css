@@ -1,0 +1,29 @@
+.root {
+    -fx-base: white;
+    -fx-background: white;
+}
+
+.button {
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+}
+
+.label {
+    -fx-font-style: italic;
+}
+
+.text-field {
+
+}
+
+.myEqual {
+    -fx-background-color: mediumorchid;
+    -fx-text-fill: white;
+}
+
+/* Estilo para a primeira imagem */
+.image-main-artwork {
+    -fx-background-image: url('F:/Materias Upskill/CalculadoraAvancada_v1/CalculadoraAvancada/src/main/resources/Images/Main/Monalisa.jpeg');
+    -fx-background-size: cover;
+}
+

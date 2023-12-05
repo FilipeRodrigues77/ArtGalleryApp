@@ -321,6 +321,7 @@ the request body has only two keys, for example, the response body will have tho
 ### Response sample 
 
 ```
+{
   "id": 18
   "price": 292872.0,
   "dimensionCm": "\"266.2 × 345.2 cm\"",
@@ -329,6 +330,8 @@ the request body has only two keys, for example, the response body will have tho
   "medium": "Oil on canvas",
   "creationDate": "1814",
   "category": "Painting",
+  "collectingInstitution": "Museo Nacional del Prado, Madrid",
+  "slugReferenceArtist": "francisco-de-goya-the-third-of-may",
   "referenceImage": "https://d32dm0rphc51dk.cloudfront.net/m4X41Fun8gpDjn7Gat9cUg/{image_version}.jpg",
   "idGallery": 1,
   "idArtist": 1
