@@ -331,7 +331,7 @@ the request body has only two keys, for example, the response body will have tho
   "creationDate": "1814",
   "category": "Painting",
   "collectingInstitution": "Museo Nacional del Prado, Madrid",
-  "slugReferenceArtist": "francisco-de-goya-the-third-of-may",
+  "slugReferenceArtist": "francisco-de-goya-creating-an-artwork",
   "referenceImage": "https://d32dm0rphc51dk.cloudfront.net/m4X41Fun8gpDjn7Gat9cUg/{image_version}.jpg",
   "idGallery": 1,
   "idArtist": 1
@@ -385,6 +385,8 @@ two keys plus the artwork's id.
   "medium": "Oil on canvas",
   "creationDate": "1814",
   "category": "Painting",
+  "collectingInstitution": "Museo Nacional del Prado, Madrid",
+  "slugReferenceArtist": "francisco-de-goya-updating-an-artwork",
   "referenceImage": "https://d32dm0rphc51dk.cloudfront.net/m4X41Fun8gpDjn7Gat9cUg/{image_version}.jpg",
   "idGallery": 1,
   "idArtist": 1
