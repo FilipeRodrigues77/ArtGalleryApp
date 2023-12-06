@@ -40,6 +40,24 @@ public interface ArtworkService {
     List<Artwork> getArtworksByMedium(String medium) throws ServiceException;
 
     /**
+     * Retrieves artworks based on the specified category from storage.
+     *
+     * @param category the category to filter artworks
+     * @return List of artworks; an empty list if not found
+     * @throws ServiceException if some exception occurs in the underlying storage
+     */
+    List<Artwork> getArtworksByCategory(String category) throws ServiceException;
+
+    /**
+     * Retrieves artworks based on the specified date from storage.
+     *
+     * @param date the date to filter artworks
+     * @return List of artworks; an empty list if not found
+     * @throws ServiceException if some exception occurs in the underlying storage
+     */
+    List<Artwork> getArtworksByDate(String date) throws ServiceException;
+
+    /**
      * Retrieves artworks based on the specified artist ID from storage.
      *
      * @param artistId the ID of the artist to filter artworks
