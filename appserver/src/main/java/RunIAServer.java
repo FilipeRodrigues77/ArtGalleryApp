@@ -58,6 +58,100 @@ public class RunIAServer {
                 return gson.toJson(artistsList);
             });
 
+            get("/searchName", (request, response) -> {
+                String artistName = request.queryParams("name");
+
+                if (artistName != null && !artistName.isEmpty()) {
+                    response.type("application/json");
+                    List<Artist> matchingArtists = storage.getArtistByName(artistName);
+
+                    if (matchingArtists.isEmpty()) {
+                        response.status(404); // Not Found
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("message", "No matching artists found");
+                        return jsonObject.toString();
+                    } else {
+                        return gson.toJson(matchingArtists);
+                    }
+                } else {
+                    response.status(400); // Bad Request
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("message", "Please provide a valid artist name");
+                    return jsonObject.toString();
+                }
+            });
+
+            get("/searchNationality", (request, response) -> {
+                String nationality = request.queryParams("nationality");
+
+                if (nationality != null && !nationality.isEmpty()) {
+                    response.type("application/json");
+                    List<Artist> matchingArtists = storage.getArtistsByNationality(nationality);
+
+                    if (matchingArtists.isEmpty()) {
+                        response.status(404); // Not Found
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("message", "No matching artists found");
+                        return jsonObject.toString();
+                    } else {
+                        return gson.toJson(matchingArtists);
+                    }
+                } else {
+                    response.status(400); // Bad Request
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("message", "Please provide a valid artist nationality");
+                    return jsonObject.toString();
+                }
+            });
+
+            get("/searchBirthdate", (request, response) -> {
+                String birthdate = request.queryParams("birthdate");
+                boolean isBirthdate = true;
+
+                if (birthdate != null && birthdate.matches("\\d{4}")) {
+                    response.type("application/json");
+                    List<Artist> matchingArtists = storage.getArtistsByDate(birthdate,isBirthdate);
+
+                    if (matchingArtists.isEmpty()) {
+                        response.status(404); // Not Found
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("message", "No matching artists found");
+                        return jsonObject.toString();
+                    } else {
+                        return gson.toJson(matchingArtists);
+                    }
+                } else {
+                    response.status(400); // Bad Request
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("message", "Please provide a valid birthdate (4 digits)");
+                    return jsonObject.toString();
+                }
+            });
+
+            get("/searchDeathdate", (request, response) -> {
+                String deathdate = request.queryParams("deathdate");
+                boolean isBirthdate = false;
+
+                if (deathdate != null && deathdate.matches("\\d{4}")) {
+                    response.type("application/json");
+                    List<Artist> matchingArtists = storage.getArtistsByDate(deathdate, isBirthdate);
+
+                    if (matchingArtists.isEmpty()) {
+                        response.status(404); // Not Found
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("message", "No matching artists found");
+                        return jsonObject.toString();
+                    } else {
+                        return gson.toJson(matchingArtists);
+                    }
+                } else {
+                    response.status(400); // Bad Request
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("message", "Please provide a valid death date (4 digits)");
+                    return jsonObject.toString();
+                }
+            });
+
             get("/:id", (request, response) -> {
                 try {
                     int idArtist = Integer.parseInt(request.params(":id"));
@@ -83,7 +177,6 @@ public class RunIAServer {
 
 
             });
-
 
             post("",(request,response)->{
                 Artist newArtist = gson.fromJson(request.body(),Artist.class);
@@ -157,6 +250,165 @@ public class RunIAServer {
                 List<Artwork> artworksList = storage.getAllArtworks();
                 return gson.toJson(artworksList);
             });
+
+            get("/searchName", (request, response) -> {
+                String artworkName = request.queryParams("name");
+
+                if (artworkName != null && !artworkName.isEmpty()) {
+                    response.type("application/json");
+                    List<Artwork> matchingArtworks = storage.getArtworkByName(artworkName);
+
+                    if (matchingArtworks.isEmpty()) {
+                        response.status(404); // Not Found
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("message", "No matching artworks found");
+                        return jsonObject.toString();
+                    } else {
+                        return gson.toJson(matchingArtworks);
+                    }
+                } else {
+                    response.status(400); // Bad Request
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("message", "Please provide a valid artwork name");
+                    return jsonObject.toString();
+                }
+            });
+
+            get("/searchMedium", (request, response) -> {
+                String artworkMedium = request.queryParams("medium");
+
+                if (artworkMedium != null && !artworkMedium.isEmpty()) {
+                    response.type("application/json");
+                    List<Artwork> matchingArtworks = storage.getArtworksByMedium(artworkMedium);
+
+                    if (matchingArtworks.isEmpty()) {
+                        response.status(404); // Not Found
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("message", "No matching artworks found");
+                        return jsonObject.toString();
+                    } else {
+                        return gson.toJson(matchingArtworks);
+                    }
+                } else {
+                    response.status(400); // Bad Request
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("message", "Please provide a valid artwork medium");
+                    return jsonObject.toString();
+                }
+            });
+
+            get("/searchPriceRange", (request, response) -> {
+                String minPriceParam = request.queryParams("min");
+                String maxPriceParam = request.queryParams("max");
+
+                if (minPriceParam != null && maxPriceParam != null && !minPriceParam.isEmpty() && !maxPriceParam.isEmpty()) {
+                    double minPrice = Double.parseDouble(minPriceParam);
+                    double maxPrice = Double.parseDouble(maxPriceParam);
+
+                    if (maxPrice <= minPrice) {
+                        response.status(400); // Bad Request
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("message", "maxPrice must be greater than minPrice");
+                        return jsonObject.toString();
+                    }
+
+                    response.type("application/json");
+                    List<Artwork> matchingArtworks = storage.getArtworksByPriceRange(minPrice, maxPrice);
+
+                    if (matchingArtworks.isEmpty()) {
+                        response.status(404); // Not Found
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("message", "No matching artworks found");
+                        return jsonObject.toString();
+                    } else {
+                        return gson.toJson(matchingArtworks);
+                    }
+                } else {
+                    response.status(400); // Bad Request
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("message", "Please provide valid minPrice and maxPrice parameters");
+                    return jsonObject.toString();
+                }
+            });
+
+            get("/searchByArtist", (request, response) -> {
+                // CHECK IF THE ARTIST EXISTS
+                try{
+                    int artistID = Integer.parseInt(request.queryParams("idArtist"));
+                    Artist verifyArtist = storage.getArtistByID(artistID);
+                    if (verifyArtist == null) {
+
+                        response.status(404); // Not Found
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("message", "Artist does not exist");
+                        return jsonObject.toString();
+
+                    } else {
+                        response.type("application/json");
+                        List<Artwork> matchingArtworks = storage.getArtworksByArtist(artistID);
+                        return gson.toJson(matchingArtworks);
+                    }
+
+                } catch (NumberFormatException e){
+                    response.status(400); // Bad Request
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("message", "Invalid artist ID format");
+                    return jsonObject.toString();
+                }
+
+            });
+
+            get("/searchByExhibition", (request, response) -> {
+                // CHECK IF THE EXHIBITION EXISTS
+                try {
+                    int exhibitionId = Integer.parseInt(request.queryParams("idExhibition"));
+                    Exhibition verifyExhibition = storage.getExhibitionByID(exhibitionId);
+
+                    if (verifyExhibition == null) {
+                        response.status(404); // Not Found
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("message", "Exhibition does not exist");
+                        return jsonObject.toString();
+                    } else {
+                        response.type("application/json");
+                        List<Artwork> matchingArtworks = storage.getArtworksByExhibition(exhibitionId);
+                        return gson.toJson(matchingArtworks);
+                    }
+
+                } catch (NumberFormatException e) {
+                    response.status(400); // Bad Request
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("message", "Invalid exhibition ID format");
+                    return jsonObject.toString();
+                }
+            });
+
+            get("/searchByGallery", (request, response) -> {
+                // CHECK IF THE GALLERY EXISTS
+                try {
+                    int galleryId = Integer.parseInt(request.queryParams("idGallery"));
+                    Gallery verifyGallery = storage.getGalleryByID(galleryId);
+
+                    if (verifyGallery == null) {
+                        response.status(404); // Not Found
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("message", "Gallery does not exist");
+                        return jsonObject.toString();
+                    } else {
+                        response.type("application/json");
+                        List<Artwork> artistsInGallery = storage.getArtistsByGallery(galleryId);
+                        return gson.toJson(artistsInGallery);
+                    }
+
+                } catch (NumberFormatException e) {
+                    response.status(400); // Bad Request
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("message", "Invalid gallery ID format");
+                    return jsonObject.toString();
+                }
+            });
+
+
 
             get("/:id", (request, response) -> {
                 try {
@@ -250,6 +502,29 @@ public class RunIAServer {
                 return gson.toJson(galleriesList);
             });
 
+            get("/search", (request, response) -> {
+                String galleryName = request.queryParams("name");
+
+                if (galleryName != null && !galleryName.isEmpty()) {
+                    response.type("application/json");
+                    List<Gallery> matchingGalleries = storage.getGalleryByName(galleryName);
+
+                    if (matchingGalleries.isEmpty()) {
+                        response.status(404); // Not Found
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("message", "No matching galleries found");
+                        return jsonObject.toString();
+                    } else {
+                        return gson.toJson(matchingGalleries);
+                    }
+                } else {
+                    response.status(400); // Bad Request
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("message", "Please provide a valid gallery name");
+                    return jsonObject.toString();
+                }
+            });
+
             get("/:id", (request, response) -> {
                 try {
                     int idGallery = Integer.parseInt(request.params(":id"));
@@ -341,6 +616,30 @@ public class RunIAServer {
                 List<Exhibition> exhibitionsList = storage.getAllExhibitions();
                 return gson.toJson(exhibitionsList);
             });
+
+            get("/search", (request, response) -> {
+                String exhibitionName = request.queryParams("name");
+
+                if (exhibitionName != null && !exhibitionName.isEmpty()) {
+                    response.type("application/json");
+                    List<Exhibition> matchingExhibitions = storage.getExhibitionByName(exhibitionName);
+
+                    if (matchingExhibitions.isEmpty()) {
+                        response.status(404); // Not Found
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("message", "No matching exhibitions found");
+                        return jsonObject.toString();
+                    } else {
+                        return gson.toJson(matchingExhibitions);
+                    }
+                } else {
+                    response.status(400); // Bad Request
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("message", "Please provide a valid exhibition name");
+                    return jsonObject.toString();
+                }
+            });
+
 
             get("/:id", (request, response) -> {
                 try {

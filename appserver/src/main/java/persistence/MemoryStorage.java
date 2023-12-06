@@ -30,7 +30,6 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
 
         List<Artist> artists = new ArrayList<>();
         String commandSQL = "SELECT * FROM Artist";
-
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(commandSQL)) {
@@ -114,8 +113,72 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
             }
 
         } catch (SQLException e) {
-            //e.printStackTrace();
             throw new RuntimeException(e);
+        }
+
+        return artists;
+    }
+
+    @Override
+    public List<Artist> getArtistsByNationality(String nationality) throws ServiceException {
+        List<Artist> artists = new ArrayList<>();
+        String commandSql = "SELECT * FROM Artist WHERE nationalityName = ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement preparedStatement = conn.prepareStatement(commandSql)) {
+
+            preparedStatement.setString(1, nationality);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Artist artist = new Artist();
+                    artist.setId(resultSet.getInt("idArtist"));
+                    artist.setName(resultSet.getString("nameArtist"));
+                    artist.setBirthdate(resultSet.getString("birthDate"));
+                    artist.setDeathdate(resultSet.getString("deathDate"));
+                    artist.setBiography(resultSet.getString("biography"));
+                    artist.setNationality(resultSet.getString("nationalityName"));
+                    artist.setSlug(resultSet.getString("slug"));
+
+                    artists.add(artist);
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new ServiceException("Error retrieving artists by nationality", e);
+        }
+
+        return artists;
+    }
+
+    @Override
+    public List<Artist> getArtistsByDate(String date, boolean isBirthdate) throws ServiceException {
+        List<Artist> artists = new ArrayList<>();
+        String columnName = isBirthdate ? "birthDate" : "deathDate";
+        String commandSql = "SELECT * FROM Artist WHERE " + columnName + " = ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement preparedStatement = conn.prepareStatement(commandSql)) {
+
+            preparedStatement.setString(1, date);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Artist artist = new Artist();
+                    artist.setId(resultSet.getInt("idArtist"));
+                    artist.setName(resultSet.getString("nameArtist"));
+                    artist.setBirthdate(resultSet.getString("birthDate"));
+                    artist.setDeathdate(resultSet.getString("deathDate"));
+                    artist.setBiography(resultSet.getString("biography"));
+                    artist.setNationality(resultSet.getString("nationalityName"));
+                    artist.setSlug(resultSet.getString("slug"));
+
+                    artists.add(artist);
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new ServiceException("Error retrieving artists by date", e);
         }
 
         return artists;
@@ -279,6 +342,160 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
     }
 
     @Override
+    public List<Artwork> getArtworkByName(String name) throws ServiceException {
+        List<Artwork> artworks = new ArrayList<>();
+        String commandSql = "SELECT * FROM Artwork WHERE nameArtwork LIKE ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement preparedStatement = conn.prepareStatement(commandSql)) {
+
+            Artwork artwork = null;
+            preparedStatement.setString(1, name + "%");
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    artwork = new Artwork();
+                    artwork.setId(resultSet.getInt("idArtwork"));
+                    artwork.setPrice(resultSet.getDouble("price"));
+                    artwork.setDimensionCm(resultSet.getString("dimensionCm"));
+                    artwork.setDimensionIN(resultSet.getString("dimensionIN"));
+                    artwork.setName(resultSet.getString("nameArtwork"));
+                    artwork.setMedium(resultSet.getString("mediumArtwork"));
+                    artwork.setCreationDate(resultSet.getString("creationDate"));
+                    artwork.setCategory(resultSet.getString("category"));
+                    artwork.setCollectingInstitution(resultSet.getString("collectingInstitution"));
+                    artwork.setSlugReferenceArtist(resultSet.getString("slugReferenceArtist"));
+                    artwork.setReferenceImage(resultSet.getString("referenceImage"));
+                    artwork.setIdArtist(resultSet.getInt("idArtist"));
+                    artwork.setIdGallery(resultSet.getInt("idGallery"));
+
+                    artworks.add(artwork);
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return artworks;
+    }
+
+    @Override
+    public List<Artwork> getArtworksByMedium(String medium) throws ServiceException {
+
+        List<Artwork> artworks = new ArrayList<>();
+        String commandSql = "SELECT * FROM Artwork WHERE mediumArtwork LIKE ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement preparedStatement = conn.prepareStatement(commandSql)) {
+
+            Artwork artwork = null;
+            preparedStatement.setString(1, medium+"%");
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    artwork = new Artwork();
+                    artwork.setId(resultSet.getInt("idArtwork"));
+                    artwork.setPrice(resultSet.getDouble("price"));
+                    artwork.setDimensionCm(resultSet.getString("dimensionCm"));
+                    artwork.setDimensionIN(resultSet.getString("dimensionIN"));
+                    artwork.setName(resultSet.getString("nameArtwork"));
+                    artwork.setMedium(resultSet.getString("mediumArtwork"));
+                    artwork.setCreationDate(resultSet.getString("creationDate"));
+                    artwork.setCategory(resultSet.getString("category"));
+                    artwork.setCollectingInstitution(resultSet.getString("collectingInstitution"));
+                    artwork.setSlugReferenceArtist(resultSet.getString("slugReferenceArtist"));
+                    artwork.setReferenceImage(resultSet.getString("referenceImage"));
+                    artwork.setIdArtist(resultSet.getInt("idArtist"));
+                    artwork.setIdGallery(resultSet.getInt("idGallery"));
+                    artworks.add(artwork);
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return artworks;
+    }
+
+    @Override
+    public List<Artwork> getArtworksByArtist(int artistId) throws ServiceException {
+        List<Artwork> artworks = new ArrayList<>();
+        String commandSql = "SELECT * FROM Artwork WHERE idArtist = ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement preparedStatement = conn.prepareStatement(commandSql)) {
+
+             Artwork artwork = null;
+             preparedStatement.setInt(1, artistId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    artwork = new Artwork();
+                    artwork.setId(resultSet.getInt("idArtwork"));
+                    artwork.setPrice(resultSet.getDouble("price"));
+                    artwork.setDimensionCm(resultSet.getString("dimensionCm"));
+                    artwork.setDimensionIN(resultSet.getString("dimensionIN"));
+                    artwork.setName(resultSet.getString("nameArtwork"));
+                    artwork.setMedium(resultSet.getString("mediumArtwork"));
+                    artwork.setCreationDate(resultSet.getString("creationDate"));
+                    artwork.setCategory(resultSet.getString("category"));
+                    artwork.setCollectingInstitution(resultSet.getString("collectingInstitution"));
+                    artwork.setSlugReferenceArtist(resultSet.getString("slugReferenceArtist"));
+                    artwork.setReferenceImage(resultSet.getString("referenceImage"));
+                    artwork.setIdArtist(resultSet.getInt("idArtist"));
+                    artwork.setIdGallery(resultSet.getInt("idGallery"));
+                    artworks.add(artwork);
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return artworks;
+    }
+
+    @Override
+    public List<Artwork> getArtworksByExhibition(int exhibitionId) throws ServiceException {
+        List<Artwork> artworks = new ArrayList<>();
+        String commandSql = "SELECT * FROM shows WHERE idExhibition = ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement preparedStatement = conn.prepareStatement(commandSql)) {
+             preparedStatement.setInt(1, exhibitionId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    artworks.add(getArtworkByID(resultSet.getInt("idArtwork")));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return artworks;
+    }
+
+    @Override
+    public List<Artwork> getArtistsByGallery(int galleryId) throws ServiceException {
+
+        String commandSql = "SELECT * FROM Artwork WHERE idGallery = ?";
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement preparedStatement = conn.prepareStatement(commandSql)) {
+
+            Artwork artwork = null;
+            preparedStatement.setInt(1, galleryId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                return buildArtwork(resultSet);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Override
     public Artwork createArtwork(Artwork artwork) throws ServiceException {
         String commandSql = "INSERT INTO Artwork (nameArtwork, price, dimensionCm, dimensionIN, mediumArtwork, " +
                 "creationDate, category, collectingInstitution, slugReferenceArtist," +
@@ -386,7 +603,71 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
         }
     }
 
-    //Gallery methods
+    @Override
+    public List<Artwork> getArtworksByPriceRange(double minPrice, double maxPrice) throws ServiceException {
+        List<Artwork> artworks = new ArrayList<>();
+        String commandSql = "SELECT * FROM Artwork WHERE price >= ? AND price <= ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement preparedStatement = conn.prepareStatement(commandSql)) {
+
+            Artwork artwork = null;
+            preparedStatement.setDouble(1, minPrice);
+            preparedStatement.setDouble(2, maxPrice);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    artwork = new Artwork();
+                    artwork.setId(resultSet.getInt("idArtwork"));
+                    artwork.setPrice(resultSet.getDouble("price"));
+                    artwork.setDimensionCm(resultSet.getString("dimensionCm"));
+                    artwork.setDimensionIN(resultSet.getString("dimensionIN"));
+                    artwork.setName(resultSet.getString("nameArtwork"));
+                    artwork.setMedium(resultSet.getString("mediumArtwork"));
+                    artwork.setCreationDate(resultSet.getString("creationDate"));
+                    artwork.setCategory(resultSet.getString("category"));
+                    artwork.setCollectingInstitution(resultSet.getString("collectingInstitution"));
+                    artwork.setSlugReferenceArtist(resultSet.getString("slugReferenceArtist"));
+                    artwork.setReferenceImage(resultSet.getString("referenceImage"));
+                    artwork.setIdArtist(resultSet.getInt("idArtist"));
+                    artwork.setIdGallery(resultSet.getInt("idGallery"));
+                    artworks.add(artwork);
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return artworks;
+    }
+
+    private List<Artwork> buildArtwork (ResultSet resultSet) throws SQLException {
+        List<Artwork> artworks = new ArrayList<>();
+        while (resultSet.next()) {
+            Artwork artwork = new Artwork();
+            artwork.setId(resultSet.getInt("idArtwork"));
+            artwork.setPrice(resultSet.getDouble("price"));
+            artwork.setDimensionCm(resultSet.getString("dimensionCm"));
+            artwork.setDimensionIN(resultSet.getString("dimensionIN"));
+            artwork.setName(resultSet.getString("nameArtwork"));
+            artwork.setMedium(resultSet.getString("mediumArtwork"));
+            artwork.setCreationDate(resultSet.getString("creationDate"));
+            artwork.setCategory(resultSet.getString("category"));
+            artwork.setCollectingInstitution(resultSet.getString("collectingInstitution"));
+            artwork.setSlugReferenceArtist(resultSet.getString("slugReferenceArtist"));
+            artwork.setReferenceImage(resultSet.getString("referenceImage"));
+            artwork.setIdArtist(resultSet.getInt("idArtist"));
+            artwork.setIdGallery(resultSet.getInt("idGallery"));
+            artworks.add(artwork);
+        }
+
+        return artworks;
+    }
+
+
+
+    //Gallery methods ------------------------------------------------------------------------------------------------
     @Override
     public List<Gallery> getAllGalleries() throws ServiceException {
         List<Gallery> galleries = new ArrayList<>();
@@ -398,7 +679,6 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
 
             while (resultSet.next()) {
                 Gallery gallery = new Gallery();
-
                 gallery.setId(resultSet.getInt("idGallery"));
                 gallery.setNameGallery(resultSet.getString("nameGallery"));
                 gallery.setEmail(resultSet.getString("email"));
@@ -436,6 +716,37 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
             throw new RuntimeException(e);
         }
         return gallery;
+    }
+
+    @Override
+    public List<Gallery> getGalleryByName(String name) throws ServiceException {
+        List<Gallery> galleries = new ArrayList<>();
+        String commandSql = "SELECT * FROM Gallery WHERE nameGallery LIKE ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement preparedStatement = conn.prepareStatement(commandSql)) {
+
+            Gallery gallery = null;
+
+            preparedStatement.setString(1, name + "%");
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    gallery = new Gallery();
+                    gallery.setId(resultSet.getInt("idGallery"));
+                    gallery.setNameGallery(resultSet.getString("nameGallery"));
+                    gallery.setEmail(resultSet.getString("email"));
+                    gallery.setRegionName(resultSet.getString("regionName"));
+
+                    galleries.add(gallery);
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return galleries;
     }
 
     @Override
@@ -566,6 +877,41 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
         }
         return exhibition;
     }
+
+    @Override
+    public List<Exhibition> getExhibitionByName(String name) throws ServiceException {
+        List<Exhibition> exhibitions = new ArrayList<>();
+        String commandSql = "SELECT * FROM Exhibition WHERE nameExhibition LIKE ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement preparedStatement = conn.prepareStatement(commandSql)) {
+
+            Exhibition exhibition = null;
+
+            preparedStatement.setString(1, name + "%");
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    exhibition = new Exhibition();
+                    exhibition.setId(resultSet.getInt("idExhibition"));
+                    exhibition.setNameExhibition(resultSet.getString("nameExhibition"));
+                    exhibition.setStartDate(resultSet.getDate("startDate").toLocalDate());
+                    exhibition.setEndDate(resultSet.getDate("endDate").toLocalDate());
+                    exhibition.setExdescription(resultSet.getString("Exdescription"));
+                    exhibition.setExstatus(resultSet.getString("Exstatus"));
+                    exhibition.setIdGallery(resultSet.getString("idGallery"));
+
+                    exhibitions.add(exhibition);
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new ServiceException("Error retrieving exhibitions by name", e);
+        }
+
+        return exhibitions;
+    }
+
 
     @Override
     public Exhibition createExhibition(Exhibition exhibition) throws ServiceException {

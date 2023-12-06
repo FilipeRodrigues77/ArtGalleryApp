@@ -24,6 +24,15 @@ public interface ExhibitionService {
     Exhibition getExhibitionByID(int id) throws ServiceException;
 
     /**
+     * Retrieves exhibitions with the specified name from storage.
+     *
+     * @param name the name of the exhibitions
+     * @return List of exhibitions; an empty list if not found
+     * @throws ServiceException if some exception occurs in the underlying storage
+     */
+    List<Exhibition> getExhibitionByName(String name) throws ServiceException;
+
+    /**
      * Creates an exhibition and persists its information in storage.
      * If Exhibition id attribute is ignored by this method if it is set.
      *
