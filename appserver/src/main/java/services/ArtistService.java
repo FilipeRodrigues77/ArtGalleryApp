@@ -27,6 +27,26 @@ public interface ArtistService {
     List<Artist> getArtistByName(String name) throws ServiceException;
 
     /**
+     * Retrieves artists with the specified nationality from storage.
+     *
+     * @param nationality the nationality of the artists
+     * @return List of artists; an empty list if not found
+     * @throws ServiceException if some exception occurs in the underlying storage
+     */
+    List<Artist> getArtistsByNationality(String nationality) throws ServiceException;
+
+    /**
+     * Retrieves artists based on the specified date (birthdate or deathdate) from storage.
+     *
+     * @param date the date to filter artists
+     * @param isBirthdate true if filtering by birthdate, false if filtering by deathdate
+     * @return List of artists; an empty list if not found
+     * @throws ServiceException if some exception occurs in the underlying storage
+     */
+    List<Artist> getArtistsByDate(String date, boolean isBirthdate) throws ServiceException;
+
+
+    /**
      * Retrieves an artist with the specified id from storage.
      *
      * @param id the artist's id

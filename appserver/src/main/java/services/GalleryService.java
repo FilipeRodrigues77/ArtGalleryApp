@@ -27,6 +27,15 @@ public interface GalleryService {
     Gallery getGalleryByID(int id) throws ServiceException;
 
     /**
+     * Retrieves galleries with the specified name from storage.
+     *
+     * @param name the name of the galleries
+     * @return List of galleries; an empty list if not found
+     * @throws ServiceException if some exception occurs in the underlying storage
+     */
+    List<Gallery> getGalleryByName(String name) throws ServiceException;
+
+    /**
      * Creates a gallery and persists its information in storage.
      * If Gallery id attribute is ignored by this method if it is set.
      *

@@ -117,6 +117,38 @@ The error details are logged, and a meaningful error response is sent.
 }
 
 ````
+
+### Artist Search by Name
+#### Endpoint: /artists/search
+Method: GET
+Description: Retrieve a list of artists matching the provided name.
+Parameters: name (string): The name of the artist to search for.
+Response: JSON array containing artist information.
+
+###  Response Sample
+
+````
+[
+  {
+    "id": 4,
+    "name": "Alexandre Cabanel",
+    "nationality": "French",
+    "birthdate": "1823",
+    "deathdate": "1889",
+    "slug": "alexandre-cabanel"
+  },
+  {
+    "id": 10,
+    "name": "Auguste Rodin",
+    "nationality": "French",
+    "biography": "",
+    "birthdate": "1840",
+    "deathdate": "1917",
+    "slug": "auguste-rodin"
+  }
+]
+````
+
 ### Create New Artist
 #### Endpoint: /artists
 - Method: POST
