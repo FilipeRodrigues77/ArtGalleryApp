@@ -37,6 +37,7 @@ public class RunIAServer {
 
         // Default port is 4567, hence we're running at http://localhost:4567/<endpoint>
 
+        port(8000);
         logger.info("Starting Main server at {}", new Date().toString());
 
         /*  INSTANTIATE STORAGE */
@@ -49,7 +50,8 @@ public class RunIAServer {
                 .create();
 
         /* CONFIGURE END POINTS */
-        // ARTISTS
+
+        // ARTIST
         path("/artists",()->{
 
             get("", (request, response) -> {
@@ -242,6 +244,7 @@ public class RunIAServer {
             });
 
         });
+
         // ARTWORK
         path("/artworks", () -> {
 
@@ -408,7 +411,51 @@ public class RunIAServer {
                 }
             });
 
+            get("/searchByCategory", (request, response) -> {
+                String artworkCategory = request.queryParams("category");
 
+                if (artworkCategory != null && !artworkCategory.isEmpty()) {
+                    response.type("application/json");
+                    List<Artwork> matchingArtworks = storage.getArtworksByCategory(artworkCategory);
+
+                    if (matchingArtworks.isEmpty()) {
+                        response.status(404); // Not Found
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("message", "No matching artworks found");
+                        return jsonObject.toString();
+                    } else {
+                        return gson.toJson(matchingArtworks);
+                    }
+                } else {
+                    response.status(400); // Bad Request
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("message", "Please provide a valid artwork category");
+                    return jsonObject.toString();
+                }
+            });
+
+            get("/searchByDate", (request, response) -> {
+                String creationDate = request.queryParams("date");
+
+                if (creationDate != null && creationDate.matches("\\d{4}")) {
+                    response.type("application/json");
+                    List<Artwork> matchingArtists = storage.getArtworksByDate(creationDate);
+
+                    if (matchingArtists.isEmpty()) {
+                        response.status(404); // Not Found
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("message", "No matching artwork found");
+                        return jsonObject.toString();
+                    } else {
+                        return gson.toJson(matchingArtists);
+                    }
+                } else {
+                    response.status(400); // Bad Request
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("message", "Please provide a valid date (4 digits)");
+                    return jsonObject.toString();
+                }
+            });
 
             get("/:id", (request, response) -> {
                 try {
@@ -494,6 +541,7 @@ public class RunIAServer {
 
         });
 
+        // GALLERY
         path("/galleries", () -> {
 
             get("", (request, response) -> {
@@ -609,6 +657,7 @@ public class RunIAServer {
 
         });
 
+        // EXHIBITION
         path("/exhibitions", () -> {
 
             get("", (request, response) -> {
@@ -640,6 +689,30 @@ public class RunIAServer {
                 }
             });
 
+            get("/searchByGallery", (request, response) -> {
+                // CHECK IF THE GALLERY EXISTS
+                try {
+                    int galleryId = Integer.parseInt(request.queryParams("idGallery"));
+                    Gallery verifyGallery = storage.getGalleryByID(galleryId);
+
+                    if (verifyGallery == null) {
+                        response.status(404); // Not Found
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("message", "Gallery does not exist");
+                        return jsonObject.toString();
+                    } else {
+                        response.type("application/json");
+                        List<Exhibition> exhibitionsInGallery = storage.getExhibitionsByGallery(galleryId);
+                        return gson.toJson(exhibitionsInGallery);
+                    }
+
+                } catch (NumberFormatException e) {
+                    response.status(400); // Bad Request
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("message", "Invalid gallery ID format");
+                    return jsonObject.toString();
+                }
+            });
 
             get("/:id", (request, response) -> {
                 try {
