@@ -13,6 +13,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -79,13 +80,10 @@ public class SceneArtwork extends BorderPane {
 
         // SET THE OPTIONS FOR EACH MENU
         // NOTE: THIS WILL EVENTUALLY BECOME A METHOD
-        ObservableList<String> mediumOptions = FXCollections.observableArrayList(
-                "Option 1",
-                "Option 2",
-                "Option 3",
-                "Option 4"
-        );
 
+        /*
+        Maybe price needs to be a text field where user can input the max value and the min value
+         */
         ObservableList<String> priceOptions = FXCollections.observableArrayList(
                 "Option 1",
                 "Option 2",
@@ -94,31 +92,29 @@ public class SceneArtwork extends BorderPane {
         );
 
         ObservableList<String> dateOptions = FXCollections.observableArrayList(
-                "Option 1",
-                "Option 2",
-                "Option 3",
-                "Option 4"
+                "1400-1599",
+                "1600-1799",
+                "1800-1999",
+                "2000-2023"
         );
 
-        ObservableList<String> categoryOptions = FXCollections.observableArrayList(
-                "Option 1",
-                "Option 2",
-                "Option 3",
-                "Option 4"
-        );
 
         // CREATE A MOMBOX AND ADD THE OBSERVABLELIST TO EACH MENU
-        // List<Artwork> artworkList = MainGetAllArtworks.getAllArtworks();
-        ComboBox<String> mediumMenu = new ComboBox<>(mediumOptions);
+        List<Artwork> artworkList = MainGetAllArtworks.getAllArtworks();
+
+        ComboBox<String> mediumMenu = new ComboBox<>(createOptionsMenu(artworkList,"medium"));
+        mediumMenu.setMaxWidth(100);
         mediumMenu.setValue("Medium");
 
-        ComboBox<String> priceMenu = new ComboBox<>(mediumOptions);
+
+        ComboBox<String> priceMenu = new ComboBox<>(priceOptions);
         priceMenu.setValue("Preço");
 
-        ComboBox<String> dateMenu = new ComboBox<>(mediumOptions);
+        ComboBox<String> dateMenu = new ComboBox<>(dateOptions);
         dateMenu.setValue("Data Criação");
 
-        ComboBox<String>categoryMenu = new ComboBox<>(mediumOptions);
+        ComboBox<String>categoryMenu = new ComboBox<>(createOptionsMenu(artworkList,"category"));
+        categoryMenu.setMaxWidth(120);
         categoryMenu.setValue("Categoria");
 
 
@@ -145,7 +141,7 @@ public class SceneArtwork extends BorderPane {
         grid.setGridLinesVisible(false);
 
         // FILL THE GRIDPANE WITH IMAGES AND LABELS
-        for (int i = 0; i < 84; i++) {
+        for (int i = 0; i < 85; i++) {
             int imageNum = i+1;
 
             Image image = new Image("Images/Artwork/Square/square"+imageNum+".jpg");
@@ -218,36 +214,33 @@ public class SceneArtwork extends BorderPane {
     }
 
 
-    private ObservableList<String> menuOptions(List<Artwork>artworkList, String field){
+    private ObservableList<String> createOptionsMenu (List<Artwork>artworkList, String field){
 
         List<String> testing = new ArrayList<>();
 
         String menuField = field.toLowerCase();
 
         switch (menuField){
-            case "medium": for(Artwork art : artworkList){
-                testing.add(art.getMedium());
+            case "medium", "category": for(Artwork art : artworkList){
+                String option = art.getMedium();
+                if(!testing.contains(option)){
+                    testing.add(option);
+                }
             }
             break;
 
             case "price": for(Artwork art : artworkList){
-                testing.add(String.valueOf(art.getPrice()));
+                String option = String.valueOf(art.getPrice());
+                if(!testing.contains(option)){
+                    testing.add(option);
+                }
             }
             break;
 
-            case "creation date":  for(Artwork art : artworkList){
-                testing.add(art.getCreationDate());
-            }
-            break;
-
-            case "category":  for(Artwork art : artworkList){
-                testing.add(art.getCategory());
-            }
 
         }
 
-        ObservableList<String> options = FXCollections.observableArrayList(testing);
-        return options;
+        return FXCollections.observableArrayList(testing);
     }
     public void defaultSizeIcon (ImageView imageView){
         imageView.setFitHeight(18); // Ajuste a altura conforme necessário
