@@ -1,5 +1,7 @@
 package view;
 
+import domain.Artwork;
+import presenter.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -10,6 +12,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import java.util.ArrayList;
+import java.util.List;
+
+
 
 public class SceneArtwork extends BorderPane {
 
@@ -102,6 +108,7 @@ public class SceneArtwork extends BorderPane {
         );
 
         // CREATE A MOMBOX AND ADD THE OBSERVABLELIST TO EACH MENU
+        // List<Artwork> artworkList = MainGetAllArtworks.getAllArtworks();
         ComboBox<String> mediumMenu = new ComboBox<>(mediumOptions);
         mediumMenu.setValue("Medium");
 
@@ -138,9 +145,10 @@ public class SceneArtwork extends BorderPane {
         grid.setGridLinesVisible(false);
 
         // FILL THE GRIDPANE WITH IMAGES AND LABELS
-        for (int i = 0; i < 85; i++) {
+        for (int i = 0; i < 84; i++) {
             int imageNum = i+1;
-            Image image = new Image("Images/Artwork/Square/square" + imageNum+ ".jpg");
+
+            Image image = new Image("Images/Artwork/Square/square"+imageNum+".jpg");
             ImageView imageViewArtwork = new ImageView(image);
             defaultSizeArtworkImage(imageViewArtwork);
 
@@ -209,6 +217,38 @@ public class SceneArtwork extends BorderPane {
 
     }
 
+
+    private ObservableList<String> menuOptions(List<Artwork>artworkList, String field){
+
+        List<String> testing = new ArrayList<>();
+
+        String menuField = field.toLowerCase();
+
+        switch (menuField){
+            case "medium": for(Artwork art : artworkList){
+                testing.add(art.getMedium());
+            }
+            break;
+
+            case "price": for(Artwork art : artworkList){
+                testing.add(String.valueOf(art.getPrice()));
+            }
+            break;
+
+            case "creation date":  for(Artwork art : artworkList){
+                testing.add(art.getCreationDate());
+            }
+            break;
+
+            case "category":  for(Artwork art : artworkList){
+                testing.add(art.getCategory());
+            }
+
+        }
+
+        ObservableList<String> options = FXCollections.observableArrayList(testing);
+        return options;
+    }
     public void defaultSizeIcon (ImageView imageView){
         imageView.setFitHeight(18); // Ajuste a altura conforme necessário
         imageView.setFitWidth(18);  // Ajuste a largura conforme necessário
