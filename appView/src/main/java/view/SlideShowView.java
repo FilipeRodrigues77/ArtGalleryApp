@@ -18,7 +18,7 @@ import java.util.List;
 
 public class SlideShowView extends BorderPane {
 
-    private static final String FOLDER_PATH = "appView/src/main/resources/Images/Artwork/Square";
+    private static final String FOLDER_PATH = "appView/src/main/resources/Images/Artwork/ArtworkSquare";
     private List<Integer> randomOrder;
     private int currentIndex = 0;
 
