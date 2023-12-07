@@ -1,9 +1,6 @@
 package view;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -99,11 +96,11 @@ public class SceneArtist extends BorderPane {
         grid.setGridLinesVisible(false);
 
         // FILL THE GRIDPANE WITH IMAGES AND LABELS
-        for (int i = 0; i < 85; i++) {
+        for (int i = 0; i < 41; i++) {
             int imageNum = i+1;
-            Image image = new Image("Images/Artwork/Square/square" + imageNum+ ".jpg");
-            ImageView imageViewArtwork = new ImageView(image);
-            defaultSizeArtworkImage(imageViewArtwork);
+            Image image = new Image("Images/Artist/ArtistSquare/square" + imageNum+ ".jpg");
+            ImageView imageViewArtist = new ImageView(image);
+            defaultSizeArtistImage(imageViewArtist);
 
 
             // Create a new VBox for each iteration
@@ -112,16 +109,17 @@ public class SceneArtist extends BorderPane {
             Label labelBirthday = new Label("Ano nasc " + i);
             Label labelDeathday = new Label("Ano morte " + i);
 
-            HBox hBoxArtistDetails = new HBox(labelNationality, labelBirthday, labelDeathday);
-            VBox vBoxLabelArtwork = new VBox(labelArtistName, hBoxArtistDetails);
+            HBox hBoxArtistNation = new HBox(labelNationality);
+            HBox hBoxArtistDetails = new HBox(labelBirthday, labelDeathday);
+            VBox vBoxLabelArtist = new VBox(labelArtistName, hBoxArtistNation, hBoxArtistDetails);
 
             // CALCULATE THE COORDINATE FOR EACH CELL (4 COLUMNS)
             int col = i % 4;
             int row = i / 4 * 2; // MULTIPLY BY TWO TO JUMP LINE ON EACH ITTERATION
 
             // ADD IMAGES AND LABELS TO EACH CALCULATED SPOT
-            grid.add(imageViewArtwork, col * 2, row);
-            grid.add(vBoxLabelArtwork, col * 2, row + 1);
+            grid.add(imageViewArtist, col * 2, row);
+            grid.add(vBoxLabelArtist, col * 2, row + 1);
         }
 
         // ---------------------------------------------- BOTTOM LAYOUT ----------------------------------------------
@@ -164,7 +162,7 @@ public class SceneArtist extends BorderPane {
         this.setCenter(scrollPane);
 
         // CONFIGURE ACTION TO CHANGE SCENARIO
-        hyperlinkArtist.setOnAction(e -> getScene().setRoot(new SceneArtist()));
+        hyperLinkArtwork.setOnAction(e -> getScene().setRoot(new SceneArtwork()));
         hyperlinkMain.setOnAction(e -> getScene().setRoot(new MainView()));
         hyperlinkGallery.setOnAction(e -> getScene().setRoot(new SceneGallery()));
         hyperlinkExhibition.setOnAction(e -> getScene().setRoot(new SceneExhibition()));
@@ -177,7 +175,7 @@ public class SceneArtist extends BorderPane {
         // imageView.setPreserveRatio(true);
     }
 
-    public void defaultSizeArtworkImage(ImageView imageView){
+    public void defaultSizeArtistImage(ImageView imageView){
         imageView.setFitHeight(160); // Ajuste a altura conforme necessário
         imageView.setFitWidth(160);  // Ajuste a largura conforme necessário
         imageView.setPreserveRatio(true);
