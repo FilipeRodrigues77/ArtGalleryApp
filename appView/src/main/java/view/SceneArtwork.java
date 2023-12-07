@@ -140,7 +140,7 @@ public class SceneArtwork extends BorderPane {
         // FILL THE GRIDPANE WITH IMAGES AND LABELS
         for (int i = 0; i < 85; i++) {
             int imageNum = i+1;
-            Image image = new Image("Images/Artwork/ArtworkSquare/square" + imageNum+ ".jpg");
+            Image image = new Image("Images/Artwork/Square/square" + imageNum+ ".jpg");
             ImageView imageViewArtwork = new ImageView(image);
             defaultSizeArtworkImage(imageViewArtwork);
 
