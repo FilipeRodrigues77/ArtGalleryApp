@@ -22,7 +22,7 @@ public class MainView extends BorderPane {
 
     private void doLayout() {
         // Vamos criar aqui o layout deste painel
-        setPadding(new Insets(30));
+        setPadding(new Insets(20));
 
         // Controls
 
@@ -54,14 +54,25 @@ public class MainView extends BorderPane {
         Button buttonExhibition = new Button("EXPOSIÇÕES");
 
         // Imagens
-        // Caminho para o arquivo de imagem
+        // I~A LOGO
+        Image logo = new Image("Images/logo/logoIA-02.png");
+        ImageView logoView = new ImageView(logo);
+        logoView.preserveRatioProperty();
+        logoView.setFitWidth(27);
+        logoView.setFitHeight(27);
+        logoView.setSmooth(true);
+
+        // SEARCH ICON
+        Image searchIcon = new Image("Icons/searchIcon-03.png");
+        ImageView searchIconView = new ImageView(searchIcon);
+        searchIconView.preserveRatioProperty();
+        searchIconView.setFitWidth(20);
+        searchIconView.setFitHeight(20);
+        searchIconView.setSmooth(true);
+
         String imageGitHubPath = "Icons/Github.png";
         ImageView imageViewGitHub = new ImageView(new Image(imageGitHubPath));
         defaultSizeIcon(imageViewGitHub);
-
-        String imageMagnifier  = "Icons/IconeLupa.jpg";
-        ImageView imageViewMagnifier = new ImageView(new Image(imageMagnifier));
-        defaultSizeIcon(imageViewMagnifier);
 
         String imageLinkedin = "Icons/Linkedin.png";
         ImageView imageViewLinkedin = new ImageView(new Image(imageLinkedin));
@@ -84,7 +95,8 @@ public class MainView extends BorderPane {
         defaultSizeMainImage(imageViewMainExhibition);
 
         // Layout Top
-        HBox hBoxSearch = new HBox(textFieldSearch, imageViewMainExhibition);
+        HBox hBoxSearch = new HBox(logoView, textFieldSearch, searchIconView);
+        hBoxSearch.setSpacing(20);
         HBox hBoxHyperlink = new HBox(hyperlinkArtwork,hyperlinkArtist,hyperlinkGallery, hyperlinkExhibition, hyperlinkSlideShow);
         hBoxHyperlink.setPrefHeight(50);
         hBoxHyperlink.setSpacing(10);
@@ -93,13 +105,17 @@ public class MainView extends BorderPane {
         setTop(vBoxTop);
 
         // Layout Bottom
-        setBottom(labelBottonStatus);
+        HBox bottomImages = new HBox(imageViewLinkedin,imageViewGitHub);
+        bottomImages.setSpacing(10);
+        HBox bottomLayout = new HBox(labelBottonStatus,bottomImages);
+        bottomLayout.setSpacing(500);
+        setBottom(bottomLayout);
 
         // Layout Center
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
-        grid.setGridLinesVisible(true);
+        grid.setGridLinesVisible(false);
         grid.setPadding(new Insets(0,0,10,0));
 
         // Configuração de columnSpan e rowSpan para cobrir a célula (0,0)
@@ -164,8 +180,8 @@ public class MainView extends BorderPane {
     }
 
     public void defaultSizeIcon (ImageView imageView){
-        imageView.setFitHeight(30); // Ajuste a altura conforme necessário
-        imageView.setFitWidth(30);  // Ajuste a largura conforme necessário
+        imageView.setFitHeight(18); // Ajuste a altura conforme necessário
+        imageView.setFitWidth(18);  // Ajuste a largura conforme necessário
         // imageView.setPreserveRatio(true);
     }
 
