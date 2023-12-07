@@ -3,7 +3,6 @@ package view;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -141,7 +140,7 @@ public class SceneArtwork extends BorderPane {
         // FILL THE GRIDPANE WITH IMAGES AND LABELS
         for (int i = 0; i < 85; i++) {
             int imageNum = i+1;
-            Image image = new Image("Images/Square/square" + imageNum+ ".jpg");
+            Image image = new Image("Images/Artwork/Square/square" + imageNum+ ".jpg");
             ImageView imageViewArtwork = new ImageView(image);
             defaultSizeArtworkImage(imageViewArtwork);
 

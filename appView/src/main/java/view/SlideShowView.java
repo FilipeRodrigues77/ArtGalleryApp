@@ -18,13 +18,13 @@ import java.util.List;
 
 public class SlideShowView extends BorderPane {
 
-    private static final String FOLDER_PATH = "src/main/resources/Images/Artwork/Square";
+    private static final String FOLDER_PATH = "appView/src/main/resources/Images/Artwork/Square";
     private List<Integer> randomOrder;
     private int currentIndex = 0;
 
     public SlideShowView() {
         // Configuração do layout
-        getStylesheets().add("appStyleLight.css");
+        getStylesheets().add("appStyle.css");
         getStyleClass().add("SlideShowView");
         StackPane centerPane = new StackPane();
         centerPane.setAlignment(Pos.CENTER);
