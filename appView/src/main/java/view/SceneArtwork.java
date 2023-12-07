@@ -13,7 +13,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -105,6 +104,15 @@ public class SceneArtwork extends BorderPane {
         ComboBox<String> mediumMenu = new ComboBox<>(createOptionsMenu(artworkList,"medium"));
         mediumMenu.setMaxWidth(100);
         mediumMenu.setValue("Medium");
+
+        mediumMenu.setOnAction(e->{
+            // get the selected item*
+            String selected = mediumMenu.getSelectionModel().getSelectedItem();
+            if(selected != null){
+               List<Artwork> artworks = MainGetArtworkByMedium.getArtworks(selected);
+                System.out.println(artworks);
+            }
+        });
 
 
         ComboBox<String> priceMenu = new ComboBox<>(priceOptions);
