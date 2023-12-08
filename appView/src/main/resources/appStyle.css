@@ -78,9 +78,14 @@
 .my-center-label-5 {
     -fx-text-fill: white;
     -fx-font-size: 16;
-    -fx-background-color: gray;
+}
+
+.my-center-label-6 {
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-font-size: 16;
 }
 
 .cell-gray-background {
-    -fx-background-color: gray;
+    -fx-background-color: rgba(169, 169, 169, 0.8);
 }

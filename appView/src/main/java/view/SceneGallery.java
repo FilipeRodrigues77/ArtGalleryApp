@@ -104,10 +104,10 @@ public class SceneGallery extends BorderPane {
 
             VBox vBoxGalleryDetails = new VBox(labelGalleryName,labelGalleryRegion,hyperlinkContactGallery);
             vBoxGalleryDetails.setAlignment(Pos.CENTER);
+            vBoxGalleryDetails.setPrefWidth(355);
             HBox hBoxCenter = new HBox(imageViewGallery, vBoxGalleryDetails);
-            hBoxCenter.setSpacing(50);
 
-            labelGalleryName.getStyleClass().add("my-center-label-5");
+            labelGalleryName.getStyleClass().add("my-center-label-6");
             labelGalleryRegion.getStyleClass().add("my-center-label-5");
             hyperlinkContactGallery.getStyleClass().add("my-center-label-5");
             vBoxGalleryDetails.getStyleClass().add("cell-gray-background");
@@ -174,7 +174,7 @@ public class SceneGallery extends BorderPane {
 
     public void defaultSizeGalleryImage(ImageView imageView){
         imageView.setFitHeight(250); // Ajuste a altura conforme necessário
-        imageView.setFitWidth(400);  // Ajuste a largura conforme necessário
+        imageView.setFitWidth(380);  // Ajuste a largura conforme necessário
         imageView.setPreserveRatio(true);
     }
 
