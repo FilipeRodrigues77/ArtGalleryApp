@@ -53,3 +53,24 @@
     -fx-background-position: center;
 }
 
+.my-center-label-1 {
+    -fx-font-weight: bold;
+    -fx-font-size: 24;
+}
+
+.my-center-label-2 {
+    -fx-text-fill: gray;
+    -fx-font-weight: bold;
+    -fx-font-size: 18;
+}
+
+.my-center-label-3 {
+    -fx-text-fill: gray;
+    -fx-font-size: 16;
+}
+
+.my-center-label-4 {
+    -fx-font-weight: bold;
+    -fx-font-size: 24;
+    -fx-background-color: #f4f4f4; /* Cor de fundo */
+}
