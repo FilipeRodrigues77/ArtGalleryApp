@@ -229,8 +229,15 @@ public class SceneArtwork extends BorderPane {
         String menuField = field.toLowerCase();
 
         switch (menuField){
-            case "medium", "category": for(Artwork art : artworkList){
+            case "medium": for(Artwork art : artworkList){
                 String option = art.getMedium();
+                if(!testing.contains(option)){
+                    testing.add(option);
+                }
+            }
+            break;
+            case "category": for(Artwork art : artworkList){
+                String option = art.getCategory();
                 if(!testing.contains(option)){
                     testing.add(option);
                 }
@@ -243,8 +250,6 @@ public class SceneArtwork extends BorderPane {
                     testing.add(option);
                 }
             }
-            break;
-
 
         }
 
