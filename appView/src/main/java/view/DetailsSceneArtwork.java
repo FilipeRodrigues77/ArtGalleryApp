@@ -152,7 +152,7 @@ public class DetailsSceneArtwork extends BorderPane {
     public void defaultSizeArtworkImage(ImageView imageView){
         imageView.setFitHeight(300); // Ajuste a altura conforme necessário
         imageView.setFitWidth(360);  // Ajuste a largura conforme necessário
-        // imageView.setPreserveRatio(true);
+        //imageView.setPreserveRatio(true);
     }
 
 }
