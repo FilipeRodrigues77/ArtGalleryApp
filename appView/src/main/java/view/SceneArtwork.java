@@ -402,6 +402,10 @@ public class SceneArtwork extends BorderPane {
         Label labelArtworkSizeIN = new Label(sizeIN.substring(1,sizeIN.length()-1));
         Label labelPrice = new Label(price);
 
+
+        // See artist button
+        Button artistDetailsButton = new Button("Ver artista");
+
         // This should be a button that links to the artists details page:
         // Label labelBiography = new Label("Aqui está a biografia do artista");
 
@@ -414,7 +418,9 @@ public class SceneArtwork extends BorderPane {
         labelArtworkSizeIN.getStyleClass().add("my-center-label-3");
         labelPrice.getStyleClass().add("my-center-label-4");
 
-        VBox vBoxArtworkImage = new VBox(imageViewArtwork);
+        VBox vBoxArtworkImage = new VBox(imageViewArtwork, artistDetailsButton);
+        vBoxArtworkImage.setSpacing(40);
+
         VBox vBoxLabel = new VBox(labelArtworkName, labelArtistName, labelGalleryName, labelArtworkMedium,
                 labelArtworkCategory, labelArtworkSizeCM,labelArtworkSizeIN, labelPrice);
 
