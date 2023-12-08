@@ -149,21 +149,52 @@ public class SceneArtwork extends BorderPane {
         grid.setGridLinesVisible(false);
 
         // FILL THE GRIDPANE WITH IMAGES AND LABELS
-        for (int i = 0; i < 85; i++) {
-            int imageNum = i+1;
+        for (int i = 0; i < 8; i++) {
+             int imageNum = i+1;
 
-            Image image = new Image("Images/Artwork/Square/square"+imageNum+".jpg");
+             int maxTextLength = 23;
+            Artwork artwork = artworkList.get(i);
+            Image image = new Image(artwork.getReferenceImage());
             ImageView imageViewArtwork = new ImageView(image);
             defaultSizeArtworkImage(imageViewArtwork);
 
+            imageViewArtwork.setOnMouseClicked(e->setArtworkLabelsOnAction());
+
 
             // Create a new VBox for each iteration
-            Label labelArtworkName = new Label("Artwork " + i);
-            Label labelArtistName = new Label("Artist " + i);
-            Label labelGalleryName = new Label("Gallery " + i);
-            Label labelPrice = new Label("Price " + i);
 
-            VBox vBoxLabelArtwork = new VBox(labelArtworkName, labelArtistName, labelGalleryName, labelPrice);
+            String artworkName = artwork.getName();
+            Hyperlink hyperArtworkName = null;
+
+            if (artworkName.length() < maxTextLength){
+                 hyperArtworkName = new Hyperlink(artworkName);
+            } else{
+                 hyperArtworkName = new Hyperlink(artworkName.substring(0,maxTextLength)+"...");
+            }
+            hyperArtworkName.setOnAction(e-> setArtworkLabelsOnAction());
+
+            String artistName = MainGetArtistById.getArtistById(artwork.getIdArtist()).getName();
+            Hyperlink hyperArtistName = null;
+            if (artistName.length() < maxTextLength){
+                 hyperArtistName = new Hyperlink(artistName);
+            } else{
+                 hyperArtistName = new Hyperlink(artistName.substring(0,maxTextLength)+"...");
+            }
+            hyperArtistName.setOnAction(e-> setArtworkLabelsOnAction());
+
+
+            String galleryName = MainGetGalleryById.getGalleryById(artwork.getIdGallery()).getNameGallery();
+            Hyperlink hyperGalleryName = null;
+            if (galleryName.length() < maxTextLength){
+                hyperGalleryName = new Hyperlink(galleryName);
+            } else{
+                hyperGalleryName = new Hyperlink(galleryName.substring(0,maxTextLength)+"...");
+            }
+            hyperGalleryName.setOnAction(e-> setArtworkLabelsOnAction());
+
+
+            Hyperlink labelPrice = new Hyperlink(String.valueOf(artwork.getPrice()));
+            VBox vBoxLabelArtwork = new VBox(hyperArtworkName, hyperArtistName, hyperGalleryName, labelPrice);
 
             // CALCULATE THE COORDINATE FOR EACH CELL (4 COLUMNS)
             int col = i % 4;
@@ -222,6 +253,9 @@ public class SceneArtwork extends BorderPane {
     }
 
 
+    private void setArtworkLabelsOnAction(){
+        getScene().setRoot(new DetailsSceneArtwork());
+    }
     private ObservableList<String> createOptionsMenu (List<Artwork>artworkList, String field){
 
         List<String> testing = new ArrayList<>();
