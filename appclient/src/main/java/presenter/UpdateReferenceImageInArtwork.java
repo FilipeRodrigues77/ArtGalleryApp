@@ -19,7 +19,7 @@ public class UpdateReferenceImageInArtwork {
 
         for (int i = 0; i < 85; i++) {
             int imageNum = i + 1;
-            String path = "Images/Artwork/Square/square" + imageNum + ".jpg";
+            String path = "Images/Artwork/Square/{imageVersion}" + imageNum + ".jpg";
 
             // Sample data for the update
             Artwork updatedArtwork = listArtwork.get(i);
