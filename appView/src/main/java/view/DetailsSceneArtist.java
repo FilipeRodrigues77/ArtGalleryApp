@@ -1,10 +1,11 @@
 package view;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -12,9 +13,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class DetailsSceneArtwork extends BorderPane {
+public class DetailsSceneArtist extends BorderPane {
 
-    public DetailsSceneArtwork() {
+    public DetailsSceneArtist() {
         doLayout();
         getStylesheets().add("appStyle.css");
         //getStylesheets().add("appStyleDark.css");
@@ -66,9 +67,9 @@ public class DetailsSceneArtwork extends BorderPane {
         defaultSizeIcon(imageViewLinkedin);
 
         // LINKEDIN IMAGE
-        String imageArtwork = "Images/Artwork/AllArtworks/square1.jpg";
-        ImageView imageViewArtwork = new ImageView(new Image(imageArtwork));
-        defaultSizeArtworkImage(imageViewArtwork);
+        String imageArtwork = "Images/Artist/ArtistSquare/square2.jpg";
+        ImageView imageViewArtist = new ImageView(new Image(imageArtwork));
+        defaultSizeArtistImage(imageViewArtist);
 
         // ---------------------------------------------- TOP LAYOUT ----------------------------------------------
 
@@ -90,32 +91,60 @@ public class DetailsSceneArtwork extends BorderPane {
         // ---------------------------------------------- CENTER LAYOUT ----------------------------------------------
 
         // LABELS
-        Label labelArtworkName = new Label("Nome da Obra de Arte");
         Label labelArtistName = new Label("Artista Relacionado");
-        Label labelGalleryName = new Label("Galeria");
-        Label labelArtworkMedium = new Label("Método");
-        Label labelArtworkCategory = new Label("Categoria");
-        Label labelArtworkSize = new Label("Tamanho");
-        Label labelPrice = new Label("Preço");
+        Label labelNationality = new Label("Nacionalidade ");
+        Label labelBirthday = new Label("Ano nasc ");
+        Label labelDeathday = new Label("Ano morte ");
+        Label labelHeaderAboutArtist = new Label("Sobre o Artista");
         Label labelBiography = new Label("Aqui está a biografia do artista");
 
-        labelArtworkName.getStyleClass().add("my-center-label-1");
-        labelArtistName.getStyleClass().add("my-center-label-2");
-        labelGalleryName.getStyleClass().add("my-center-label-2");
-        labelArtworkMedium.getStyleClass().add("my-center-label-3");
-        labelArtworkCategory.getStyleClass().add("my-center-label-3");
-        labelArtworkSize.getStyleClass().add("my-center-label-3");
-        labelPrice.getStyleClass().add("my-center-label-4");
+        labelArtistName.getStyleClass().add("my-center-label-1");
 
-        VBox vBoxArtworkImage = new VBox(imageViewArtwork);
-        VBox vBoxLabel = new VBox(labelArtworkName, labelArtistName, labelGalleryName, labelArtworkMedium, labelArtworkSize,labelArtworkCategory, labelPrice);
-        vBoxLabel.setAlignment(Pos.TOP_LEFT);
-        vBoxLabel.setSpacing(10);
-        HBox hBoxCenterLayout = new HBox(vBoxArtworkImage, vBoxLabel);
+        VBox vBoxArtistInfo = new VBox(labelArtistName, labelNationality, labelBirthday, labelDeathday);
+        VBox vBoxArtistBiography = new VBox(labelHeaderAboutArtist, labelBiography);
+
+        VBox vBoxArtistImage = new VBox(imageViewArtist);
+        HBox hBoxCenterLayout = new HBox(vBoxArtistImage, vBoxArtistInfo, vBoxArtistBiography);
         hBoxCenterLayout.setSpacing(50);
-        HBox hBoxBiography = new HBox(labelBiography);
-        hBoxBiography.setPadding(new Insets(15,0,0,0));
-        VBox vBoxCenterLayout = new VBox(hBoxCenterLayout, hBoxBiography);
+
+        // CREATE A GRIDPANE
+        GridPane grid = new GridPane();
+        grid.setHgap(15.4);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(0, 10, 0, 0));
+        grid.setGridLinesVisible(false);
+
+        // FILL THE GRIDPANE WITH IMAGES AND LABELS
+        for (int i = 0; i < 7; i++) {
+            int imageNum = i+1;
+            Image image = new Image("Images/Artwork/AllArtworks/square" + imageNum+ ".jpg");
+            ImageView imageViewArtwork = new ImageView(image);
+            defaultSizeArtworkImage(imageViewArtwork);
+
+            // Create a new VBox for each iteration
+            Label labelArtworkName = new Label("Artwork " + i);
+            Label labelGalleryName = new Label("Gallery " + i);
+            Label labelPrice = new Label("Price " + i);
+
+            VBox vBoxLabelArtwork = new VBox(labelArtworkName, labelGalleryName, labelPrice);
+
+            // CALCULATE THE COORDINATE FOR EACH CELL (4 COLUMNS)
+            int col = i % 4;
+            int row = i / 4 * 2; // MULTIPLY BY TWO TO JUMP LINE ON EACH ITTERATION
+
+            // ADD IMAGES AND LABELS TO EACH CALCULATED SPOT
+            grid.add(imageViewArtwork, col * 2, row);
+            grid.add(vBoxLabelArtwork, col * 2, row + 1);
+        }
+
+        // CREATE SCROLL_PANE TO ALLOW US TO SCROLL THROUGH THE GRID_PANE
+        ScrollPane scrollPane = new ScrollPane();
+        // ADD GRID_PANE INSIDE THE SCROLL_PANE OBJ
+        scrollPane.setContent(grid);
+
+        VBox vBoxCenterLayout = new VBox(hBoxCenterLayout, scrollPane);
+        vBoxCenterLayout.setSpacing(20);
+
         setCenter(vBoxCenterLayout);
 
         // ---------------------------------------------- BOTTOM LAYOUT ----------------------------------------------
@@ -150,8 +179,14 @@ public class DetailsSceneArtwork extends BorderPane {
     }
 
     public void defaultSizeArtworkImage(ImageView imageView){
-        imageView.setFitHeight(300); // Ajuste a altura conforme necessário
-        imageView.setFitWidth(360);  // Ajuste a largura conforme necessário
+        imageView.setFitHeight(130); // Ajuste a altura conforme necessário
+        imageView.setFitWidth(160);  // Ajuste a largura conforme necessário
+        //imageView.setPreserveRatio(true);
+    }
+
+    public void defaultSizeArtistImage(ImageView imageView){
+        imageView.setFitHeight(200); // Ajuste a altura conforme necessário
+        imageView.setFitWidth(260);  // Ajuste a largura conforme necessário
         //imageView.setPreserveRatio(true);
     }
 

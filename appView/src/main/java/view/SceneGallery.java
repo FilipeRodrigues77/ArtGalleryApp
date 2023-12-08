@@ -1,28 +1,186 @@
 package view;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 
-public class SceneGallery extends VBox {
+public class SceneGallery extends BorderPane {
 
     public SceneGallery() {
-        setSpacing(10);
-        setAlignment(Pos.CENTER);
-
-        Label labelScene = new Label("CENARIO DAS GALERIAS");
-        Button buttonMain = new Button("PRINCIPAL");
-        Button buttonArtist = new Button("ARTISTAS");
-        Button buttonArtwork = new Button("OBRAS");
-        Button buttonExhibition = new Button("EXPOSIÇÕES");
-
-        getChildren().addAll(labelScene, buttonMain, buttonArtist, buttonArtwork, buttonExhibition);
-
-        // Configurar a ação do botão para mudar cenario
-        buttonMain.setOnAction(e -> getScene().setRoot(new MainView()));
-        buttonArtist.setOnAction(e -> getScene().setRoot(new SceneArtist()));
-        buttonArtwork.setOnAction(e -> getScene().setRoot(new SceneArtwork()));
-        buttonExhibition.setOnAction(e -> getScene().setRoot(new SceneExhibition()));
+        doLayout();
+        getStylesheets().add("appStyle.css");
+        //getStylesheets().add("appStyleDark.css");
     }
+
+    private void doLayout() {
+        // Vamos criar aqui o layout deste painel
+        setPadding(new Insets(20));
+
+        //--------------------------------------------- HEADER ELEMENTS ---------------------------------------------
+
+        // HYPERLINKS
+        Hyperlink hyperlinkArtist = new Hyperlink("Artistas");
+        Hyperlink hyperlinkMain = new Hyperlink("     home ^");
+        Hyperlink hyperlinkGallery = new Hyperlink("Galerias");
+        Hyperlink hyperlinkExhibition = new Hyperlink("Exposições");
+        Hyperlink hyperLinkArtwork = new Hyperlink("Obras de Arte");
+
+        // Labels
+        Label labelfilter = new Label("Filtro =");
+
+        // Text Fields
+        TextField textFieldSearch = new TextField("Procurar por artista, galeria, exposição ou obra de arte");
+        textFieldSearch.setPrefSize(550, 30);
+        textFieldSearch.setOnMouseClicked(e -> textFieldSearch.clear());
+
+        TextField textFieldSearchByNation = new TextField("Região: (inglês):");
+        textFieldSearchDefault(textFieldSearchByNation);
+
+        // Images
+
+        // I~A LOGO
+        Image logo = new Image("Images/logo/logoIA-02.png");
+        ImageView logoView = new ImageView(logo);
+        logoView.preserveRatioProperty();
+        logoView.setFitWidth(27);
+        logoView.setFitHeight(27);
+        logoView.setSmooth(true);
+
+        // SEARCH ICON
+        Image searchIcon = new Image("Icons/searchIcon-03.png");
+        ImageView searchIconView = new ImageView(searchIcon);
+        searchIconView.preserveRatioProperty();
+        searchIconView.setFitWidth(20);
+        searchIconView.setFitHeight(20);
+        searchIconView.setSmooth(true);
+
+        // ADD PAGE HEADER ELEMENTS
+        HBox hBoxHeader = new HBox(logoView,textFieldSearch, searchIconView, hyperlinkMain);
+        hBoxHeader.setSpacing(20);
+
+        // ADD THE HYPERLINKS
+        HBox hBoxHyperlink = new HBox(hyperlinkArtist,hyperLinkArtwork,hyperlinkGallery, hyperlinkExhibition);
+        hBoxHyperlink.setPadding(new Insets(10,0,0,0));
+        hBoxHyperlink.setPrefHeight(50);
+        hBoxHyperlink.setSpacing(20);
+
+        // CREATE LABEL FOR FILTER AREA
+        Label filterLabel = new Label("Filtros = ");
+
+        // ADD ELEMENTS FOR THE MENU HBOX
+        // SET HBOX FOR THE FILTER MENUS
+        HBox hBoxMenu = new HBox(filterLabel, textFieldSearchByNation);
+        hBoxMenu.setSpacing(30);
+
+        // ADD ALL THE ELEMENTS FOR THE TOP SIDE INSIDE A HEADER VBOX
+        VBox vBoxTop = new VBox(hBoxHeader,hBoxHyperlink, hBoxMenu);
+        setMargin(vBoxTop, new Insets(0, 0, 20, 0));
+        setTop(vBoxTop);
+
+
+        // ---------------------------------------------- CENTER LAYOUT ----------------------------------------------
+
+        // CREATE A GRIDPANE
+        GridPane grid = new GridPane();
+        grid.setHgap(15.4);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(0, 10, 0, 0));
+        grid.setGridLinesVisible(false);
+
+        // FILL THE GRIDPANE WITH IMAGES AND LABELS
+        for (int i = 0; i < 10; i++) {
+            int imageNum = i + 1;
+            Image image = new Image("Images/Gallery/Gallery" + imageNum + ".jpg");
+            ImageView imageViewGallery = new ImageView(image);
+            defaultSizeGalleryImage(imageViewGallery);
+
+            // Create a new VBox for each iteration
+            Label labelGalleryName = new Label("Nome da Galeria " + i);
+            Label labelGalleryRegion = new Label("Região " + i);
+            Hyperlink hyperlinkContactGallery = new Hyperlink("Contatar Galeria " + i);
+
+            VBox vBoxGalleryDetails = new VBox(labelGalleryName,labelGalleryRegion,hyperlinkContactGallery);
+            vBoxGalleryDetails.setAlignment(Pos.CENTER);
+            HBox hBoxCenter = new HBox(imageViewGallery, vBoxGalleryDetails);
+            hBoxCenter.setSpacing(50);
+
+            labelGalleryName.getStyleClass().add("my-center-label-5");
+            labelGalleryRegion.getStyleClass().add("my-center-label-5");
+            hyperlinkContactGallery.getStyleClass().add("my-center-label-5");
+            vBoxGalleryDetails.getStyleClass().add("cell-gray-background");
+
+            int col = 0;
+            int row = i;
+            grid.add(hBoxCenter, col, row + 1);
+        }
+
+        // CREATE SCROLL_PANE TO ALLOW US TO SCROLL THROUGH THE GRID_PANE
+        ScrollPane scrollPane = new ScrollPane();
+        // ADD GRID_PANE INSIDE THE SCROLL_PANE OBJ
+        scrollPane.setContent(grid);
+        // LAST STEP: CENTER THE SCROLL_PANE
+        setCenter(scrollPane);
+
+        // ---------------------------------------------- BOTTOM LAYOUT ----------------------------------------------
+
+        // DEFINE A HBOX THAT WILL CONTRAIN ALL THE BOTTOM ELEMENTS
+        HBox bottomLayout = new HBox();
+
+        // IMAGES
+
+        // GIT IMAGE
+        String imageGitHubPath = "Icons/Github.png";
+        ImageView imageViewGitHub = new ImageView(new Image(imageGitHubPath));
+        defaultSizeIcon(imageViewGitHub);
+
+        // LINKEDIN IMAGE
+        String imageLinkedin = "Icons/Linkedin.png";
+        ImageView imageViewLinkedin = new ImageView(new Image(imageLinkedin));
+        defaultSizeIcon(imageViewLinkedin);
+
+        // DEFINE A HBOX THAT WILL CONTAIN THE IMAGES (ADD SIMULTANEOUSLY)
+        HBox bottomImages = new HBox(imageViewLinkedin,imageViewGitHub);
+        bottomImages.setSpacing(10);
+
+        // STATUS LABEL
+        Label labelBottonStatus = new Label("I~A © 2023 I~A  Todos os direitos reservados");
+        bottomLayout.getChildren().addAll(labelBottonStatus,bottomImages);
+        bottomLayout.setPadding(new Insets(20,0,0,0));
+        bottomLayout.setSpacing(500);
+
+        // ADD THE BOTTOM ELEMENTS INSIDE THE DESIGNATED HBOX
+        this.setBottom(bottomLayout);
+
+
+        // ---------------------------------------------- END  PLUS ----------------------------------------------
+
+
+        // CONFIGURE ACTION TO CHANGE SCENARIO
+        hyperLinkArtwork.setOnAction(e -> getScene().setRoot(new SceneArtwork()));
+        hyperlinkMain.setOnAction(e -> getScene().setRoot(new MainView()));
+        hyperlinkArtist.setOnAction(e -> getScene().setRoot(new SceneArtist()));
+        hyperlinkExhibition.setOnAction(e -> getScene().setRoot(new SceneExhibition()));
+
+    }
+
+    public void defaultSizeIcon (ImageView imageView){
+        imageView.setFitHeight(18); // Ajuste a altura conforme necessário
+        imageView.setFitWidth(18);  // Ajuste a largura conforme necessário
+        // imageView.setPreserveRatio(true);
+    }
+
+    public void defaultSizeGalleryImage(ImageView imageView){
+        imageView.setFitHeight(250); // Ajuste a altura conforme necessário
+        imageView.setFitWidth(400);  // Ajuste a largura conforme necessário
+        imageView.setPreserveRatio(true);
+    }
+
+    public void textFieldSearchDefault(TextField textField) {
+        textField.setPrefSize(150, 15);
+        textField.setOnMouseClicked(e -> textField.clear());
+    }
+
 }
