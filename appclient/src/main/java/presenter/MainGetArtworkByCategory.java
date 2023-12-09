@@ -26,7 +26,7 @@ public class MainGetArtworkByCategory {
         OkHttpClient httpClient = new OkHttpClient();
         Gson gson = new GsonBuilder().create();
 
-        String url = "http://localhost:8000/artworks/searchByCategory?category=" + category;
+        String url = "http://localhost:4567/artworks/searchByCategory?category=" + category;
 
         Request getRequest = new Request.Builder()
                 .url(url)

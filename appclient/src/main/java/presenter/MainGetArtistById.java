@@ -28,7 +28,7 @@ public class MainGetArtistById {
         Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:8000/artists/"+artistId)
+                .url("http://localhost:4567/artists/"+artistId)
                 .build();
 
         try {

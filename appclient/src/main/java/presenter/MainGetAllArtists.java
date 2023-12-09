@@ -18,14 +18,16 @@ import java.util.List;
  * Class used to retrieve data about artists from the database and store it in a list of Artist object.
  */
 public class MainGetAllArtists {
-    public static void main(String[] args) {
 
+    public static List<Artist> getAllArtists (){
+
+        List<Artist> listArtist = null;
         // DESERIALIZATION
         OkHttpClient httpClient = new OkHttpClient();
         Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:8000/artists")
+                .url("http://localhost:4567/artists")
                 .build();
 
         try {
@@ -37,15 +39,11 @@ public class MainGetAllArtists {
                 // Deserialize a list of clients
                 Type listType = new TypeToken<ArrayList<Artist>>(){}.getType();
 
-                List<Artist> listArtist = null;
+
                 if (response.body() != null) {
                     listArtist = gson.fromJson(response.body().string(), listType);
                 }
-                if (listArtist != null) {
-                    for (Artist artist : listArtist) {
-                        System.out.println(artist);
-                    }
-                }
+
             } else {
                 // Something failed, maybe the artist does not exist
                 if (response.body() != null) {
@@ -57,5 +55,8 @@ public class MainGetAllArtists {
             System.out.println(e.getMessage());
             // e.printStackTrace();
         }
+        return listArtist;
     }
+
+
 }

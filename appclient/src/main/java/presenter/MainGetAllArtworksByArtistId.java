@@ -13,13 +13,14 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainGetArtworksByPriceRange {
+public class MainGetAllArtworksByArtistId {
 
     public static void main(String[] args) {
-        System.out.println(getArtworks(400000,500000));
-    }
 
-    public static List<Artwork> getArtworks (double minPrice, double maxPrice){
+        System.out.println(getAllArtworks(1));
+
+    }
+    public static List<Artwork> getAllArtworks(int idArtist){
 
         List<Artwork> listArtworks = null;
         // DESERIALIZATION
@@ -27,7 +28,7 @@ public class MainGetArtworksByPriceRange {
         Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:4567/artworks/searchPriceRange?min="+minPrice+"&max="+maxPrice)
+                .url("http://localhost:4567/artworks/searchByArtist?idArtist="+ idArtist)
                 .build();
 
         try {
@@ -51,10 +52,11 @@ public class MainGetArtworksByPriceRange {
             }
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
         return listArtworks;
 
     }
+
 }

@@ -26,7 +26,7 @@ public class MainGetAllGalleries {
         Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:8000/galleries")  // Update the URL to the endpoint for galleries
+                .url("http://localhost:4567/galleries")  // Update the URL to the endpoint for galleries
                 .build();
 
         try {

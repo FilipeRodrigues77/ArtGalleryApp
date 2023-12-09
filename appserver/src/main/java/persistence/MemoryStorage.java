@@ -112,7 +112,7 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
     public Artist createArtist(Artist artist) throws ServiceException {
 
         String commandSql = "INSERT INTO Artist (nameArtist, birthDate, deathDate, biography, " +
-                "nationalityName, slug) VALUES (?, ?, ?, ?, ?, ?)";
+                "nationalityName, slug, referenceImage) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement preparedStatement = conn.prepareStatement(commandSql, Statement.RETURN_GENERATED_KEYS)) {
@@ -123,6 +123,7 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
             preparedStatement.setString(4, artist.getBiography());
             preparedStatement.setString(5, artist.getNationality());
             preparedStatement.setString(6, artist.getSlug());
+            preparedStatement.setString(7, artist.getReferenceImage());
 
             int affectedRows = preparedStatement.executeUpdate();
 
@@ -144,7 +145,8 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
     @Override
     public Artist updateArtist(Artist artist) throws ServiceException {
         String commandSql = "UPDATE artist\n" +
-                "SET nameArtist = ?, birthDate = ?, deathDate = ?, biography = ?, nationalityName = ?, slug = ?\n" +
+                "SET nameArtist = ?, birthDate = ?, deathDate = ?, biography = ?, nationalityName = ?, slug = ?" +
+                ", referenceImage = ? " +
                 "WHERE idArtist = " + artist.getId();
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
@@ -156,6 +158,7 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
             preparedStatement.setString(4, artist.getBiography());
             preparedStatement.setString(5, artist.getNationality());
             preparedStatement.setString(6, artist.getSlug());
+            preparedStatement.setString(7, artist.getReferenceImage());
 
             int affectedRows = preparedStatement.executeUpdate();
 
@@ -201,7 +204,7 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
             artist.setBiography(resultSet.getString("biography"));
             artist.setNationality(resultSet.getString("nationalityName"));
             artist.setSlug(resultSet.getString("slug"));
-            artist.setSlug(resultSet.getString("slug"));
+            artist.setReferenceImage(resultSet.getString("referenceImage"));
 
             // add a single artist to the list of artists
             artists.add(artist);

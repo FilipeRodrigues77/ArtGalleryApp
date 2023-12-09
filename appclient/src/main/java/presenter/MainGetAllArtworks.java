@@ -64,7 +64,7 @@ public class MainGetAllArtworks {
         Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:8000/artworks")
+                .url("http://localhost:4567/artworks")
                 .build();
 
         try {

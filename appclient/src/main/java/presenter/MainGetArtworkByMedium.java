@@ -23,7 +23,7 @@ public class MainGetArtworkByMedium {
         Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:8000/artworks/searchMedium?medium="+medium)
+                .url("http://localhost:4567/artworks/searchMedium?medium="+medium)
                 .build();
 
         try {

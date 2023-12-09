@@ -25,7 +25,7 @@ public class MainGetArtworksByDateRange {
         OkHttpClient httpClient = new OkHttpClient();
         Gson gson = new GsonBuilder().create();
 
-        String url = "http://localhost:8000/artworks/searchByDateRange?startDate=" + startDate + "&endDate=" + endDate;
+        String url = "http://localhost:4567/artworks/searchByDateRange?startDate=" + startDate + "&endDate=" + endDate;
 
         Request getRequest = new Request.Builder()
                 .url(url)

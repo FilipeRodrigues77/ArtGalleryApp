@@ -1,5 +1,6 @@
 package domain;
 
+
 public class Artist {
 
     private int id;
@@ -9,12 +10,13 @@ public class Artist {
     private String birthdate;
     private String deathdate;
     private String slug;
+    private String referenceImage;
 
     public Artist() {
     }
 
     public Artist(int id, String name, String nationality, String biography,
-                  String birthday, String deathday, String slug) {
+                  String birthday, String deathday, String slug, String referenceImage) {
 
         this.id = id;
         this.name = name;
@@ -23,6 +25,7 @@ public class Artist {
         this.birthdate = birthday;
         this.deathdate = deathday;
         this.slug = slug;
+        this.referenceImage= referenceImage;
     }
 
     public int getId() {
@@ -50,6 +53,10 @@ public class Artist {
     }
 
     public String getSlug() { return slug; }
+
+    public String getReferenceImage() {
+        return referenceImage;
+    }
 
     public void setId(int id) {
         this.id = id;
@@ -79,6 +86,10 @@ public class Artist {
         this.slug = slug;
     }
 
+    public void setReferenceImage(String referenceImage) {
+        this.referenceImage = referenceImage;
+    }
+
     @Override
     public String toString() {
         return "Artist{" + "\n" +
@@ -89,6 +100,7 @@ public class Artist {
                 ", birthdate='" + birthdate + '\'' + "\n" +
                 ", deathdate='" + deathdate + '\'' + "\n" +
                 ", slug='" + slug + '\'' + "\n" +
+                ", referenceImage='" + referenceImage + '\'' + "\n" +
                 '}'+ "\n\n";
     }
 }

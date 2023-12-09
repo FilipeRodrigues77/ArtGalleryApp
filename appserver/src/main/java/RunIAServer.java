@@ -37,7 +37,7 @@ public class RunIAServer {
 
         // Default port is 4567, hence we're running at http://localhost:4567/<endpoint>
 
-        port(8000);
+        port(4567);
         logger.info("Starting Main server at {}", new Date().toString());
 
         /*  INSTANTIATE STORAGE */
