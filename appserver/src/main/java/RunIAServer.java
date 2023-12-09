@@ -457,6 +457,33 @@ public class RunIAServer {
                 }
             });
 
+            get("/searchByDateRange", (request, response) -> {
+                String startDate = request.queryParams("startDate");
+                String endDate = request.queryParams("endDate");
+
+                if (startDate != null && endDate != null
+                   && startDate.matches("\\d{4}") && endDate.matches("\\d{4}")) {
+
+                    response.type("application/json");
+                    List<Artwork> matchingArtworks = storage.getArtworksByDateRange(startDate, endDate);
+
+                    if (matchingArtworks.isEmpty()) {
+                        response.status(404); // Not Found
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("message", "No matching artwork found within the specified date range");
+                        return jsonObject.toString();
+                    } else {
+                        return gson.toJson(matchingArtworks);
+                    }
+                } else {
+                    response.status(400); // Bad Request
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("message", "Please provide valid start and end dates");
+                    return jsonObject.toString();
+                }
+            });
+
+
             get("/:id", (request, response) -> {
                 try {
                     int idArtwork = Integer.parseInt(request.params(":id"));

@@ -155,7 +155,7 @@ public class Artwork {
     public String toString() {
         return "Artwork{\n" +
                 "  id=" + id + "\n" +
-                ", price=" + price +
+                ", price=" + price + "\n" +
                 ", dimensionCm='" + dimensionCm + '\'' +"\n" +
                 ", dimensionIN='" + dimensionIN + '\'' + "\n" +
                 ", name='" + name + '\'' + "\n" +
