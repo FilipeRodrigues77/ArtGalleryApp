@@ -17,6 +17,7 @@ public class Test extends Application {
         Scene detailsArtworkScene = new Scene(new DetailsSceneArtwork(), 800, 600);
         Scene detailsArtistScene = new Scene(new DetailsSceneArtist(), 800, 600);
         Scene detailsGalleryScene = new Scene(new DetailsSceneGallery(), 800, 600);
+        Scene detailsExhibitionScene = new Scene(new DetailsSceneExhibition(), 800, 600);
 
         Scene sceneArtwork = new Scene(new SceneArtwork(), 800, 600);
         Scene sceneArtist = new Scene(new SceneArtist(), 800, 600);
@@ -24,7 +25,7 @@ public class Test extends Application {
         Scene sceneGallery = new Scene(new SceneGallery(), 800, 600);
 
         // SET FIRST SCENE AND SHOW
-        primaryStage.setScene(detailsGalleryScene);
+        primaryStage.setScene(detailsExhibitionScene);
         primaryStage.show();
     }
 }
