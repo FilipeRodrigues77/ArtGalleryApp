@@ -198,7 +198,7 @@ public class SceneExhibition extends BorderPane {
         // imageView.setPreserveRatio(true);
     }
 
-    public void defaultSizeGalleryImage(ImageView imageView){
+    public void defaultSizeExhibitionImage(ImageView imageView){
         imageView.setFitHeight(250); // Ajuste a altura conforme necessário
         imageView.setFitWidth(380);  // Ajuste a largura conforme necessário
         imageView.setPreserveRatio(true);
