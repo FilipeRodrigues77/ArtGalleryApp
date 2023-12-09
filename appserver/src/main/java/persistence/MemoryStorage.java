@@ -383,6 +383,23 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
     }
 
     @Override
+    public List<Artwork> getArtworksByDateRange(String startDate, String endDate) throws ServiceException {
+
+        String commandSql = "SELECT * FROM Artwork WHERE creationDate BETWEEN ? AND ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement preparedStatement = conn.prepareStatement(commandSql)) {
+            preparedStatement.setString(1, startDate);
+            preparedStatement.setString(2, endDate);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                return buildArtwork(resultSet);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public Artwork createArtwork(Artwork artwork) throws ServiceException {
         String commandSql = "INSERT INTO Artwork (nameArtwork, price, dimensionCm, dimensionIN, mediumArtwork, " +
                 "creationDate, category, collectingInstitution, slugReferenceArtist," +

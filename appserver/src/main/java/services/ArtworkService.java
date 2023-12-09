@@ -95,6 +95,17 @@ public interface ArtworkService {
     List<Artwork> getArtworksByPriceRange(double minPrice, double maxPrice) throws ServiceException;
 
     /**
+     * Retrieves artworks based on the specified date range from storage.
+     *
+     * @param startDate the start date of the range (in String format)
+     * @param endDate   the end date of the range (in String format)
+     * @return List of artworks; an empty list if not found
+     * @throws ServiceException if some exception occurs in the underlying storage
+     */
+    List<Artwork> getArtworksByDateRange(String startDate, String endDate) throws ServiceException;
+
+
+    /**
      * Creates an artwork and persists its information in storage.
      * If Artwork id attribute is ignored by this method if it is set.
      *
