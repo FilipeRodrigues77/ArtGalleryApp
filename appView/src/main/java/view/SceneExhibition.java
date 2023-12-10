@@ -34,6 +34,8 @@ public class SceneExhibition extends BorderPane {
         Hyperlink hyperlinkExhibition = new Hyperlink("Exposições");
         Hyperlink hyperLinkArtwork = new Hyperlink("Obras de Arte");
 
+        hyperlinkExhibition.getStyleClass().add("actual-page-hyperlink");
+
         // Labels
         Label labelfilter = new Label("Filtro =");
 
@@ -120,7 +122,11 @@ public class SceneExhibition extends BorderPane {
             Label labelStatus = new Label("Aberto/Fechado " + i);
             Label labelStartDate = new Label("data inicio " + i);
             Label labelEndDate = new Label("data fecho " + i);
+
             Button buttonExhibitionDetails = new Button("Aceder Exposição");
+            buttonExhibitionDetails.getStyleClass().add("button-modern");
+            buttonExhibitionDetails.setPrefWidth(180);
+            buttonExhibitionDetails.setPrefHeight(10);
 
 
             HBox hBoxExhibitionName = new HBox(labelExhibitionName);
@@ -152,9 +158,6 @@ public class SceneExhibition extends BorderPane {
 
         // ---------------------------------------------- BOTTOM LAYOUT ----------------------------------------------
 
-        // DEFINE A HBOX THAT WILL CONTRAIN ALL THE BOTTOM ELEMENTS
-        HBox bottomLayout = new HBox();
-
         // IMAGES
 
         // GIT IMAGE
@@ -167,18 +170,22 @@ public class SceneExhibition extends BorderPane {
         ImageView imageViewLinkedin = new ImageView(new Image(imageLinkedin));
         defaultSizeIcon(imageViewLinkedin);
 
-        // DEFINE A HBOX THAT WILL CONTAIN THE IMAGES (ADD SIMULTANEOUSLY)
-        HBox bottomImages = new HBox(imageViewLinkedin,imageViewGitHub);
-        bottomImages.setSpacing(10);
-
-        // STATUS LABEL
+        // LABEL
         Label labelBottonStatus = new Label("I~A © 2023 I~A  Todos os direitos reservados");
-        bottomLayout.getChildren().addAll(labelBottonStatus,bottomImages);
-        bottomLayout.setPadding(new Insets(20,0,0,0));
-        bottomLayout.setSpacing(500);
 
-        // ADD THE BOTTOM ELEMENTS INSIDE THE DESIGNATED HBOX
-        this.setBottom(bottomLayout);
+        // DEFINE A HBOX THAT WILL CONTAIN THE IMAGES (ADD SIMULTANEOUSLY)
+        HBox hBoxBottomImages = new HBox(imageViewLinkedin,imageViewGitHub);
+        hBoxBottomImages.setSpacing(10);
+        HBox.setHgrow(hBoxBottomImages, javafx.scene.layout.Priority.ALWAYS);
+        hBoxBottomImages.setAlignment(Pos.CENTER_RIGHT);
+
+        // HBOX BOTTOM
+        HBox hBoxBottomStatus = new HBox(labelBottonStatus);
+        HBox.setHgrow(hBoxBottomStatus, javafx.scene.layout.Priority.ALWAYS);
+        hBoxBottomStatus.setAlignment(Pos.CENTER_LEFT);
+        HBox hBoxBottomLayout = new HBox(hBoxBottomStatus,hBoxBottomImages);
+        hBoxBottomLayout.setPadding(new Insets(20,0,0,0));
+        setBottom(hBoxBottomLayout);
 
 
         // ---------------------------------------------- END  PLUS ----------------------------------------------

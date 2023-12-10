@@ -28,6 +28,8 @@ public class SceneGallery extends BorderPane {
         Hyperlink hyperlinkExhibition = new Hyperlink("Exposições");
         Hyperlink hyperLinkArtwork = new Hyperlink("Obras de Arte");
 
+        hyperlinkGallery.getStyleClass().add("actual-page-hyperlink");
+
         // Labels
         Label labelfilter = new Label("Filtro =");
 
@@ -126,9 +128,6 @@ public class SceneGallery extends BorderPane {
 
         // ---------------------------------------------- BOTTOM LAYOUT ----------------------------------------------
 
-        // DEFINE A HBOX THAT WILL CONTRAIN ALL THE BOTTOM ELEMENTS
-        HBox bottomLayout = new HBox();
-
         // IMAGES
 
         // GIT IMAGE
@@ -141,22 +140,26 @@ public class SceneGallery extends BorderPane {
         ImageView imageViewLinkedin = new ImageView(new Image(imageLinkedin));
         defaultSizeIcon(imageViewLinkedin);
 
-        // DEFINE A HBOX THAT WILL CONTAIN THE IMAGES (ADD SIMULTANEOUSLY)
-        HBox bottomImages = new HBox(imageViewLinkedin,imageViewGitHub);
-        bottomImages.setSpacing(10);
+        // ---------------------------------------------- BOTTOM LAYOUT ----------------------------------------------
 
-        // STATUS LABEL
+        // LABEL
         Label labelBottonStatus = new Label("I~A © 2023 I~A  Todos os direitos reservados");
-        bottomLayout.getChildren().addAll(labelBottonStatus,bottomImages);
-        bottomLayout.setPadding(new Insets(20,0,0,0));
-        bottomLayout.setSpacing(500);
 
-        // ADD THE BOTTOM ELEMENTS INSIDE THE DESIGNATED HBOX
-        this.setBottom(bottomLayout);
+        // DEFINE A HBOX THAT WILL CONTAIN THE IMAGES (ADD SIMULTANEOUSLY)
+        HBox hBoxBottomImages = new HBox(imageViewLinkedin,imageViewGitHub);
+        hBoxBottomImages.setSpacing(10);
+        HBox.setHgrow(hBoxBottomImages, javafx.scene.layout.Priority.ALWAYS);
+        hBoxBottomImages.setAlignment(Pos.CENTER_RIGHT);
 
+        // HBOX BOTTOM
+        HBox hBoxBottomStatus = new HBox(labelBottonStatus);
+        HBox.setHgrow(hBoxBottomStatus, javafx.scene.layout.Priority.ALWAYS);
+        hBoxBottomStatus.setAlignment(Pos.CENTER_LEFT);
+        HBox hBoxBottomLayout = new HBox(hBoxBottomStatus,hBoxBottomImages);
+        hBoxBottomLayout.setPadding(new Insets(20,0,0,0));
+        setBottom(hBoxBottomLayout);
 
         // ---------------------------------------------- END  PLUS ----------------------------------------------
-
 
         // CONFIGURE ACTION TO CHANGE SCENARIO
         hyperLinkArtwork.setOnAction(e -> getScene().setRoot(new SceneArtwork()));
