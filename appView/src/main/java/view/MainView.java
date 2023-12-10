@@ -204,7 +204,7 @@ public class MainView extends BorderPane {
 
     public void defaultSizeMainImage (ImageView imageView){
         imageView.setFitHeight(100); // Ajuste a altura conforme necessário
-        imageView.setFitWidth(364);  // Ajuste a largura conforme necessário
+        imageView.setFitWidth(365);  // Ajuste a largura conforme necessário
         // imageView.setPreserveRatio(true);
     }
 
