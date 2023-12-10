@@ -32,6 +32,8 @@ public class DetailsSceneGallery extends BorderPane {
         Hyperlink hyperlinkExhibition = new Hyperlink("Exposições");
         Hyperlink hyperLinkArtwork = new Hyperlink("Obras de Arte");
 
+        hyperlinkGallery.getStyleClass().add("actual-page-hyperlink");
+
         // TEXT FIELDS
         TextField textFieldSearch = new TextField("Procurar por artista, galeria, exposição ou obra de arte");
         textFieldSearch.setPrefSize(550, 30);
