@@ -3,7 +3,6 @@ package presenter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import domain.Artist;
-import domain.Artwork;
 import okhttp3.*;
 
 import java.io.IOException;
@@ -17,7 +16,7 @@ public class UpdateReferenceImageInArtist {
         Gson gson = new GsonBuilder().create();
 
         // We need the list of URL
-        List<Artist> listArtists = MainGetAllArtists.getAllArtists();
+        List<Artist> listArtists = MainGetArtists.getAllArtists();
 
         for (int i = 0; i < 40; i++) {
             int artistNum = i + 1;

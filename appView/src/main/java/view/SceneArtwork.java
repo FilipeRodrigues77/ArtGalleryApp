@@ -26,12 +26,15 @@ public class SceneArtwork extends BorderPane {
         //getStylesheets().add("appStyleDark.css");
     }
 
+
     private void doLayout() {
         // Vamos criar aqui o layout deste painel
         setPadding(new Insets(20));
         ScrollPane scrollPane = new ScrollPane();
 
         //--------------------------------------------- HEADER ELEMENTS ---------------------------------------------
+
+        ScrollPane finalScrollPane = scrollPane;
 
         // HYPERLINKS
         Hyperlink hyperlinkArtist = new Hyperlink("Artistas");
@@ -42,9 +45,13 @@ public class SceneArtwork extends BorderPane {
 
 
         // Text Fields
-        TextField textFieldSearch = new TextField("Procurar por artista, galeria, exposição ou obra de arte");
+
+        String searchOrigText = "Procurar por artista, galeria, exposição ou obra de arte";
+        TextField textFieldSearch = new TextField(searchOrigText);
+        setOriginalDescription(textFieldSearch,searchOrigText);
         textFieldSearch.setPrefSize(550, 30);
         textFieldSearch.setOnMouseClicked(e -> textFieldSearch.clear());
+
 
         // Images
 
@@ -63,6 +70,7 @@ public class SceneArtwork extends BorderPane {
         searchIconView.setFitWidth(20);
         searchIconView.setFitHeight(20);
         searchIconView.setSmooth(true);
+        searchIconView.setOnMouseClicked(e -> handleSearchIconSelection(textFieldSearch));
 
         // ADD PAGE HEADER ELEMENTS
         HBox hBoxHeader = new HBox(logoView,textFieldSearch, searchIconView, hyperlinkMain);
@@ -77,12 +85,7 @@ public class SceneArtwork extends BorderPane {
         // SET HBOX FOR THE FILTER MENUS
         HBox hBoxMenu = new HBox();
 
-        // SET THE OPTIONS FOR EACH MENU
-        // NOTE: THIS WILL EVENTUALLY BECOME A METHOD
-
-        /*
-        Maybe price needs to be a text field where user can input the max value and the min value
-         */
+        // CREATE THE COMBO_BOXES
         ObservableList<String> priceOptions = FXCollections.observableArrayList(
                 "Todos",
                 "100-99999",
@@ -100,116 +103,25 @@ public class SceneArtwork extends BorderPane {
 
 
         // CREATE A MOMBOX AND ADD THE OBSERVABLELIST TO EACH MENU
-        List<Artwork> artworkList = MainGetAllArtworks.getAllArtworks();
+        List<Artwork> artworkList = MainGetArtworks.getAllArtworks();
 
         ComboBox<String> mediumMenu = new ComboBox<>(createOptionsMenu(artworkList,"medium"));
         mediumMenu.setMaxWidth(100);
         mediumMenu.setValue("Medium");
-
-        ScrollPane finalScrollPane = scrollPane;
-        mediumMenu.setOnAction(e->{
-            // get the selected item*
-            String selected = mediumMenu.getSelectionModel().getSelectedItem();
-            if(selected != null){
-                if (selected.equalsIgnoreCase("Todos")){
-                    finalScrollPane.setContent(buildMainGrid(artworkList));
-                    // LAST STEP: CENTER THE SCROLL_PANE
-                    this.setCenter(finalScrollPane);
-                }
-                else{
-                    List<Artwork> artworks = MainGetArtworkByMedium.getArtworks(selected);
-                    // ADD GRID_PANE INSIDE THE SCROLL_PANE OBJ
-                    finalScrollPane.setContent(filteredGrid(artworks));
-                    // LAST STEP: CENTER THE SCROLL_PANE
-                    this.setCenter(finalScrollPane);
-                }
-            }
-
-        });
-
+        mediumMenu.setOnAction(e-> handleMediumSelection(mediumMenu, artworkList));
 
         ComboBox<String> priceMenu = new ComboBox<>(priceOptions);
         priceMenu.setValue("Preço(€)");
-        priceMenu.setOnAction(e->{
-            // get the selected item*
-            String selected = priceMenu.getSelectionModel().getSelectedItem();
-            if(selected != null){
-                if (selected.equalsIgnoreCase("Todos")){
-                    finalScrollPane.setContent(buildMainGrid(artworkList));
-                    this.setCenter(finalScrollPane);
-                }
-                else{
-                    String [] values  = selected.split("-");
-                    double min = Double.parseDouble(values[0]);
-                    double max = Double.parseDouble(values[1]);
-                    List<Artwork> artworks = MainGetArtworksByPriceRange.getArtworks(min,max);
-                    // ADD GRID_PANE INSIDE THE SCROLL_PANE OBJ
-                    if(artworks != null){
-                        finalScrollPane.setContent(filteredGrid(artworks));
-                        // LAST STEP: CENTER THE SCROLL_PANE
-                        this.setCenter(finalScrollPane);
-                    }
-                    else{
-                        getScene().setRoot(new ShowError());
-                    }
-
-                    // LAST STEP: CENTER THE SCROLL_PANE
-                    this.setCenter(finalScrollPane);
-                }
-            }
-        });
+        priceMenu.setOnAction(e-> handlePriceSelection(priceMenu,artworkList));
 
         ComboBox<String> dateMenu = new ComboBox<>(dateOptions);
         dateMenu.setValue("Data Criação");
-        dateMenu.setOnAction(e->{
-            // get the selected item*
-            String selected = dateMenu.getSelectionModel().getSelectedItem();
-            if(selected != null){
-                if (selected.equalsIgnoreCase("Todos")){
-                    finalScrollPane.setContent(buildMainGrid(artworkList));
-                    this.setCenter(finalScrollPane);
-                }
-                else{
-                    String [] values  = selected.split("-");
-                    List<Artwork> artworks = MainGetArtworksByDateRange.getArtworks(values[0],values[1]);
-                    // ADD GRID_PANE INSIDE THE SCROLL_PANE OBJ
-                    if(artworks != null){
-                        finalScrollPane.setContent(filteredGrid(artworks));
-                        // LAST STEP: CENTER THE SCROLL_PANE
-                        this.setCenter(finalScrollPane);
-                    }
-                    else{
-                        getScene().setRoot(new ShowError());
-                    }
-
-                    // LAST STEP: CENTER THE SCROLL_PANE
-                    this.setCenter(finalScrollPane);
-                }
-            }
-        });
+        dateMenu.setOnAction(e-> handleDateSelection(dateMenu, artworkList));
 
         ComboBox<String>categoryMenu = new ComboBox<>(createOptionsMenu(artworkList,"category"));
         categoryMenu.setMaxWidth(120);
         categoryMenu.setValue("Categoria");
-        categoryMenu.setOnAction(e->{
-            // get the selected item*
-            String selected = categoryMenu.getSelectionModel().getSelectedItem();
-            if(selected != null){
-                if (selected.equalsIgnoreCase("Todos")){
-                    finalScrollPane.setContent(buildMainGrid(artworkList));
-                    // LAST STEP: CENTER THE SCROLL_PANE
-                    this.setCenter(finalScrollPane);
-                }
-                else{
-                    List<Artwork> artworks = MainGetArtworkByCategory.getArtworks(selected);
-                    // ADD GRID_PANE INSIDE THE SCROLL_PANE OBJ
-                    finalScrollPane.setContent(filteredGrid(artworks));
-                    // LAST STEP: CENTER THE SCROLL_PANE
-                    this.setCenter(finalScrollPane);
-                }
-            }
-        });
-
+        categoryMenu.setOnAction(e->handleCategorySelection(categoryMenu, artworkList));
 
         // CREATE LABEL FOR FILTER AREA
         Label filterLabel = new Label("Filtros = ");
@@ -225,7 +137,6 @@ public class SceneArtwork extends BorderPane {
 
 
         // ---------------------------------------------- CENTER LAYOUT ----------------------------------------------
-
         // CREATE A GRIDPANE
         GridPane grid = buildMainGrid(artworkList);
 
@@ -263,7 +174,6 @@ public class SceneArtwork extends BorderPane {
         // ADD THE BOTTOM ELEMENTS INSIDE THE DESIGNATED HBOX
         this.setBottom(bottomLayout);
 
-
         // ---------------------------------------------- END  PLUS ----------------------------------------------
         // LAST STEP: CENTER THE SCROLL_PANE
         this.setCenter(scrollPane);
@@ -273,6 +183,135 @@ public class SceneArtwork extends BorderPane {
         hyperlinkMain.setOnAction(e -> getScene().setRoot(new MainView()));
         hyperlinkGallery.setOnAction(e -> getScene().setRoot(new SceneGallery()));
         hyperlinkExhibition.setOnAction(e -> getScene().setRoot(new SceneExhibition()));
+
+    }
+
+
+    private void setOriginalDescription(TextField textField, String originalText){
+
+        textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                if (textField.getText().isEmpty()) {
+                    textField.setText(originalText);
+                }
+            }
+        });
+    }
+
+    private void handleSearchIconSelection (TextField textFieldSearch ){
+        ScrollPane finalScrollPane = new ScrollPane();
+        String searchText = textFieldSearch.getText().trim();
+        if (!searchText.isEmpty()) {
+
+            List<Artwork> artworks = MainGetArtworks.getArtworkByName(searchText);
+            if(artworks != null){
+                finalScrollPane.setContent(filteredGrid(artworks));
+                this.setCenter(finalScrollPane);
+            }
+            else{
+                getScene().setRoot(new ShowErrorArtwork());
+            }
+            this.setCenter(finalScrollPane);
+
+        }
+    }
+
+    private void handleMediumSelection (ComboBox<String> mediumMenu, List<Artwork> artworkList){
+
+        ScrollPane finalScrollPane = new ScrollPane();
+        // get the selected item*
+        String selected = mediumMenu.getSelectionModel().getSelectedItem();
+        if(selected != null){
+            if (selected.equalsIgnoreCase("Todos")){
+                finalScrollPane.setContent(buildMainGrid(artworkList));
+                // LAST STEP: CENTER THE SCROLL_PANE
+                this.setCenter(finalScrollPane);
+            }
+            else{
+                List<Artwork> artworks = MainGetArtworks.getArtworksByMedium(selected);
+                // ADD GRID_PANE INSIDE THE SCROLL_PANE OBJ
+                finalScrollPane.setContent(filteredGrid(artworks));
+                // LAST STEP: CENTER THE SCROLL_PANE
+                this.setCenter(finalScrollPane);
+            }
+        }
+    }
+
+    private void handlePriceSelection (ComboBox<String> priceMenu, List<Artwork> artworkList){
+        ScrollPane finalScrollPane = new ScrollPane();
+        // get the selected item*
+        String selected = priceMenu.getSelectionModel().getSelectedItem();
+        if(selected != null){
+            if (selected.equalsIgnoreCase("Todos")){
+                finalScrollPane.setContent(buildMainGrid(artworkList));
+                this.setCenter(finalScrollPane);
+            }
+            else{
+                String [] values  = selected.split("-");
+                double min = Double.parseDouble(values[0]);
+                double max = Double.parseDouble(values[1]);
+                List<Artwork> artworks = MainGetArtworks.getArtworksByPrice(min,max);
+                // ADD GRID_PANE INSIDE THE SCROLL_PANE OBJ
+                if(artworks != null){
+                    finalScrollPane.setContent(filteredGrid(artworks));
+                    // LAST STEP: CENTER THE SCROLL_PANE
+                    this.setCenter(finalScrollPane);
+                }
+                else{
+                    getScene().setRoot(new ShowErrorArtwork());
+                }
+
+                // LAST STEP: CENTER THE SCROLL_PANE
+                this.setCenter(finalScrollPane);
+            }
+        }
+
+    }
+
+    private void handleCategorySelection (ComboBox<String> categoryMenu, List<Artwork> artworkList) {
+        ScrollPane finalScrollPane = new ScrollPane();
+        // get the selected item*
+        String selected = categoryMenu.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            if (selected.equalsIgnoreCase("Todos")) {
+                finalScrollPane.setContent(buildMainGrid(artworkList));
+                // LAST STEP: CENTER THE SCROLL_PANE
+                this.setCenter(finalScrollPane);
+            } else {
+                List<Artwork> artworks = MainGetArtworks.getArtworksByCategory(selected);
+                // ADD GRID_PANE INSIDE THE SCROLL_PANE OBJ
+                finalScrollPane.setContent(filteredGrid(artworks));
+                // LAST STEP: CENTER THE SCROLL_PANE
+                this.setCenter(finalScrollPane);
+            }
+        }
+
+    }
+
+    private void handleDateSelection (ComboBox<String> dateMenu, List<Artwork> artworkList) {
+        ScrollPane finalScrollPane = new ScrollPane();
+        // get the selected item*
+        String selected = dateMenu.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            if (selected.equalsIgnoreCase("Todos")) {
+                finalScrollPane.setContent(buildMainGrid(artworkList));
+                this.setCenter(finalScrollPane);
+            } else {
+                String[] values = selected.split("-");
+                List<Artwork> artworks = MainGetArtworks.getArtworksByDate(values[0], values[1]);
+                // ADD GRID_PANE INSIDE THE SCROLL_PANE OBJ
+                if (artworks != null) {
+                    finalScrollPane.setContent(filteredGrid(artworks));
+                    // LAST STEP: CENTER THE SCROLL_PANE
+                    this.setCenter(finalScrollPane);
+                } else {
+                    getScene().setRoot(new ShowErrorArtwork());
+                }
+
+                // LAST STEP: CENTER THE SCROLL_PANE
+                this.setCenter(finalScrollPane);
+            }
+        }
 
     }
 
@@ -493,7 +532,7 @@ public class SceneArtwork extends BorderPane {
             }
 
 
-            String artistName = MainGetArtistById.getArtistById(artwork.getIdArtist()).getName();
+            String artistName = MainGetArtists.getArtistById(artwork.getIdArtist()).getName();
             Hyperlink hyperArtistName;
             if (artistName.length() < maxTextLength){
                 hyperArtistName = new Hyperlink(artistName);
@@ -574,7 +613,7 @@ public class SceneArtwork extends BorderPane {
                 }
 
 
-                String artistName = MainGetArtistById.getArtistById(artwork.getIdArtist()).getName();
+                String artistName = MainGetArtists.getArtistById(artwork.getIdArtist()).getName();
                 Hyperlink hyperArtistName;
                 if (artistName.length() < maxTextLength){
                     hyperArtistName = new Hyperlink(artistName);

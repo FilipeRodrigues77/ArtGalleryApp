@@ -15,7 +15,7 @@ public class UpdateReferenceImageInArtwork {
         Gson gson = new GsonBuilder().create();
 
         // We need the list of URL
-        List<Artwork> listArtwork = MainGetAllArtworks.getAllArtworks();
+        List<Artwork> listArtwork = MainGetArtworks.getAllArtworks();
 
         for (int i = 0; i < 85; i++) {
             int imageNum = i + 1;

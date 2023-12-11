@@ -68,7 +68,7 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
         String commandSql = "SELECT * FROM Artist WHERE nameArtist LIKE ?";
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement preparedStatement = conn.prepareStatement(commandSql)) {
-            preparedStatement.setString(1, name + "%");
+            preparedStatement.setString(1, "%" + name + "%");
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 return buildArtists(resultSet);
@@ -258,7 +258,7 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement preparedStatement = conn.prepareStatement(commandSql)) {
-            preparedStatement.setString(1, name + "%");
+            preparedStatement.setString(1, "%" + name + "%");
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 return buildArtwork(resultSet);
             }

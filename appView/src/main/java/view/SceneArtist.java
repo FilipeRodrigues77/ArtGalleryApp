@@ -6,11 +6,9 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
-import presenter.MainGetAllArtists;
-import presenter.MainGetAllArtworksByArtistId;
-import presenter.MainGetArtistById;
-import presenter.MainGetGalleryById;
+import presenter.*;
 
 import java.util.List;
 
@@ -39,18 +37,43 @@ public class SceneArtist extends BorderPane {
         Label labelfilter = new Label("Filtro =");
 
         // Text Fields
-        TextField textFieldSearch = new TextField("Procurar por artista, galeria, exposição ou obra de arte");
+        String searchOrigText = "Procurar por artista, galeria, exposição ou obra de arte";
+        TextField textFieldSearch = new TextField(searchOrigText);
+        setOriginalDescription(textFieldSearch,searchOrigText);
         textFieldSearch.setPrefSize(550, 30);
         textFieldSearch.setOnMouseClicked(e -> textFieldSearch.clear());
 
-        TextField textFieldSearchByNation = new TextField("Nacionalidade (inglês):");
+
+        String nacionalOrigText = "Nacionalidade (inglês)";
+        TextField textFieldSearchByNation = new TextField(nacionalOrigText);
+        setOriginalDescription(textFieldSearchByNation,nacionalOrigText);
         textFieldSearchDefault(textFieldSearchByNation);
+        textFieldSearchByNation.setOnKeyPressed(e-> {
+            if (e.getCode() == KeyCode.ENTER) {
+                handleNationalSelection(textFieldSearchByNation);
+            }
+        });
 
-        TextField textFieldSearchByBirthday = new TextField("Ano nascimento, ex: 1886");
-        textFieldSearchDefault(textFieldSearchByBirthday);
+        String birthdateOrigText = "Ano nascimento, ex: 1886";
+        TextField textFieldSearchByBirthdate = new TextField(birthdateOrigText);
+        setOriginalDescription(textFieldSearchByBirthdate,birthdateOrigText);
+        textFieldSearchDefault(textFieldSearchByBirthdate);
+        textFieldSearchByBirthdate.setOnKeyPressed(e-> {
+            if (e.getCode() == KeyCode.ENTER) {
+                handleBirthdateSelection(textFieldSearchByBirthdate);
+            }
+        });
 
-        TextField textFieldSearchByDeathday = new TextField("Ano de morte, ex: 1956");
-        textFieldSearchDefault(textFieldSearchByDeathday);
+        String deathdateOrigText = "Ano de morte, ex: 1956";
+        TextField textFieldSearchByDeathdate = new TextField(deathdateOrigText);
+        textFieldSearchDefault(textFieldSearchByDeathdate);
+        setOriginalDescription(textFieldSearchByDeathdate, deathdateOrigText);
+        textFieldSearchByDeathdate.setOnKeyPressed(e-> {
+            if (e.getCode() == KeyCode.ENTER) {
+                handleDeathdateSelection(textFieldSearchByDeathdate);
+            }
+        });
+
 
         // Images
 
@@ -69,6 +92,7 @@ public class SceneArtist extends BorderPane {
         searchIconView.setFitWidth(20);
         searchIconView.setFitHeight(20);
         searchIconView.setSmooth(true);
+        searchIconView.setOnMouseClicked(e -> handleSearchIconSelection(textFieldSearch));
 
         // ADD PAGE HEADER ELEMENTS
         HBox hBoxHeader = new HBox(logoView,textFieldSearch, searchIconView, hyperlinkMain);
@@ -85,7 +109,7 @@ public class SceneArtist extends BorderPane {
 
         // ADD ELEMENTS FOR THE MENU HBOX
         // SET HBOX FOR THE FILTER MENUS
-        HBox hBoxMenu = new HBox(filterLabel, textFieldSearchByNation, textFieldSearchByBirthday, textFieldSearchByDeathday);
+        HBox hBoxMenu = new HBox(filterLabel, textFieldSearchByNation, textFieldSearchByBirthdate, textFieldSearchByDeathdate);
         hBoxMenu.setSpacing(30);
 
         // ADD ALL THE ELEMENTS FOR THE TOP SIDE INSIDE A HEADER VBOX
@@ -97,7 +121,7 @@ public class SceneArtist extends BorderPane {
         // ---------------------------------------------- CENTER LAYOUT ----------------------------------------------
 
         // CREATE A GRIDPANE
-        List<Artist> listArtists = MainGetAllArtists.getAllArtists();
+        List<Artist> listArtists = MainGetArtists.getAllArtists();
         ScrollPane scrollPane = new ScrollPane();
         // ADD GRID_PANE INSIDE THE SCROLL_PANE OBJ
         scrollPane.setContent(buildMainGrid(listArtists));
@@ -147,6 +171,93 @@ public class SceneArtist extends BorderPane {
 
     }
 
+    private void setOriginalDescription(TextField textField, String originalText){
+
+        textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                if (textField.getText().isEmpty()) {
+                    textField.setText(originalText);
+                }
+            }
+        });
+    }
+
+    private void handleNationalSelection(TextField textFieldSearch ){
+        ScrollPane finalScrollPane = new ScrollPane();
+        String searchText = textFieldSearch.getText().trim();
+        if (!searchText.isEmpty()) {
+
+            List<Artist> artists = MainGetArtists.getArtistByNationality(searchText);
+            if(artists != null){
+                finalScrollPane.setContent(filteredGrid(artists));
+                this.setCenter(finalScrollPane);
+            }
+            else{
+                getScene().setRoot(new ShowErrorArtist());
+            }
+            this.setCenter(finalScrollPane);
+
+        }
+    }
+
+    private void handleBirthdateSelection(TextField textFieldSearch ){
+
+        ScrollPane finalScrollPane = new ScrollPane();
+        String searchText = textFieldSearch.getText().trim();
+        if (!searchText.isEmpty()) {
+
+            List<Artist> artists = MainGetArtists.getArtistByBirthdate(searchText);
+            if(artists != null){
+                finalScrollPane.setContent(filteredGrid(artists));
+                this.setCenter(finalScrollPane);
+            }
+            else{
+                getScene().setRoot(new ShowErrorArtist());
+            }
+            this.setCenter(finalScrollPane);
+
+        }
+
+    }
+
+    private void handleDeathdateSelection(TextField textFieldSearch ){
+
+        ScrollPane finalScrollPane = new ScrollPane();
+        String searchText = textFieldSearch.getText().trim();
+        if (!searchText.isEmpty()) {
+
+            List<Artist> artists = MainGetArtists.getArtistByDeathdate(searchText);
+            if(artists != null){
+                finalScrollPane.setContent(filteredGrid(artists));
+                this.setCenter(finalScrollPane);
+            }
+            else{
+                getScene().setRoot(new ShowErrorArtist());
+            }
+            this.setCenter(finalScrollPane);
+
+        }
+
+    }
+
+    private void handleSearchIconSelection(TextField textFieldSearch ){
+        ScrollPane finalScrollPane = new ScrollPane();
+        String searchText = textFieldSearch.getText().trim();
+        if (!searchText.isEmpty()) {
+
+            List<Artist> artists = MainGetArtists.getArtistByName(searchText);
+            if(artists != null){
+                finalScrollPane.setContent(filteredGrid(artists));
+                this.setCenter(finalScrollPane);
+            }
+            else{
+                getScene().setRoot(new ShowErrorArtist());
+            }
+            this.setCenter(finalScrollPane);
+
+        }
+    }
+
     private GridPane buildMainGrid(List<Artist> artistList){
 
         GridPane grid = new GridPane();
@@ -174,9 +285,71 @@ public class SceneArtist extends BorderPane {
                 hyperArtistName = new Hyperlink(artistName.substring(0,maxTextLength)+"...");
             }
 
-            String artistOrigen = MainGetArtistById.getArtistById(artist.getId()).getName();
+            String artistOrigen = MainGetArtists.getArtistById(artist.getId()).getName();
             Hyperlink hyperArtistOrigen;
 
+            if (artistOrigen.length() < maxTextLength){
+                hyperArtistOrigen = new Hyperlink(artistOrigen);
+            } else{
+                hyperArtistOrigen = new Hyperlink(artistOrigen.substring(0,maxTextLength)+"...");
+            }
+
+            String birthDate = artist.getBirthdate();
+            String deathDate = artist.getDeathdate();
+            Hyperlink hyperBirthDeathDate;
+            if(deathDate != null ){
+                hyperBirthDeathDate = new Hyperlink(birthDate + " | " + deathDate);
+            }
+            else {
+                hyperBirthDeathDate = new Hyperlink(birthDate );
+            }
+
+            imageViewArtist.setOnMouseClicked(e-> doArtistDetailsLayout(artist));
+
+            VBox vBoxLabelArtist = new VBox(hyperArtistName, hyperArtistOrigen, hyperBirthDeathDate);
+            // CALCULATE THE COORDINATE FOR EACH CELL (4 COLUMNS)
+            int col = i % 4;
+            int row = i / 4 * 2; // MULTIPLY BY TWO TO JUMP LINE ON EACH ITTERATION
+
+            // ADD IMAGES AND LABELS TO EACH CALCULATED SPOT
+            grid.add(imageViewArtist, col * 2, row);
+            grid.add(vBoxLabelArtist, col * 2, row + 1);
+
+            imageViewArtist.setOnMouseClicked(e->doArtistDetailsLayout(artist));
+        }
+
+        return grid;
+    }
+
+    private GridPane filteredGrid(List<Artist> artistList){
+
+        GridPane grid = new GridPane();
+        grid.setHgap(15.4);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(0, 10, 0, 0));
+        grid.setGridLinesVisible(false);
+
+        for (int i = 0; i < artistList.size(); i++) {
+            // int imageNum = i+1;
+
+            int maxTextLength = 23;
+            Artist artist = artistList.get(i);
+            String imageRef = artist.getReferenceImage();
+            Image image = new Image(imageRef);
+            ImageView imageViewArtist = new ImageView(image);
+            defaultSizeArtistImage(imageViewArtist);
+
+            String artistName = artist.getName();
+            Hyperlink hyperArtistName;
+
+            if (artistName.length() < maxTextLength){
+                hyperArtistName = new Hyperlink(artistName);
+            } else{
+                hyperArtistName = new Hyperlink(artistName.substring(0,maxTextLength)+"...");
+            }
+
+            String artistOrigen = artist.getNationality();
+            Hyperlink hyperArtistOrigen;
             if (artistOrigen.length() < maxTextLength){
                 hyperArtistOrigen = new Hyperlink(artistOrigen);
             } else{
@@ -303,7 +476,7 @@ public class SceneArtist extends BorderPane {
         hBoxCenterLayout.setSpacing(50);
 
 
-        List<Artwork> artistsArtworks = MainGetAllArtworksByArtistId.getAllArtworks(artist.getId());
+        List<Artwork> artistsArtworks = MainGetArtworks.getArtworksByArtistId(artist.getId());
 
         // CREATE SCROLL_PANE TO ALLOW US TO SCROLL THROUGH THE GRID_PANE
         ScrollPane scrollPane = new ScrollPane();
@@ -340,7 +513,6 @@ public class SceneArtist extends BorderPane {
 
     }
 
-
     private GridPane buildThisArtisArtworkGrid(List<Artwork> artworkList){
 
         GridPane grid = new GridPane();
@@ -351,9 +523,7 @@ public class SceneArtist extends BorderPane {
 
         for (int i = 0; i < artworkList.size(); i++) {
 
-            int imageNum = i+1;
             int maxTextLength = 23;
-
 
             Artwork artwork = artworkList.get(i);
             String imageRef = artwork.getReferenceImage().replace("{imageVersion}","square");
@@ -397,8 +567,7 @@ public class SceneArtist extends BorderPane {
         return grid;
     }
 
-
-
+    // image treatment
     public void defaultSizeIcon (ImageView imageView){
         imageView.setFitHeight(18); // Ajuste a altura conforme necessário
         imageView.setFitWidth(18);  // Ajuste a largura conforme necessário
