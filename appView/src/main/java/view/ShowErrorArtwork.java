@@ -11,9 +11,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 
-public class ShowError extends BorderPane {
+public class ShowErrorArtwork extends BorderPane {
 
-    public ShowError() {
+    public ShowErrorArtwork() {
         doLayout();
     }
 

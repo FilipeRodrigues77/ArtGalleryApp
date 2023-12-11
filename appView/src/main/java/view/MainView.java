@@ -106,10 +106,12 @@ public class MainView extends BorderPane {
         HBox hBoxSearch = new HBox(logoView, textFieldSearch, searchIconView);
         hBoxSearch.setSpacing(20);
         HBox hBoxHyperlink = new HBox(hyperlinkArtwork,hyperlinkArtist,hyperlinkGallery, hyperlinkExhibition, hyperlinkSlideShow);
+        hBoxHyperlink.setPadding(new Insets(10,0,0,0));
         hBoxHyperlink.setPrefHeight(50);
         hBoxHyperlink.setSpacing(20);
-        hBoxHyperlink.setPadding(new Insets(10,0,0,0));
+
         VBox vBoxTop = new VBox(hBoxSearch,hBoxHyperlink);
+
         setMargin(vBoxTop, new Insets(0, 0, 20, 0));
         setTop(vBoxTop);
 

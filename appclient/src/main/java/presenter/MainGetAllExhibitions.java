@@ -28,7 +28,7 @@ public class MainGetAllExhibitions {
                 .create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:8000/exhibitions")  // Update the URL to the endpoint for exhibitions
+                .url("http://localhost:4567/exhibitions")  // Update the URL to the endpoint for exhibitions
                 .build();
 
         try {

@@ -2,38 +2,38 @@ package presenter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import domain.Artwork;
+import domain.Artist;
 import okhttp3.*;
 
 import java.io.IOException;
 import java.util.List;
 
-public class UpdateReferenceImageInArtwork {
+public class UpdateReferenceImageInArtist {
 
     public static void main(String[] args) {
+
         OkHttpClient httpClient = new OkHttpClient();
         Gson gson = new GsonBuilder().create();
 
         // We need the list of URL
-        List<Artwork> listArtwork = MainGetArtworks.getAllArtworks();
+        List<Artist> listArtists = MainGetArtists.getAllArtists();
 
-        for (int i = 0; i < 85; i++) {
-            int imageNum = i + 1;
-            String path = "Images/Artwork/AllArtworks/{imageVersion}" + imageNum + ".jpg";
-
+        for (int i = 0; i < 40; i++) {
+            int artistNum = i + 1;
+            String path = "Images/Artist/ArtistSquare/square" + artistNum + ".jpg";
 
             // Sample data for the update
-            Artwork updatedArtwork = listArtwork.get(i);
+            Artist updatedArtist = listArtists.get(i);
+            updatedArtist.setReferenceImage(path);
 
-            updatedArtwork.setReferenceImage(path);
-            int artworkIdToUpdate = imageNum;
+            int artistIdToUpdate = artistNum;
 
-            // Serialize the updated artwork
-            String jsonRequestBody = gson.toJson(updatedArtwork);
+            // Serialize the updated artist
+            String jsonRequestBody = gson.toJson(updatedArtist);
 
             // Build the request
             Request putRequest = new Request.Builder()
-                    .url("http://localhost:4567/artworks/" + artworkIdToUpdate)
+                    .url("http://localhost:4567/artists/" + artistIdToUpdate)
                     .put(RequestBody.create(MediaType.parse("application/json"), jsonRequestBody))
                     .build();
 
@@ -44,18 +44,17 @@ public class UpdateReferenceImageInArtwork {
 
                 if (response.code() == 200) {
                     // Handle successful update response
-                    System.out.println("Artwork updated successfully");
+                    System.out.println("Artist updated successfully");
                 } else {
-                    // Handle failure response
-                    if (response.body() != null) {
-                        System.out.println(response.body().string());
-                    }
+
+                    System.out.println(response.body().string());
                 }
+
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
                 if (response != null && response.body() != null) {
-                    response.body().close(); // Close the response body
+                    response.body().close();
                 }
             }
         }
