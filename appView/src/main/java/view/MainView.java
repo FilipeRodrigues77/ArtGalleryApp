@@ -34,13 +34,16 @@ public class MainView extends BorderPane {
         Hyperlink hyperlinkSlideShow = new Hyperlink("SlideShow");
 
         // Labels
-        Label labelCenterArtwork = new Label("Mundo~Obras de Arte");
-        Label labelCenterArtist = new Label("Mundo~Artistas");
-        Label labelCenterGallery = new Label("Mundo~Galerias");
-        Label labelCenterExhibition = new Label("Mundo~Exposições");
+        Label labelCenterArtwork = new Label("I~A Mundo~Obras de Arte");
+        Label labelCenterArtist = new Label("I~A Mundo~Artistas");
+        Label labelCenterGallery = new Label("I~A Mundo~Galerias");
+        Label labelCenterExhibition = new Label("I~A Mundo~Exposições");
         Label labelBottonStatus = new Label("I~A © 2023 I~A  Todos os direitos reservados");
 
-        labelCenterArtwork.getStyleClass().add("my-label");
+        styleLabelCenterArtwork(labelCenterArtwork);
+        styleLabelCenterArtwork(labelCenterArtist);
+        styleLabelCenterArtwork(labelCenterGallery);
+        styleLabelCenterArtwork(labelCenterExhibition);
 
         // Text Fields
         TextField textFieldSearch = new TextField("Procurar por artista, galeria, exposição ou obra de arte");
@@ -48,10 +51,15 @@ public class MainView extends BorderPane {
         textFieldSearch.setOnMouseClicked(e -> textFieldSearch.clear());
 
         // Buttons
-        Button buttonArtwork = new Button("OBRAS");
-        Button buttonArtist = new Button("ARTISTAS");
-        Button buttonGallery = new Button("GALERIAS");
-        Button buttonExhibition = new Button("EXPOSIÇÕES");
+        Button buttonArtwork = new Button("Ver Obras de Arte");
+        Button buttonArtist = new Button("Ver Artistas");
+        Button buttonGallery = new Button("Ver Galerias");
+        Button buttonExhibition = new Button("Ver Exposições");
+
+        defaultButtonLayout(buttonArtwork);
+        defaultButtonLayout(buttonArtist);
+        defaultButtonLayout(buttonGallery);
+        defaultButtonLayout(buttonExhibition);
 
         // Imagens
         // I~A LOGO
@@ -78,19 +86,19 @@ public class MainView extends BorderPane {
         ImageView imageViewLinkedin = new ImageView(new Image(imageLinkedin));
         defaultSizeIcon(imageViewLinkedin);
 
-        String imageMainArtwork = "Images/Main/artwork01.jpg";
+        String imageMainArtwork = "Images/Main/exampleMainArtwork.png";
         ImageView imageViewMainArtwork = new ImageView(new Image(imageMainArtwork));
         defaultSizeMainImage(imageViewMainArtwork);
 
-        String imageMainArtist = "Images/Main/artista2.jpg";
+        String imageMainArtist = "Images/Main/exampleMainArtist.png";
         ImageView imageViewMainArtist = new ImageView(new Image(imageMainArtist));
         defaultSizeMainImage(imageViewMainArtist);
 
-        String imageMainGallery = "Images/Main/museo1.jpg";
+        String imageMainGallery = "Images/Main/exampleMainMuseum.png";
         ImageView imageViewMainGallery = new ImageView(new Image(imageMainGallery));
         defaultSizeMainImage(imageViewMainGallery);
 
-        String imageMainExhibition = "Images/Main/exposicao3.jpg";
+        String imageMainExhibition = "Images/Main/exampleMainExhibition.png";
         ImageView imageViewMainExhibition = new ImageView(new Image(imageMainExhibition));
         defaultSizeMainImage(imageViewMainExhibition);
 
@@ -102,17 +110,20 @@ public class MainView extends BorderPane {
         hBoxHyperlink.setPrefHeight(50);
         hBoxHyperlink.setSpacing(20);
 
-
         VBox vBoxTop = new VBox(hBoxSearch,hBoxHyperlink);
 
         setMargin(vBoxTop, new Insets(0, 0, 20, 0));
         setTop(vBoxTop);
 
         // Layout Bottom
-        HBox bottomImages = new HBox(imageViewLinkedin,imageViewGitHub);
-        bottomImages.setSpacing(10);
-        HBox bottomLayout = new HBox(labelBottonStatus,bottomImages);
-        bottomLayout.setSpacing(500);
+        HBox hBoxBottomStatus = new HBox(labelBottonStatus);
+        HBox.setHgrow(hBoxBottomStatus, javafx.scene.layout.Priority.ALWAYS);
+        hBoxBottomStatus.setAlignment(Pos.CENTER_LEFT);
+        HBox hBoxBottomImages = new HBox(imageViewLinkedin,imageViewGitHub);
+        hBoxBottomImages.setSpacing(10);
+        HBox.setHgrow(hBoxBottomImages, javafx.scene.layout.Priority.ALWAYS);
+        hBoxBottomImages.setAlignment(Pos.CENTER_RIGHT);
+        HBox bottomLayout = new HBox(hBoxBottomStatus,hBoxBottomImages);
         setBottom(bottomLayout);
 
         // Layout Center
@@ -130,9 +141,13 @@ public class MainView extends BorderPane {
         grid.add(imageViewMainGallery,0,3);
 
         VBox vBoxArtwork = new VBox(labelCenterArtwork,buttonArtwork);
+        vBoxArtwork.setSpacing(10);
         VBox vBoxArtist = new VBox(labelCenterArtist,buttonArtist);
+        vBoxArtist.setSpacing(10);
         VBox vBoxGallery = new VBox(labelCenterGallery,buttonGallery);
+        vBoxGallery.setSpacing(10);
         VBox vBoxExhibition = new VBox(labelCenterExhibition,buttonExhibition);
+        vBoxExhibition.setSpacing(10);
 
         grid.add(vBoxArtwork, 1, 0);
         grid.add(vBoxArtist, 1,1);
@@ -191,8 +206,18 @@ public class MainView extends BorderPane {
 
     public void defaultSizeMainImage (ImageView imageView){
         imageView.setFitHeight(100); // Ajuste a altura conforme necessário
-        imageView.setFitWidth(364);  // Ajuste a largura conforme necessário
+        imageView.setFitWidth(365);  // Ajuste a largura conforme necessário
         // imageView.setPreserveRatio(true);
+    }
+
+    public void defaultButtonLayout (Button button){
+        button.getStyleClass().add("button-modern");
+        button.setPrefWidth(180);
+        button.setPrefHeight(10);
+    }
+
+    public void styleLabelCenterArtwork (Label label){
+        label.getStyleClass().add("my-label");
     }
 
 }

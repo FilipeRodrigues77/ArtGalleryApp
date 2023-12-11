@@ -47,6 +47,21 @@
     -fx-focus-color: transparent; /* Remover contorno azul ao focar */
 }
 
+.actual-page-hyperlink {
+    -fx-text-fill: gray; /* Cor do texto normal */
+    -fx-underline: false; /* Remover sublinhado padrão */
+    -fx-font-style: italic;
+}
+
+.actual-page-hyperlink:hover {
+    -fx-text-fill: gray; /* Cor do texto ao passar o mouse */
+    -fx-underline: false; /* Adicionar sublinhado ao passar o mouse */
+}
+
+.actual-page-hyperlink:focused {
+    -fx-focus-color: transparent; /* Remover contorno azul ao focar */
+}
+
 .SlideShowView {
     -fx-background-image: url('SlideShowImages/QuadroClaro.jpg');
     -fx-background-size: cover;
@@ -80,12 +95,41 @@
     -fx-font-size: 16;
 }
 
-.my-center-label-6 {
+.my-label-gray-medium-size {
     -fx-font-weight: bold;
-    -fx-text-fill: white;
+    -fx-text-fill: gray;
     -fx-font-size: 16;
 }
 
 .cell-gray-background {
-    -fx-background-color: rgba(169, 169, 169, 0.8);
+    -fx-background-color: rgba(169, 169, 169, 0.7);
+}
+
+.cell-clear-background {
+    -fx-background-color: #f4f4f4; /* Cor de fundo */
+    -fx-background-radius: 7 7 7 7;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+/* Estilizar a área do track (trilha) do ScrollBar vertical */
+.scroll-bar:vertical .track {
+    -fx-background-color: #f0f0f0;
+}
+
+.button-modern {
+   -fx-background-color: transparent; /* Fundo transparente */
+   -fx-text-fill: #808080; /* Cor do texto (cinza) */
+   -fx-font-size: 10px; /* Tamanho da fonte */
+   -fx-padding: 10 20 10 20; /* Preenchimento interno do botão (topo direita baixo esquerda) */
+   -fx-border-radius: 50; /* Raio da borda do botão */
+   -fx-background-radius: 50; /* Raio do fundo do botão */
+   -fx-border-color: #808080; /* Cor da borda */
+   -fx-border-width: 1; /* Largura da borda */
+   -fx-cursor: hand; /* Cursor ao passar o mouse sobre o botão */
+}
+
+.button-modern:hover {
+    -fx-background-color: #f0f0f0; /* Cor de fundo ao passar o mouse sobre o botão */
 }
