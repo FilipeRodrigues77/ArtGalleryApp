@@ -1,5 +1,6 @@
 package view;
 
+import domain.Artist;
 import domain.Artwork;
 import javafx.geometry.Pos;
 import presenter.*;
@@ -26,7 +27,6 @@ public class SceneArtwork extends BorderPane {
         //getStylesheets().add("appStyleDark.css");
     }
 
-
     private void doLayout() {
         // Vamos criar aqui o layout deste painel
         setPadding(new Insets(20));
@@ -36,51 +36,7 @@ public class SceneArtwork extends BorderPane {
 
         ScrollPane finalScrollPane = scrollPane;
 
-        // HYPERLINKS
-        Hyperlink hyperlinkArtist = new Hyperlink("Artistas");
-        Hyperlink hyperlinkMain = new Hyperlink("     home ^");
-        Hyperlink hyperlinkGallery = new Hyperlink("Galerias");
-        Hyperlink hyperlinkExhibition = new Hyperlink("Exposições");
-        Hyperlink hyperLinkArtwork = new Hyperlink("Obras de Arte");
-
-
-        // Text Fields
-
-        String searchOrigText = "Procurar por artista, galeria, exposição ou obra de arte";
-        TextField textFieldSearch = new TextField(searchOrigText);
-        setOriginalDescription(textFieldSearch,searchOrigText);
-        textFieldSearch.setPrefSize(550, 30);
-        textFieldSearch.setOnMouseClicked(e -> textFieldSearch.clear());
-
-
-        // Images
-
-        // I~A LOGO
-        Image logo = new Image("Images/logo/logoIA-02.png");
-        ImageView logoView = new ImageView(logo);
-        logoView.preserveRatioProperty();
-        logoView.setFitWidth(27);
-        logoView.setFitHeight(27);
-        logoView.setSmooth(true);
-
-        // SEARCH ICON
-        Image searchIcon = new Image("Icons/searchIcon-03.png");
-        ImageView searchIconView = new ImageView(searchIcon);
-        searchIconView.preserveRatioProperty();
-        searchIconView.setFitWidth(20);
-        searchIconView.setFitHeight(20);
-        searchIconView.setSmooth(true);
-        searchIconView.setOnMouseClicked(e -> handleSearchIconSelection(textFieldSearch));
-
-        // ADD PAGE HEADER ELEMENTS
-        HBox hBoxHeader = new HBox(logoView,textFieldSearch, searchIconView, hyperlinkMain);
-        hBoxHeader.setSpacing(20);
-
-        // ADD THE HYPERLINKS
-        HBox hBoxHyperlink = new HBox(hyperlinkArtist,hyperLinkArtwork,hyperlinkGallery, hyperlinkExhibition);
-        hBoxHyperlink.setPadding(new Insets(10,0,0,0));
-        hBoxHyperlink.setPrefHeight(50);
-        hBoxHyperlink.setSpacing(20);
+        VBox headerVbox = getHeaderBox();
 
         // SET HBOX FOR THE FILTER MENUS
         HBox hBoxMenu = new HBox();
@@ -131,7 +87,7 @@ public class SceneArtwork extends BorderPane {
         hBoxMenu.setSpacing(30);
 
         // ADD ALL THE ELEMENTS FOR THE TOP SIDE INSIDE A HEADER VBOX
-        VBox vBoxTop = new VBox(hBoxHeader,hBoxHyperlink, hBoxMenu);
+        VBox vBoxTop = new VBox(headerVbox, hBoxMenu);
         setMargin(vBoxTop, new Insets(0, 0, 20, 0));
         setTop(vBoxTop);
 
@@ -142,50 +98,18 @@ public class SceneArtwork extends BorderPane {
 
         // ---------------------------------------------- BOTTOM LAYOUT ----------------------------------------------
 
-        // DEFINE A HBOX THAT WILL CONTRAIN ALL THE BOTTOM ELEMENTS
-        HBox bottomLayout = new HBox();
-
-        // IMAGES
-
-        // GIT IMAGE
-        String imageGitHubPath = "Icons/Github.png";
-        ImageView imageViewGitHub = new ImageView(new Image(imageGitHubPath));
-        defaultSizeIcon(imageViewGitHub);
-
-        // LINKEDIN IMAGE
-        String imageLinkedin = "Icons/Linkedin.png";
-        ImageView imageViewLinkedin = new ImageView(new Image(imageLinkedin));
-        defaultSizeIcon(imageViewLinkedin);
-
-        // DEFINE A HBOX THAT WILL CONTAIN THE IMAGES (ADD SIMULTANEOUSLY)
-        HBox bottomImages = new HBox(imageViewLinkedin,imageViewGitHub);
-        bottomImages.setSpacing(10);
-
-        // STATUS LABEL
-        Label labelBottonStatus = new Label("I~A © 2023 I~A  Todos os direitos reservados");
-        bottomLayout.getChildren().addAll(labelBottonStatus,bottomImages);
-        bottomLayout.setPadding(new Insets(20,0,0,0));
-        bottomLayout.setSpacing(500);
-
-        // CREATE SCROLL_PANE TO ALLOW US TO SCROLL THROUGH THE GRID_PANE
         scrollPane = new ScrollPane();
         // ADD GRID_PANE INSIDE THE SCROLL_PANE OBJ
         scrollPane.setContent(grid);
         // ADD THE BOTTOM ELEMENTS INSIDE THE DESIGNATED HBOX
-        this.setBottom(bottomLayout);
+        this.setBottom(getFooterBox());
 
         // ---------------------------------------------- END  PLUS ----------------------------------------------
         // LAST STEP: CENTER THE SCROLL_PANE
         this.setCenter(scrollPane);
 
-        // CONFIGURE ACTION TO CHANGE SCENARIO
-        hyperlinkArtist.setOnAction(e -> getScene().setRoot(new SceneArtist()));
-        hyperlinkMain.setOnAction(e -> getScene().setRoot(new MainView()));
-        hyperlinkGallery.setOnAction(e -> getScene().setRoot(new SceneGallery()));
-        hyperlinkExhibition.setOnAction(e -> getScene().setRoot(new SceneExhibition()));
 
     }
-
 
     private void setOriginalDescription(TextField textField, String originalText){
 
@@ -315,11 +239,8 @@ public class SceneArtwork extends BorderPane {
 
     }
 
-
-    private void setArtworkLabelsOnAction(String imageRef,String artworkName,String artistName, String galleryName,String medium, String category,
-                                          String sizeCM , String sizeIN, String price){
-
-        doDetailsLayout(imageRef,artworkName, artistName, galleryName, medium, category, sizeCM , sizeIN, price);
+    private void setArtworkLabelsOnAction(Artwork artwork){
+        getScene().setRoot(doDetailsLayout(artwork));
     }
 
     private ObservableList<String> createOptionsMenu (List<Artwork>artworkList, String field){
@@ -361,87 +282,47 @@ public class SceneArtwork extends BorderPane {
         imageView.setPreserveRatio(true);
     }
 
-    private void doDetailsLayout(String imageRef,String artworkName,String artistName, String galleryName,String medium, String category,
-                                 String sizeCM , String sizeIN, String price) {
+    public BorderPane doDetailsLayout(Artwork artwork) {
 
         setPadding(new Insets(20));
 
-        //--------------------------------------------- HEADER ELEMENTS ---------------------------------------------
-
-        // HYPERLINKS
-        Hyperlink hyperlinkArtist = new Hyperlink("Artistas");
-        Hyperlink hyperlinkMain = new Hyperlink("     home ^");
-        Hyperlink hyperlinkGallery = new Hyperlink("Galerias");
-        Hyperlink hyperlinkExhibition = new Hyperlink("Exposições");
-        Hyperlink hyperLinkArtwork = new Hyperlink("Obras de Arte");
-
-        // TEXT FIELDS
-        TextField textFieldSearch = new TextField("Procurar por artista, galeria, exposição ou obra de arte");
-        textFieldSearch.setPrefSize(550, 30);
-        textFieldSearch.setOnMouseClicked(e -> textFieldSearch.clear());
-
-        // IMAGES
-
-        // I~A LOGO
-        Image logo = new Image("Images/logo/logoIA-02.png");
-        ImageView logoView = new ImageView(logo);
-        logoView.preserveRatioProperty();
-        logoView.setFitWidth(27);
-        logoView.setFitHeight(27);
-        logoView.setSmooth(true);
-
-        // SEARCH ICON
-        Image searchIcon = new Image("Icons/searchIcon-03.png");
-        ImageView searchIconView = new ImageView(searchIcon);
-        searchIconView.preserveRatioProperty();
-        searchIconView.setFitWidth(20);
-        searchIconView.setFitHeight(20);
-        searchIconView.setSmooth(true);
-
-        // ---------------------------------------------- TOP LAYOUT ----------------------------------------------
-
-        // ADD PAGE HEADER ELEMENTS
-        HBox hBoxHeader = new HBox(logoView,textFieldSearch, searchIconView, hyperlinkMain);
-        hBoxHeader.setSpacing(20);
-
-        // ADD THE HYPERLINKS
-        HBox hBoxHyperlink = new HBox(hyperlinkArtist,hyperLinkArtwork,hyperlinkGallery, hyperlinkExhibition);
-        hBoxHyperlink.setPadding(new Insets(10,0,0,0));
-        hBoxHyperlink.setPrefHeight(50);
-        hBoxHyperlink.setSpacing(20);
-
         // ADD ALL THE ELEMENTS FOR THE TOP SIDE INSIDE A HEADER VBOX
-        VBox vBoxTop = new VBox(hBoxHeader,hBoxHyperlink);
+        VBox vBoxTop = getHeaderBox();
         setMargin(vBoxTop, new Insets(0, 0, 20, 0));
         setTop(vBoxTop);
 
         // ---------------------------------------------- CENTER LAYOUT ----------------------------------------------
 
         // ARTWORK IMAGE
-        String imageArtwork = imageRef.replace("{imageVersion}", "large_rectangle");
+        String imageArtwork = artwork.getReferenceImage().replace("{imageVersion}", "large_rectangle");
         ImageView imageViewArtwork = new ImageView(new Image(imageArtwork));
         imageViewArtwork.setFitHeight(300);
         imageViewArtwork.setFitWidth(360);
-        imageViewArtwork.setOnMouseClicked(e -> getScene().setRoot(new ShowFullImage(imageRef)));
+        imageViewArtwork.setOnMouseClicked(e -> getScene().setRoot(new ShowFullImage(artwork.getReferenceImage())));
 
 
         // LABELS
-        Label labelArtworkName = new Label(artworkName);
-        Label labelArtistName = new Label(artistName);
-        Label labelGalleryName = new Label(galleryName);
-        Label labelArtworkMedium = new Label(medium);
-        Label labelArtworkCategory = new Label(category);
-        Label labelArtworkSizeCM = new Label(sizeCM.substring(1,sizeCM.length()-1));
-        Label labelArtworkSizeIN = new Label(sizeIN.substring(1,sizeIN.length()-1));
-        Label labelPrice = new Label(price);
+        Label labelArtworkName = new Label(artwork.getName());
+        Label labelArtistName = new Label(MainGetArtists.getArtistById(artwork.getIdArtist()).getName());
+        Label labelGalleryName = new Label(MainGetGalleries.getGalleryById(artwork.getIdGallery()).getNameGallery());
+        Label labelArtworkMedium = new Label(artwork.getName());
+        Label labelArtworkCategory = new Label(artwork.getCategory());
+
+
+        Label labelArtworkSizeCM = new Label(artwork.getDimensionCm().substring(1,artwork.getDimensionCm().length()-1));
+        Label labelArtworkSizeIN = new Label(artwork.getDimensionIN().substring(1,artwork.getDimensionIN().length()-1));
+        Label labelPrice = new Label(String.valueOf(artwork.getPrice()));
 
 
         // See artist button
-        Button artistDetailsButton = new Button("Ver artista");
-
         // This should be a button that links to the artists details page:
-        // Label labelBiography = new Label("Aqui está a biografia do artista");
+        Button artistDetailsButton = new Button("Ver artista");
+        SceneArtist artistDetailsScene = new SceneArtist();
+        Artist artist = MainGetArtists.getArtistById(artwork.getIdArtist());
+        artistDetailsButton.setOnAction(e-> getScene().setRoot(artistDetailsScene.doArtistDetailsLayout(artist)));
 
+
+        // CREATE REQUIRED LABELS
         labelArtworkName.getStyleClass().add("my-center-label-1");
         labelArtistName.getStyleClass().add("my-center-label-2");
         labelGalleryName.getStyleClass().add("my-center-label-2");
@@ -467,6 +348,15 @@ public class SceneArtwork extends BorderPane {
 
         // ---------------------------------------------- BOTTOM LAYOUT ----------------------------------------------
 
+        setBottom(getFooterBox());
+
+        // ---------------------------------------------- END  PLUS ----------------------------------------------
+
+        return this;
+    }
+
+    private HBox getFooterBox (){
+
         // GIT IMAGE
         String imageGitHubPath = "Icons/Github.png";
         ImageView imageViewGitHub = new ImageView(new Image(imageGitHubPath));
@@ -488,15 +378,70 @@ public class SceneArtwork extends BorderPane {
         HBox hBoxBottomLayout = new HBox(labelButtonStatus,hBoxBottomImages);
         hBoxBottomLayout.setPadding(new Insets(20,0,0,0));
         hBoxBottomLayout.setSpacing(500);
-        setBottom(hBoxBottomLayout);
 
-        // ---------------------------------------------- END  PLUS ----------------------------------------------
+        return hBoxBottomLayout;
+    }
+
+    private VBox getHeaderBox (){
+
+        // HYPERLINKS
+        Hyperlink hyperlinkArtist = new Hyperlink("Artistas");
+        Hyperlink hyperlinkMain = new Hyperlink("     home ^");
+        Hyperlink hyperlinkGallery = new Hyperlink("Galerias");
+        Hyperlink hyperlinkExhibition = new Hyperlink("Exposições");
+        Hyperlink hyperLinkArtwork = new Hyperlink("Obras de Arte");
+
+        // TEXT FIELDS
+        String searchOrigText = "Procurar por artista, galeria, exposição ou obra de arte";
+        TextField textFieldSearch = new TextField(searchOrigText);
+        setOriginalDescription(textFieldSearch,searchOrigText);
+        textFieldSearch.setPrefSize(550, 30);
+        textFieldSearch.setOnMouseClicked(e -> textFieldSearch.clear());
+
+        // IMAGES
+
+        // I~A LOGO
+        Image logo = new Image("Images/logo/logoIA-02.png");
+        ImageView logoView = new ImageView(logo);
+        logoView.preserveRatioProperty();
+        logoView.setFitWidth(27);
+        logoView.setFitHeight(27);
+        logoView.setSmooth(true);
+
+        // SEARCH ICON
+        Image searchIcon = new Image("Icons/searchIcon-03.png");
+        ImageView searchIconView = new ImageView(searchIcon);
+        searchIconView.preserveRatioProperty();
+        searchIconView.setFitWidth(20);
+        searchIconView.setFitHeight(20);
+        searchIconView.setSmooth(true);
+        searchIconView.setOnMouseClicked(e -> handleSearchIconSelection(textFieldSearch));
+
+        // ---------------------------------------------- TOP LAYOUT ----------------------------------------------
+
+        // ADD PAGE HEADER ELEMENTS
+        HBox hBoxHeader = new HBox(logoView,textFieldSearch, searchIconView, hyperlinkMain);
+        hBoxHeader.setSpacing(20);
+
+        // ADD THE HYPERLINKS
+        HBox hBoxHyperlink = new HBox(hyperlinkArtist,hyperLinkArtwork,hyperlinkGallery, hyperlinkExhibition);
+        hBoxHyperlink.setPadding(new Insets(10,0,0,0));
+        hBoxHyperlink.setPrefHeight(50);
+        hBoxHyperlink.setSpacing(20);
+
+        // ADD ALL THE ELEMENTS FOR THE TOP SIDE INSIDE A HEADER VBOX
+        VBox vBoxTop = new VBox(hBoxHeader,hBoxHyperlink);
+        setMargin(vBoxTop, new Insets(0, 0, 20, 0));
 
         // CONFIGURE ACTION TO CHANGE SCENARIO
         hyperlinkArtist.setOnAction(e -> getScene().setRoot(new SceneArtist()));
         hyperlinkMain.setOnAction(e -> getScene().setRoot(new MainView()));
         hyperlinkGallery.setOnAction(e -> getScene().setRoot(new SceneGallery()));
         hyperlinkExhibition.setOnAction(e -> getScene().setRoot(new SceneExhibition()));
+        hyperLinkArtwork.setOnAction(e -> getScene().setRoot(new SceneArtwork()));
+
+
+        return  vBoxTop;
 
     }
 
@@ -553,17 +498,13 @@ public class SceneArtwork extends BorderPane {
             String price = String.valueOf(artwork.getPrice());
             Hyperlink hyperPrice = new Hyperlink(price);
 
-            hyperArtworkName.setOnAction(e-> setArtworkLabelsOnAction(artwork.getReferenceImage(), artworkName,artistName,galleryName,
-                    artwork.getMedium(),artwork.getCategory(), artwork.getDimensionCm(),artwork.getDimensionIN(),price));
+            hyperArtworkName.setOnAction(e-> setArtworkLabelsOnAction(artwork));
 
-            hyperArtistName.setOnAction(e-> setArtworkLabelsOnAction(artwork.getReferenceImage(),artworkName,artistName,galleryName,
-                    artwork.getMedium(),artwork.getCategory(), artwork.getDimensionCm(),artwork.getDimensionIN(),price));
+            hyperArtistName.setOnAction(e-> setArtworkLabelsOnAction(artwork));
 
-            hyperGalleryName.setOnAction(e-> setArtworkLabelsOnAction(artwork.getReferenceImage(),artworkName,artistName,galleryName,
-                    artwork.getMedium(),artwork.getCategory(), artwork.getDimensionCm(),artwork.getDimensionIN(),price));
+            hyperGalleryName.setOnAction(e-> setArtworkLabelsOnAction(artwork));
 
-            imageViewArtwork.setOnMouseClicked(e-> setArtworkLabelsOnAction(artwork.getReferenceImage(),artworkName,artistName,galleryName,
-                    artwork.getMedium(),artwork.getCategory(), artwork.getDimensionCm(),artwork.getDimensionIN(),price));
+            imageViewArtwork.setOnMouseClicked(e-> setArtworkLabelsOnAction(artwork));
 
 
             VBox vBoxLabelArtwork = new VBox(hyperArtworkName, hyperArtistName, hyperGalleryName, hyperPrice);
@@ -634,18 +575,13 @@ public class SceneArtwork extends BorderPane {
                 String price = String.valueOf(artwork.getPrice());
                 Hyperlink hyperPrice = new Hyperlink(price);
 
-                hyperArtworkName.setOnAction(e-> setArtworkLabelsOnAction(artwork.getReferenceImage(), artworkName,artistName,galleryName,
-                        artwork.getMedium(),artwork.getCategory(), artwork.getDimensionCm(),artwork.getDimensionIN(),price));
+                hyperArtworkName.setOnAction(e-> setArtworkLabelsOnAction(artwork));
 
-                hyperArtistName.setOnAction(e-> setArtworkLabelsOnAction(artwork.getReferenceImage(),artworkName,artistName,galleryName,
-                        artwork.getMedium(),artwork.getCategory(), artwork.getDimensionCm(),artwork.getDimensionIN(),price));
+                hyperArtistName.setOnAction(e-> setArtworkLabelsOnAction(artwork));
 
-                hyperGalleryName.setOnAction(e-> setArtworkLabelsOnAction(artwork.getReferenceImage(),artworkName,artistName,galleryName,
-                        artwork.getMedium(),artwork.getCategory(), artwork.getDimensionCm(),artwork.getDimensionIN(),price));
+                hyperGalleryName.setOnAction(e-> setArtworkLabelsOnAction(artwork));
 
-                imageViewArtwork.setOnMouseClicked(e-> setArtworkLabelsOnAction(artwork.getReferenceImage(),artworkName,artistName,galleryName,
-                        artwork.getMedium(),artwork.getCategory(), artwork.getDimensionCm(),artwork.getDimensionIN(),price));
-
+                imageViewArtwork.setOnMouseClicked(e-> setArtworkLabelsOnAction(artwork));
 
                 VBox vBoxLabelArtwork = new VBox(hyperArtworkName, hyperArtistName, hyperGalleryName, hyperPrice);
 

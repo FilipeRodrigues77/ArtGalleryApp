@@ -1,11 +1,15 @@
 package view;
 
+import domain.Artist;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import presenter.MainGetArtists;
+
+import java.util.List;
 
 public class SceneGallery extends BorderPane {
 
@@ -167,6 +171,119 @@ public class SceneGallery extends BorderPane {
         hyperlinkArtist.setOnAction(e -> getScene().setRoot(new SceneArtist()));
         hyperlinkExhibition.setOnAction(e -> getScene().setRoot(new SceneExhibition()));
 
+    }
+
+
+    private void setOriginalDescription(TextField textField, String originalText){
+
+        textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                if (textField.getText().isEmpty()) {
+                    textField.setText(originalText);
+                }
+            }
+        });
+    }
+
+    private HBox getFooterBox (){
+
+        // GIT IMAGE
+        String imageGitHubPath = "Icons/Github.png";
+        ImageView imageViewGitHub = new ImageView(new Image(imageGitHubPath));
+        defaultSizeIcon(imageViewGitHub);
+
+        // LINKEDIN IMAGE
+        String imageLinkedin = "Icons/Linkedin.png";
+        ImageView imageViewLinkedin = new ImageView(new Image(imageLinkedin));
+        defaultSizeIcon(imageViewLinkedin);
+
+        // LABEL
+        Label labelButtonStatus = new Label("I~A © 2023 I~A  Todos os direitos reservados");
+
+        // DEFINE A HBOX THAT WILL CONTAIN THE IMAGES (ADD SIMULTANEOUSLY)
+        HBox hBoxBottomImages = new HBox(imageViewLinkedin,imageViewGitHub);
+        hBoxBottomImages.setSpacing(10);
+
+        // HBOX BOTTOM
+        HBox hBoxBottomLayout = new HBox(labelButtonStatus,hBoxBottomImages);
+        hBoxBottomLayout.setPadding(new Insets(20,0,0,0));
+        hBoxBottomLayout.setSpacing(500);
+
+        return hBoxBottomLayout;
+    }
+
+    private VBox getHeaderBox (){
+
+        // HYPERLINKS
+        Hyperlink hyperlinkArtist = new Hyperlink("Artistas");
+        Hyperlink hyperlinkMain = new Hyperlink("     home ^");
+        Hyperlink hyperlinkGallery = new Hyperlink("Galerias");
+        Hyperlink hyperlinkExhibition = new Hyperlink("Exposições");
+        Hyperlink hyperLinkArtwork = new Hyperlink("Obras de Arte");
+
+        // Text Fields
+        String searchOrigText = "Procurar por artista, galeria, exposição ou obra de arte";
+        TextField textFieldSearch = new TextField(searchOrigText);
+        setOriginalDescription(textFieldSearch,searchOrigText);
+        textFieldSearch.setPrefSize(550, 30);
+        textFieldSearch.setOnMouseClicked(e -> textFieldSearch.clear());
+
+        // I~A LOGO
+        Image logo = new Image("Images/logo/logoIA-02.png");
+        ImageView logoView = new ImageView(logo);
+        logoView.preserveRatioProperty();
+        logoView.setFitWidth(27);
+        logoView.setFitHeight(27);
+        logoView.setSmooth(true);
+
+        // SEARCH ICON
+        Image searchIcon = new Image("Icons/searchIcon-03.png");
+        ImageView searchIconView = new ImageView(searchIcon);
+        searchIconView.preserveRatioProperty();
+        searchIconView.setFitWidth(20);
+        searchIconView.setFitHeight(20);
+        searchIconView.setSmooth(true);
+        searchIconView.setOnMouseClicked(e -> handleSearchIconSelection(textFieldSearch));
+
+        // ADD PAGE HEADER ELEMENTS --
+        HBox hBoxHeader = new HBox(logoView,textFieldSearch, searchIconView, hyperlinkMain);
+        hBoxHeader.setSpacing(20);
+
+        // ADD THE HYPERLINKS
+        HBox hBoxHyperlink = new HBox(hyperlinkArtist,hyperLinkArtwork,hyperlinkGallery, hyperlinkExhibition);
+        hBoxHyperlink.setPadding(new Insets(10,0,0,0));
+        hBoxHyperlink.setPrefHeight(50);
+        hBoxHyperlink.setSpacing(20);
+
+        // CONFIGURE ACTION TO CHANGE SCENARIO
+        hyperLinkArtwork.setOnAction(e -> getScene().setRoot(new SceneArtwork()));
+        hyperlinkMain.setOnAction(e -> getScene().setRoot(new MainView()));
+        hyperlinkGallery.setOnAction(e -> getScene().setRoot(new SceneGallery()));
+        hyperlinkExhibition.setOnAction(e -> getScene().setRoot(new SceneExhibition()));
+
+        VBox vBoxTop = new VBox(hBoxHeader,hBoxHyperlink);
+        setMargin(vBoxTop, new Insets(0, 0, 20, 0));
+
+        return  vBoxTop;
+
+    }
+
+    private void handleSearchIconSelection(TextField textFieldSearch ){
+        ScrollPane finalScrollPane = new ScrollPane();
+        String searchText = textFieldSearch.getText().trim();
+        if (!searchText.isEmpty()) {
+
+            List<Artist> artists = MainGetArtists.getArtistByName(searchText);
+            if(artists != null){
+                // finalScrollPane.setContent(filteredGrid(artists));
+                this.setCenter(finalScrollPane);
+            }
+            else{
+                getScene().setRoot(new ShowErrorArtist());
+            }
+            this.setCenter(finalScrollPane);
+
+        }
     }
 
     public void defaultSizeIcon (ImageView imageView){

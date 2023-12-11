@@ -1,5 +1,6 @@
 package view;
 
+import domain.Artwork;
 import javafx.geometry.Insets;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -8,8 +9,9 @@ import javafx.scene.layout.BorderPane;
 
 public class ShowFullImage extends BorderPane {
 
-    public ShowFullImage(String imageToShowRef) {
+    public ShowFullImage(String imageToShowRef ) {
         doLayout(imageToShowRef);
+
     }
 
     private void doLayout(String reference ) {
@@ -23,12 +25,8 @@ public class ShowFullImage extends BorderPane {
         this.setTop(arrowView);
         arrowView.setOnMouseClicked(e -> getScene().setRoot(new SceneArtwork()));
 
-
-
-
         String imageArtwork = reference.replace("{imageVersion}", "large");
         Image imageToDisplay = new Image(imageArtwork);
-
 
         double resizePercentage ;
         if(imageToDisplay.getHeight() >= sceneLength ){
