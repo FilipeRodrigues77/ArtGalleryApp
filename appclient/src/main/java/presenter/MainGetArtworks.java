@@ -30,7 +30,7 @@ public class MainGetArtworks {
         Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:9000/artworks")
+                .url("http://localhost:8000/artworks")
                 .build();
 
         try {
@@ -71,7 +71,7 @@ public class MainGetArtworks {
         Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:9000/artworks/searchByArtist?idArtist="+ idArtist)
+                .url("http://localhost:8000/artworks/searchByArtist?idArtist="+ idArtist)
                 .build();
 
         try {
@@ -109,7 +109,7 @@ public class MainGetArtworks {
         OkHttpClient httpClient = new OkHttpClient();
         Gson gson = new GsonBuilder().create();
 
-        String url = "http://localhost:9000/artworks/searchByCategory?category=" + category;
+        String url = "http://localhost:8000/artworks/searchByCategory?category=" + category;
 
         Request getRequest = new Request.Builder()
                 .url(url)
@@ -149,7 +149,7 @@ public class MainGetArtworks {
         Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:9000/artworks/searchMedium?medium="+medium)
+                .url("http://localhost:8000/artworks/searchMedium?medium="+medium)
                 .build();
 
         try {
@@ -188,7 +188,7 @@ public class MainGetArtworks {
         Gson gson = new GsonBuilder().create();
 
         //Build the url and add query parameter
-        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://localhost:9000/artworks/searchName")).newBuilder();
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://localhost:8000/artworks/searchName")).newBuilder();
         urlBuilder.addQueryParameter("name", name);
         String url = urlBuilder.build().toString();
 
@@ -229,7 +229,7 @@ public class MainGetArtworks {
         OkHttpClient httpClient = new OkHttpClient();
         Gson gson = new GsonBuilder().create();
 
-        String url = "http://localhost:9000/artworks/searchByDateRange?startDate=" + startDate + "&endDate=" + endDate;
+        String url = "http://localhost:8000/artworks/searchByDateRange?startDate=" + startDate + "&endDate=" + endDate;
 
         Request getRequest = new Request.Builder()
                 .url(url)
@@ -269,7 +269,7 @@ public class MainGetArtworks {
         Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:9000/artworks/searchPriceRange?min="+minPrice+"&max="+maxPrice)
+                .url("http://localhost:8000/artworks/searchPriceRange?min="+minPrice+"&max="+maxPrice)
                 .build();
 
         try {
@@ -308,7 +308,7 @@ public class MainGetArtworks {
         Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:9000/artworks/searchByGallery?idGallery=" + idGallery)
+                .url("http://localhost:8000/artworks/searchByGallery?idGallery=" + idGallery)
                 .build();
 
         try {

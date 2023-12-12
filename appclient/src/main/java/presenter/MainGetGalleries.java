@@ -28,7 +28,7 @@ public class MainGetGalleries {
         Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:9000/galleries")  // Update the URL to the endpoint for galleries
+                .url("http://localhost:8000/galleries")  // Update the URL to the endpoint for galleries
                 .build();
 
         try {
@@ -71,7 +71,7 @@ public class MainGetGalleries {
         Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:9000/galleries/"+galleryId)
+                .url("http://localhost:8000/galleries/"+galleryId)
                 .build();
 
         try {
@@ -111,7 +111,7 @@ public class MainGetGalleries {
         Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:9000/galleries/searchByRegion?region=" + region)
+                .url("http://localhost:8000/galleries/searchByRegion?region=" + region)
                 .build();
 
         try {
