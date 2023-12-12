@@ -298,7 +298,7 @@ public class SceneArtwork extends BorderPane {
         ImageView imageViewArtwork = new ImageView(new Image(imageArtwork));
         imageViewArtwork.setFitHeight(300);
         imageViewArtwork.setFitWidth(360);
-        imageViewArtwork.setOnMouseClicked(e -> getScene().setRoot(new ShowFullImage(artwork.getReferenceImage())));
+        imageViewArtwork.setOnMouseClicked(e -> getScene().setRoot(new ShowFullImage(artwork.getReferenceImage(), artwork,getScene().getHeight())));
 
 
         // LABELS
@@ -486,7 +486,7 @@ public class SceneArtwork extends BorderPane {
             }
 
 
-            String galleryName = MainGetGalleryById.getGalleryById(artwork.getIdGallery()).getNameGallery();
+            String galleryName = MainGetGalleries.getGalleryById(artwork.getIdGallery()).getNameGallery();
             Hyperlink hyperGalleryName;
             if (galleryName.length() < maxTextLength){
                 hyperGalleryName = new Hyperlink(galleryName);
@@ -563,7 +563,7 @@ public class SceneArtwork extends BorderPane {
                 }
 
 
-                String galleryName = MainGetGalleryById.getGalleryById(artwork.getIdGallery()).getNameGallery();
+                String galleryName = MainGetGalleries.getGalleryById(artwork.getIdGallery()).getNameGallery();
                 Hyperlink hyperGalleryName;
                 if (galleryName.length() < maxTextLength){
                     hyperGalleryName = new Hyperlink(galleryName);

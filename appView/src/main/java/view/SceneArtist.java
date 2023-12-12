@@ -478,7 +478,7 @@ public class SceneArtist extends BorderPane {
             }
 
 
-            String galleryName = MainGetGalleryById.getGalleryById(artwork.getIdGallery()).getNameGallery();
+            String galleryName = MainGetGalleries.getGalleryById(artwork.getIdGallery()).getNameGallery();
             Hyperlink hyperGalleryName;
             if (galleryName.length() < maxTextLength){
                 hyperGalleryName = new Hyperlink(galleryName);

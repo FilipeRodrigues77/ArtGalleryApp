@@ -550,6 +550,7 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
                 gallery.setNameGallery(resultSet.getString("nameGallery"));
                 gallery.setEmail(resultSet.getString("email"));
                 gallery.setRegionName(resultSet.getString("regionName"));
+                gallery.setReferenceImage(resultSet.getString("referenceImage"));
 
                 // add a single gallery to the list of galleries
                 galleries.add(gallery);
@@ -575,6 +576,7 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
                 gallery.setNameGallery(resultSet.getString("nameGallery"));
                 gallery.setEmail(resultSet.getString("email"));
                 gallery.setRegionName(resultSet.getString("regionName"));
+                gallery.setReferenceImage(resultSet.getString("referenceImage"));
 
             }
 
@@ -603,6 +605,7 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
                     gallery.setNameGallery(resultSet.getString("nameGallery"));
                     gallery.setEmail(resultSet.getString("email"));
                     gallery.setRegionName(resultSet.getString("regionName"));
+                    gallery.setReferenceImage(resultSet.getString("referenceImage"));
 
                     galleries.add(gallery);
                 }
@@ -617,8 +620,8 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
 
     @Override
     public Gallery createGallery(Gallery gallery) throws ServiceException {
-        String commandSql = "INSERT INTO Gallery (nameGallery, email, regionName) " +
-                "VALUES (?, ?, ?)";
+        String commandSql = "INSERT INTO Gallery (nameGallery, email, regionName, referenceImage) " +
+                "VALUES (?, ?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement preparedStatement = conn.prepareStatement(commandSql, Statement.RETURN_GENERATED_KEYS)) {
@@ -626,6 +629,7 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
             preparedStatement.setString(1, gallery.getNameGallery());
             preparedStatement.setString(2, gallery.getEmail());
             preparedStatement.setString(3, gallery.getRegionName());
+            preparedStatement.setString(4, gallery.getReferenceImage());
 
             int affectedRows = preparedStatement.executeUpdate();
 
@@ -645,7 +649,7 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
 
     @Override
     public Gallery updateGallery(Gallery gallery) throws ServiceException {
-        String commandSql = "UPDATE Gallery SET nameGallery = ?, email = ?, regionName = ?" +
+        String commandSql = "UPDATE Gallery SET nameGallery = ?, email = ?, regionName = ?, referenceImage = ?" +
                 "WHERE idGallery = " + gallery.getId();
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
@@ -654,6 +658,7 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
             preparedStatement.setString(1, gallery.getNameGallery());
             preparedStatement.setString(2, gallery.getEmail());
             preparedStatement.setString(3, gallery.getRegionName());
+            preparedStatement.setString(4, gallery.getReferenceImage());
 
             int affectedRows = preparedStatement.executeUpdate();
 
@@ -686,6 +691,8 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
         }
     }
 
+
+    // to be used when refactoring :
     private List<Gallery> buildGalleries(ResultSet resultSet) throws SQLException {
         List<Gallery> galleries = new ArrayList<>();
         while (resultSet.next()) {
@@ -694,6 +701,7 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
             gallery.setNameGallery(resultSet.getString("nameGallery"));
             gallery.setEmail(resultSet.getString("email"));
             gallery.setRegionName(resultSet.getString("regionName"));
+            gallery.setReferenceImage(resultSet.getString("referenceImage"));
 
             // add a single gallery to the list of galleries
             galleries.add(gallery);

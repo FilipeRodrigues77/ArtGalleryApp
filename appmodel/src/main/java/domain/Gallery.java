@@ -7,17 +7,19 @@ public class Gallery {
     private String email;
     private String regionName;
     private String referenceShows;
+    private String referenceImage;
 
     public Gallery() {
     }
 
-    public Gallery(int id, String nameGallery, String email, String regionName, String referenceShows) {
+    public Gallery(int id, String nameGallery, String email, String regionName, String referenceShows, String referenceImage) {
 
         this.id = id;
         this.nameGallery = nameGallery;
         this.email = email;
         this.regionName = regionName;
         this.referenceShows = referenceShows;
+        this.referenceImage = referenceImage;
     }
 
     public int getId() {
@@ -40,6 +42,9 @@ public class Gallery {
         return referenceShows;
     }
 
+    public String getReferenceImage() {
+        return referenceImage;
+    }
 
     public void setId(int id) {
         this.id = id;
@@ -61,6 +66,10 @@ public class Gallery {
         this.referenceShows = referenceShows;
     }
 
+    public void setReferenceImage(String referenceImage) {
+        this.referenceImage = referenceImage;
+    }
+
     @Override
     public String toString() {
         return "Gallery{" + "\n" +
@@ -68,6 +77,7 @@ public class Gallery {
                 ", nameGallery='" + nameGallery + '\'' + "\n" +
                 ", email='" + email + '\'' + "\n" +
                 ", regionName='" + regionName + '\'' + "\n" +
+                ", referenceImage='" + referenceImage + '\'' + "\n" +
                 '}'+"\n\n";
     }
 }
