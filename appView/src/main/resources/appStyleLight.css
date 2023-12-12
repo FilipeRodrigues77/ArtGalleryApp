@@ -67,7 +67,7 @@
 }
 
 .SlideShowView {
-    -fx-background-image: url('SlideShowImages/QuadroClaro.jpg');
+    -fx-background-image: url('SlideShowImages/QuadroSlideShowClaroNovo.png');
     -fx-background-size: cover;
     -fx-background-position: center;
 }

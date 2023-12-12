@@ -24,7 +24,9 @@ public class SlideShowView extends BorderPane {
 
     public SlideShowView() {
         // Configuração do layout
-        getStylesheets().add("appStyleLight.css");
+        MainView mainView = new MainView();
+        String cssTheme = mainView.themeCurrent;
+        getStylesheets().add(cssTheme);
         getStyleClass().add("SlideShowView");
         StackPane centerPane = new StackPane();
         centerPane.setAlignment(Pos.CENTER);
@@ -50,8 +52,9 @@ public class SlideShowView extends BorderPane {
                 centerPane.getChildren().add(imageView);
 
                 // Adiciona o botão "Fechar"
-                Button buttonMain = new Button("PRINCIPAL");
+                Button buttonMain = new Button("Retornar");
                 buttonMain.setOnAction(e -> getScene().setRoot(new MainView()));
+                buttonMain.getStyleClass().add("button-modern");
                 setBottom(buttonMain);
 
                 // Configuração do Timeline para mudar de imagem a cada 3 segundos
