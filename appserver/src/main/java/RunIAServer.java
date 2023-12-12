@@ -37,7 +37,7 @@ public class RunIAServer {
 
         // Default port is 4567, hence we're running at http://localhost:4567/<endpoint>
 
-        port(4567);
+        port(9000);
         logger.info("Starting Main server at {}", new Date().toString());
 
         /*  INSTANTIATE STORAGE */
@@ -599,6 +599,30 @@ public class RunIAServer {
                     return jsonObject.toString();
                 }
             });
+
+            get("/searchByRegion", (request, response) -> {
+                String region = request.queryParams("region");
+
+                if (region != null && !region.isEmpty()) {
+                    response.type("application/json");
+                    List<Gallery> matchingGalleries = storage.getGalleryByRegion(region);
+
+                    if (matchingGalleries.isEmpty()) {
+                        response.status(404); // Not Found
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("message", "No matching galleries found for the specified region");
+                        return jsonObject.toString();
+                    } else {
+                        return gson.toJson(matchingGalleries);
+                    }
+                } else {
+                    response.status(400); // Bad Request
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("message", "Please provide a valid region");
+                    return jsonObject.toString();
+                }
+            });
+
 
             get("/:id", (request, response) -> {
                 try {
