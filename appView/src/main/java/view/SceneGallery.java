@@ -304,10 +304,11 @@ public class SceneGallery extends BorderPane {
         hBoxHyperlink.setSpacing(20);
 
         // CONFIGURE ACTION TO CHANGE SCENARIO
-        hyperLinkArtwork.setOnAction(e -> getScene().setRoot(new SceneArtwork()));
+        hyperlinkArtist.setOnAction(e -> getScene().setRoot(new SceneArtist()));
         hyperlinkMain.setOnAction(e -> getScene().setRoot(new MainView()));
         hyperlinkGallery.setOnAction(e -> getScene().setRoot(new SceneGallery()));
         hyperlinkExhibition.setOnAction(e -> getScene().setRoot(new SceneExhibition()));
+        hyperLinkArtwork.setOnAction(e -> getScene().setRoot(new SceneArtwork()));
 
         VBox vBoxTop = new VBox(hBoxHeader,hBoxHyperlink);
         setMargin(vBoxTop, new Insets(0, 0, 20, 0));

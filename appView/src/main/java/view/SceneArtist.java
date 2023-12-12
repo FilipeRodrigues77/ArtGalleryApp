@@ -164,10 +164,12 @@ public class SceneArtist extends BorderPane {
         hBoxHyperlink.setSpacing(20);
 
         // CONFIGURE ACTION TO CHANGE SCENARIO
-        hyperLinkArtwork.setOnAction(e -> getScene().setRoot(new SceneArtwork()));
+        hyperlinkArtist.setOnAction(e -> getScene().setRoot(new SceneArtist()));
         hyperlinkMain.setOnAction(e -> getScene().setRoot(new MainView()));
         hyperlinkGallery.setOnAction(e -> getScene().setRoot(new SceneGallery()));
         hyperlinkExhibition.setOnAction(e -> getScene().setRoot(new SceneExhibition()));
+        hyperLinkArtwork.setOnAction(e -> getScene().setRoot(new SceneArtwork()));
+        hyperlinkArtist.getStyleClass().add("actual-page-hyperlink");
 
         VBox vBoxTop = new VBox(hBoxHeader,hBoxHyperlink);
         setMargin(vBoxTop, new Insets(0, 0, 20, 0));
@@ -291,7 +293,7 @@ public class SceneArtist extends BorderPane {
                 hyperArtistName = new Hyperlink(artistName.substring(0,maxTextLength)+"...");
             }
 
-            String artistOrigen = MainGetArtists.getArtistById(artist.getId()).getName();
+            String artistOrigen = MainGetArtists.getArtistById(artist.getId()).getNationality();
             Hyperlink hyperArtistOrigen;
 
             if (artistOrigen.length() < maxTextLength){
@@ -310,8 +312,6 @@ public class SceneArtist extends BorderPane {
                 hyperBirthDeathDate = new Hyperlink(birthDate );
             }
 
-            imageViewArtist.setOnMouseClicked(e-> doArtistDetailsLayout(artist));
-
             VBox vBoxLabelArtist = new VBox(hyperArtistName, hyperArtistOrigen, hyperBirthDeathDate);
             // CALCULATE THE COORDINATE FOR EACH CELL (4 COLUMNS)
             int col = i % 4;
@@ -322,6 +322,7 @@ public class SceneArtist extends BorderPane {
             grid.add(vBoxLabelArtist, col * 2, row + 1);
 
             imageViewArtist.setOnMouseClicked(e->doArtistDetailsLayout(artist));
+            hyperArtistName.setOnAction(e-> setArtistLabelsOnAction(artist));
         }
 
         return grid;
@@ -372,8 +373,6 @@ public class SceneArtist extends BorderPane {
                 hyperBirthDeathDate = new Hyperlink(birthDate );
             }
 
-            imageViewArtist.setOnMouseClicked(e-> doArtistDetailsLayout(artist));
-
             VBox vBoxLabelArtist = new VBox(hyperArtistName, hyperArtistOrigen, hyperBirthDeathDate);
             // CALCULATE THE COORDINATE FOR EACH CELL (4 COLUMNS)
             int col = i % 4;
@@ -383,10 +382,15 @@ public class SceneArtist extends BorderPane {
             grid.add(imageViewArtist, col * 2, row);
             grid.add(vBoxLabelArtist, col * 2, row + 1);
 
-            imageViewArtist.setOnMouseClicked(e-> getScene().setRoot(doArtistDetailsLayout(artist)));
+            imageViewArtist.setOnMouseClicked(e->doArtistDetailsLayout(artist));
+            hyperArtistName.setOnAction(e-> setArtistLabelsOnAction(artist));
         }
 
         return grid;
+    }
+
+    private void setArtistLabelsOnAction(Artist artist){
+        getScene().setRoot(doArtistDetailsLayout(artist));
     }
 
     public BorderPane doArtistDetailsLayout(Artist artist) {
@@ -412,21 +416,20 @@ public class SceneArtist extends BorderPane {
         Label labelBirthday = new Label(artist.getBirthdate());
         Label labelDeathday = new Label(artist.getDeathdate());
         Label labelHeaderAboutArtist = new Label("Sobre o Artista");
-
-        TextArea bioTextArea = new TextArea();
-        bioTextArea.setPadding(new Insets(20, 0, 0, 0));
-        bioTextArea.setPrefWidth(300);
-        bioTextArea.setPrefHeight(200);
-        bioTextArea.setText(artist.getBiography());
+        Label labelBiography = new Label(artist.getBiography());
+        labelBiography.setWrapText(true);
 
         labelArtistName.getStyleClass().add("my-center-label-1");
 
-        VBox vBoxArtistInfo = new VBox(labelArtistName, labelNationality, labelBirthday, labelDeathday);
-        VBox vBoxArtistBiography = new VBox(labelHeaderAboutArtist, bioTextArea);
+        ScrollPane scrollPaneBiography = new ScrollPane(labelBiography);
+        scrollPaneBiography.getStyleClass().add("scroll-pane");
 
+        VBox vBoxArtistInfo = new VBox(labelArtistName, labelNationality, labelBirthday, labelDeathday);
         VBox vBoxArtistImage = new VBox(imageViewArtist);
-        HBox hBoxCenterLayout = new HBox(vBoxArtistImage, vBoxArtistInfo, vBoxArtistBiography);
+        HBox hBoxCenterLayout = new HBox(vBoxArtistImage, vBoxArtistInfo);
         hBoxCenterLayout.setSpacing(50);
+        VBox vBoxGlobalCenterLayout = new VBox(hBoxCenterLayout, labelHeaderAboutArtist, scrollPaneBiography);
+        vBoxGlobalCenterLayout.setSpacing(20);
 
 
         List<Artwork> artistsArtworks = MainGetArtworks.getArtworksByArtistId(artist.getId());
@@ -435,9 +438,8 @@ public class SceneArtist extends BorderPane {
         // ADD GRID_PANE INSIDE THE SCROLL_PANE OBJ
         scrollPane.setContent(buildThisArtisArtworkGrid(artistsArtworks));
 
-        VBox vBoxCenterLayout = new VBox(hBoxCenterLayout, scrollPane);
+        VBox vBoxCenterLayout = new VBox(vBoxGlobalCenterLayout, scrollPane);
         vBoxCenterLayout.setSpacing(20);
-
         setCenter(vBoxCenterLayout);
 
         // ---------------------------------------------- BOTTOM LAYOUT ----------------------------------------------
@@ -479,6 +481,7 @@ public class SceneArtist extends BorderPane {
                 hyperArtworkName = new Hyperlink(artworkName.substring(0,maxTextLength)+"...");
             }
 
+            hyperArtworkName.setOnAction(e-> getScene().setRoot(new SceneArtwork().doDetailsLayout(artwork)));
 
             String galleryName = MainGetGalleries.getGalleryById(artwork.getIdGallery()).getNameGallery();
             Hyperlink hyperGalleryName;
@@ -487,7 +490,6 @@ public class SceneArtist extends BorderPane {
             } else{
                 hyperGalleryName = new Hyperlink(galleryName.substring(0,maxTextLength)+"...");
             }
-
 
             String price = String.valueOf(artwork.getPrice());
             Hyperlink hyperPrice = new Hyperlink(price);
@@ -517,7 +519,7 @@ public class SceneArtist extends BorderPane {
     public void defaultSizeArtistImage(ImageView imageView){
         imageView.setFitHeight(160); // Ajuste a altura conforme necessário
         imageView.setFitWidth(160);  // Ajuste a largura conforme necessário
-        imageView.setPreserveRatio(true);
+        //imageView.setPreserveRatio(true);
     }
 
     public void textFieldSearchDefault(TextField textField) {

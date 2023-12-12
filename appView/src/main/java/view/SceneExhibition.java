@@ -190,11 +190,11 @@ public class SceneExhibition extends BorderPane {
 
 
         // CONFIGURE ACTION TO CHANGE SCENARIO
-        hyperLinkArtwork.setOnAction(e -> getScene().setRoot(new SceneArtwork()));
-        hyperlinkMain.setOnAction(e -> getScene().setRoot(new MainView()));
         hyperlinkArtist.setOnAction(e -> getScene().setRoot(new SceneArtist()));
+        hyperlinkMain.setOnAction(e -> getScene().setRoot(new MainView()));
         hyperlinkGallery.setOnAction(e -> getScene().setRoot(new SceneGallery()));
-
+        hyperlinkExhibition.setOnAction(e -> getScene().setRoot(new SceneExhibition()));
+        hyperLinkArtwork.setOnAction(e -> getScene().setRoot(new SceneArtwork()));
     }
 
     public void defaultSizeIcon (ImageView imageView){

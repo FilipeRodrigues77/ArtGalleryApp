@@ -91,7 +91,7 @@
 .my-center-label-4 {
     -fx-font-weight: bold;
     -fx-font-size: 24;
-    -fx-background-color: #f4f4f4; /* Cor de fundo */
+    -fx-background-color: transparent; /* Cor de fundo */
 }
 
 .my-center-label-5 {

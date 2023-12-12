@@ -301,7 +301,6 @@ public class SceneArtwork extends BorderPane {
         imageViewArtwork.setFitWidth(360);
         imageViewArtwork.setOnMouseClicked(e -> getScene().setRoot(new ShowFullImage(artwork.getReferenceImage(), artwork,getScene().getHeight())));
 
-
         // LABELS
         Label labelArtworkName = new Label(artwork.getName());
         Label labelArtistName = new Label(MainGetArtists.getArtistById(artwork.getIdArtist()).getName());
@@ -309,19 +308,17 @@ public class SceneArtwork extends BorderPane {
         Label labelArtworkMedium = new Label(artwork.getName());
         Label labelArtworkCategory = new Label(artwork.getCategory());
 
-
         Label labelArtworkSizeCM = new Label(artwork.getDimensionCm().substring(1,artwork.getDimensionCm().length()-1));
         Label labelArtworkSizeIN = new Label(artwork.getDimensionIN().substring(1,artwork.getDimensionIN().length()-1));
         Label labelPrice = new Label(String.valueOf(artwork.getPrice()));
 
-
         // See artist button
         // This should be a button that links to the artists details page:
         Button artistDetailsButton = new Button("Ver artista");
+        artistDetailsButton.getStyleClass().add("button-modern");
         SceneArtist artistDetailsScene = new SceneArtist();
         Artist artist = MainGetArtists.getArtistById(artwork.getIdArtist());
         artistDetailsButton.setOnAction(e-> getScene().setRoot(artistDetailsScene.doArtistDetailsLayout(artist)));
-
 
         // CREATE REQUIRED LABELS
         labelArtworkName.getStyleClass().add("my-center-label-1");
@@ -333,10 +330,15 @@ public class SceneArtwork extends BorderPane {
         labelArtworkSizeIN.getStyleClass().add("my-center-label-3");
         labelPrice.getStyleClass().add("my-center-label-4");
 
+        labelArtworkName.setWrapText(true);
+        ScrollPane scrollPaneArtworkName = new ScrollPane(labelArtworkName);
+        scrollPaneArtworkName.setContent(labelArtworkName);
+        scrollPaneArtworkName.setPrefHeight(50);
+
         VBox vBoxArtworkImage = new VBox(imageViewArtwork, artistDetailsButton);
         vBoxArtworkImage.setSpacing(40);
 
-        VBox vBoxLabel = new VBox(labelArtworkName, labelArtistName, labelGalleryName, labelArtworkMedium,
+        VBox vBoxLabel = new VBox(scrollPaneArtworkName, labelArtistName, labelGalleryName, labelArtworkMedium,
                 labelArtworkCategory, labelArtworkSizeCM,labelArtworkSizeIN, labelPrice);
 
         vBoxLabel.setAlignment(Pos.TOP_LEFT);
@@ -344,8 +346,7 @@ public class SceneArtwork extends BorderPane {
         HBox hBoxCenterLayout = new HBox(vBoxArtworkImage, vBoxLabel);
         hBoxCenterLayout.setSpacing(50);
         // Box hBoxBiography = new HBox(labelBiography);
-        VBox vBoxCenterLayout = new VBox(hBoxCenterLayout);
-        setCenter(vBoxCenterLayout);
+        setCenter(hBoxCenterLayout);
 
         // ---------------------------------------------- BOTTOM LAYOUT ----------------------------------------------
 
@@ -391,6 +392,8 @@ public class SceneArtwork extends BorderPane {
         Hyperlink hyperlinkGallery = new Hyperlink("Galerias");
         Hyperlink hyperlinkExhibition = new Hyperlink("Exposições");
         Hyperlink hyperLinkArtwork = new Hyperlink("Obras de Arte");
+
+        hyperLinkArtwork.getStyleClass().add("actual-page-hyperlink");
 
         // TEXT FIELDS
         String searchOrigText = "Procurar por artista, galeria, exposição ou obra de arte";
@@ -440,7 +443,6 @@ public class SceneArtwork extends BorderPane {
         hyperlinkGallery.setOnAction(e -> getScene().setRoot(new SceneGallery()));
         hyperlinkExhibition.setOnAction(e -> getScene().setRoot(new SceneExhibition()));
         hyperLinkArtwork.setOnAction(e -> getScene().setRoot(new SceneArtwork()));
-
 
         return  vBoxTop;
 
@@ -502,12 +504,10 @@ public class SceneArtwork extends BorderPane {
 
             hyperArtworkName.setOnAction(e-> setArtworkLabelsOnAction(artwork));
 
-            hyperArtistName.setOnAction(e-> setArtworkLabelsOnAction(artwork));
-
-            hyperGalleryName.setOnAction(e-> setArtworkLabelsOnAction(artwork));
+            //hyperArtistName.setOnAction(e-> setArtworkLabelsOnAction(artwork));
+            //hyperGalleryName.setOnAction(e-> setArtworkLabelsOnAction(artwork));
 
             imageViewArtwork.setOnMouseClicked(e-> setArtworkLabelsOnAction(artwork));
-
 
             VBox vBoxLabelArtwork = new VBox(hyperArtworkName, hyperArtistName, hyperGalleryName, hyperPrice);
 
