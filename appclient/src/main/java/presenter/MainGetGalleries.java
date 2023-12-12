@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class MainGetGalleries {
 
-    public static List<Gallery> getAllGalleries (String[] args) {
+    public static List<Gallery> getAllGalleries () {
 
         List<Gallery> listGalleries = null;
         // DESERIALIZATION
