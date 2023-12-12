@@ -28,7 +28,7 @@ public class MainGetGalleries {
         Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:4567/galleries")  // Update the URL to the endpoint for galleries
+                .url("http://localhost:9000/galleries")  // Update the URL to the endpoint for galleries
                 .build();
 
         try {
@@ -71,7 +71,7 @@ public class MainGetGalleries {
         Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:4567/galleries/"+galleryId)
+                .url("http://localhost:9000/galleries/"+galleryId)
                 .build();
 
         try {
@@ -101,6 +101,42 @@ public class MainGetGalleries {
         }
 
         return gallery;
+    }
+
+    public static List<Gallery> getGalleriesByRegion(String region) {
+        List<Gallery> listGalleries = null;
+
+        // DESERIALIZATION
+        OkHttpClient httpClient = new OkHttpClient();
+        Gson gson = new GsonBuilder().create();
+
+        Request getRequest = new Request.Builder()
+                .url("http://localhost:9000/galleries/searchByRegion?region=" + region)
+                .build();
+
+        try {
+            Response response = httpClient.newCall(getRequest).execute();
+            System.out.println("Response code: " + response.code() + "\n");
+
+            if (response.code() == 200) {
+                // Deserialize a list of galleries
+                Type listType = new TypeToken<ArrayList<Gallery>>() {}.getType();
+
+                if (response.body() != null) {
+                    listGalleries = gson.fromJson(response.body().string(), listType);
+                }
+            } else {
+                // Something failed, maybe the galleries do not exist for the specified region
+                if (response.body() != null) {
+                    System.out.println(response.body().string());
+                }
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return listGalleries;
     }
 
 }

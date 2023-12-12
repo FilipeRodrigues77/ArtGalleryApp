@@ -537,29 +537,19 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
     //Gallery methods ------------------------------------------------------------------------------------------------
     @Override
     public List<Gallery> getAllGalleries() throws ServiceException {
-        List<Gallery> galleries = new ArrayList<>();
+
         String commandSQL = "SELECT * FROM Gallery";
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(commandSQL)) {
 
-            while (resultSet.next()) {
-                Gallery gallery = new Gallery();
-                gallery.setId(resultSet.getInt("idGallery"));
-                gallery.setNameGallery(resultSet.getString("nameGallery"));
-                gallery.setEmail(resultSet.getString("email"));
-                gallery.setRegionName(resultSet.getString("regionName"));
-                gallery.setReferenceImage(resultSet.getString("referenceImage"));
-
-                // add a single gallery to the list of galleries
-                galleries.add(gallery);
-            }
+             return buildGalleries(resultSet);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return galleries;
+
     }
 
     @Override
@@ -570,52 +560,60 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(commandSQL)) {
-            while (resultSet.next()) {
-                gallery = new Gallery();
-                gallery.setId(resultSet.getInt("idGallery"));
-                gallery.setNameGallery(resultSet.getString("nameGallery"));
-                gallery.setEmail(resultSet.getString("email"));
-                gallery.setRegionName(resultSet.getString("regionName"));
-                gallery.setReferenceImage(resultSet.getString("referenceImage"));
 
+            List<Gallery> galleries = buildGalleries(resultSet);
+            if (!galleries.isEmpty()){
+                gallery = galleries.get(0);
+            } else {
+                return null;
             }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
         return gallery;
     }
 
     @Override
     public List<Gallery> getGalleryByName(String name) throws ServiceException {
-        List<Gallery> galleries = new ArrayList<>();
+
         String commandSql = "SELECT * FROM Gallery WHERE nameGallery LIKE ?";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement preparedStatement = conn.prepareStatement(commandSql)) {
 
             Gallery gallery = null;
-
             preparedStatement.setString(1, name + "%");
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    gallery = new Gallery();
-                    gallery.setId(resultSet.getInt("idGallery"));
-                    gallery.setNameGallery(resultSet.getString("nameGallery"));
-                    gallery.setEmail(resultSet.getString("email"));
-                    gallery.setRegionName(resultSet.getString("regionName"));
-                    gallery.setReferenceImage(resultSet.getString("referenceImage"));
-
-                    galleries.add(gallery);
-                }
+             return buildGalleries(resultSet);
             }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        return galleries;
+    }
+
+    @Override
+    public List<Gallery> getGalleryByRegion(String region) throws ServiceException {
+
+        String commandSql = "SELECT * FROM Gallery WHERE regionName = ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement preparedStatement = conn.prepareStatement(commandSql)) {
+
+            Gallery gallery = null;
+            preparedStatement.setString(1, region );
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+              return buildGalleries(resultSet);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

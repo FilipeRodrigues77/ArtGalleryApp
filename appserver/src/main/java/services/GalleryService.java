@@ -36,6 +36,15 @@ public interface GalleryService {
     List<Gallery> getGalleryByName(String name) throws ServiceException;
 
     /**
+     * Retrieves galleries with the specified region from storage.
+     *
+     * @param region the region of the galleries
+     * @return List of galleries; an empty list if not found
+     * @throws ServiceException if some exception occurs in the underlying storage
+     */
+    List<Gallery> getGalleryByRegion(String region) throws ServiceException;
+
+    /**
      * Creates a gallery and persists its information in storage.
      * If Gallery id attribute is ignored by this method if it is set.
      *

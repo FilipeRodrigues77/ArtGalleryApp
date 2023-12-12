@@ -33,7 +33,7 @@ public class UpdateReferenceImageInArtist {
 
             // Build the request
             Request putRequest = new Request.Builder()
-                    .url("http://localhost:4567/artists/" + artistIdToUpdate)
+                    .url("http://localhost:9000/artists/" + artistIdToUpdate)
                     .put(RequestBody.create(MediaType.parse("application/json"), jsonRequestBody))
                     .build();
 

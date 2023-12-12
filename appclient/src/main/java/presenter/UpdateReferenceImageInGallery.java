@@ -30,7 +30,7 @@ public class UpdateReferenceImageInGallery {
 
             // Build the request
             Request putRequest = new Request.Builder()
-                    .url("http://localhost:4567/galleries/" + galleryNum)
+                    .url("http://localhost:9000/galleries/" + galleryNum)
                     .put(RequestBody.create(MediaType.parse("application/json"), jsonRequestBody))
                     .build();
 
