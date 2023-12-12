@@ -17,7 +17,7 @@ public class DetailsSceneExhibition extends BorderPane {
 
     public DetailsSceneExhibition() {
         doLayout();
-        getStylesheets().add("appStyle.css");
+        getStylesheets().add("appStyleLight.css");
         //getStylesheets().add("appStyleDark.css");
     }
 

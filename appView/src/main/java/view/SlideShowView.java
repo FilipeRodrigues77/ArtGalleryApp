@@ -24,7 +24,7 @@ public class SlideShowView extends BorderPane {
 
     public SlideShowView() {
         // Configuração do layout
-        getStylesheets().add("appStyle.css");
+        getStylesheets().add("appStyleLight.css");
         getStyleClass().add("SlideShowView");
         StackPane centerPane = new StackPane();
         centerPane.setAlignment(Pos.CENTER);

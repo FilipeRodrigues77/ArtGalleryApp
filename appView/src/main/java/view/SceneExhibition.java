@@ -1,6 +1,5 @@
 package view;
 
-import domain.Artwork;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -10,14 +9,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
-import java.util.List;
-
 public class SceneExhibition extends BorderPane {
 
     public SceneExhibition() {
         doLayout();
-        getStylesheets().add("appStyle.css");
-        //getStylesheets().add("appStyleDark.css");
+        MainView mainView = new MainView();
+        String cssTheme = mainView.themeCurrent;
+        getStylesheets().add(cssTheme);
     }
 
     private void doLayout() {
@@ -110,6 +108,7 @@ public class SceneExhibition extends BorderPane {
         grid.setVgap(10);
         grid.setPadding(new Insets(0, 10, 0, 0));
         grid.setGridLinesVisible(false);
+        grid.getStyleClass().add("grid-pane");
 
         // FILL THE GRIDPANE WITH IMAGES AND LABELS
         for (int i = 0; i < 35; i++) {
