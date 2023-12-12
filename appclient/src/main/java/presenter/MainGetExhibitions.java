@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Class used to retrieve data about exhibitions from the database and store it in a list of Exhibitions object.
  */
-public class MainGetAllExhibitions {
+public class MainGetExhibitions {
     public static void main(String[] args) {
 
         // DESERIALIZATION

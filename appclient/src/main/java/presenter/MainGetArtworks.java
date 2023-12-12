@@ -300,4 +300,41 @@ public class MainGetArtworks {
 
     }
 
+    public static List<Artwork> getArtworksByGalleryId(int idGallery) {
+        List<Artwork> listArtworks = null;
+
+        // DESERIALIZATION
+        OkHttpClient httpClient = new OkHttpClient();
+        Gson gson = new GsonBuilder().create();
+
+        Request getRequest = new Request.Builder()
+                .url("http://localhost:4567/artworks/searchByGallery?idGallery=" + idGallery)
+                .build();
+
+        try {
+            Response response = httpClient.newCall(getRequest).execute();
+            System.out.println("Response code: " + response.code() + "\n");
+
+            if (response.code() == 200) {
+                // Deserialize a list of artworks
+                Type listType = new TypeToken<ArrayList<Artwork>>() {}.getType();
+
+                if (response.body() != null) {
+                    listArtworks = gson.fromJson(response.body().string(), listType);
+                }
+            } else {
+                // Something failed, maybe the artworks do not exist for the specified gallery
+                if (response.body() != null) {
+                    System.out.println(response.body().string());
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return listArtworks;
+    }
+
+
 }

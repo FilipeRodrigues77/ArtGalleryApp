@@ -428,7 +428,6 @@ public class SceneArtist extends BorderPane {
 
 
         List<Artwork> artistsArtworks = MainGetArtworks.getArtworksByArtistId(artist.getId());
-
         // CREATE SCROLL_PANE TO ALLOW US TO SCROLL THROUGH THE GRID_PANE
         ScrollPane scrollPane = new ScrollPane();
         // ADD GRID_PANE INSIDE THE SCROLL_PANE OBJ
