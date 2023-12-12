@@ -1,7 +1,6 @@
 package view;
 
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -17,7 +16,7 @@ public class DetailsSceneArtist extends BorderPane {
 
     public DetailsSceneArtist() {
         doLayout();
-        getStylesheets().add("appStyle.css");
+        getStylesheets().add("appStyleLight.css");
         //getStylesheets().add("appStyleDark.css");
     }
 

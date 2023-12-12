@@ -1,6 +1,7 @@
 .root {
-    -fx-base: white;
-    -fx-background: white;
+    -fx-background-color: #333333; /* Cor de fundo escura */
+    -fx-text-fill: #ffffff; /* Cor do texto */
+    -fx-base: #333333;
 }
 
 .button {
@@ -12,6 +13,11 @@
 
 .label {
     -fx-font-style: italic;
+    -fx-text-fill: lightgray; /* Cor do texto normal */
+}
+
+.my-blue-label {
+    -fx-text-fill: #6495ed; /* Cor do texto normal */
 }
 
 .my-label {
@@ -20,26 +26,27 @@
 }
 
 .text-field {
-    -fx-background-color: #f4f4f4; /* Cor de fundo */
+    -fx-background-color: transparent; /* Cor de fundo */
     -fx-border-color: #a0a0a0; /* Cor da borda */
     -fx-border-width: 1; /* Largura da borda */
     -fx-border-radius: 5; /* Raio da borda (bordas arredondadas) */
     -fx-padding: 5; /* Preenchimento interno */
     -fx-prompt-text-fill: #808080; /* Cor do texto padrão */
+    -fx-text-fill: gray;
 }
 
 .text-field:hover {
-    -fx-background-color: #e0e0e0; /* Cor de fundo ao passar o mouse */
+    -fx-background-color:  #444444;; /* Cor de fundo ao passar o mouse */
 }
 
 .hyperlink {
-    -fx-text-fill: black; /* Cor do texto normal */
+    -fx-text-fill: gray; /* Cor do texto normal */
     -fx-underline: false; /* Remover sublinhado padrão */
     -fx-font-style: italic;
 }
 
 .hyperlink:hover {
-    -fx-text-fill: red; /* Cor do texto ao passar o mouse */
+    -fx-text-fill: lightgray; /* Cor do texto ao passar o mouse */
     -fx-underline: true; /* Adicionar sublinhado ao passar o mouse */
 }
 
@@ -48,13 +55,13 @@
 }
 
 .actual-page-hyperlink {
-    -fx-text-fill: gray; /* Cor do texto normal */
+    -fx-text-fill: lightgray; /* Cor do texto normal */
     -fx-underline: false; /* Remover sublinhado padrão */
     -fx-font-style: italic;
 }
 
 .actual-page-hyperlink:hover {
-    -fx-text-fill: gray; /* Cor do texto ao passar o mouse */
+    -fx-text-fill: lightgray; /* Cor do texto ao passar o mouse */
     -fx-underline: false; /* Adicionar sublinhado ao passar o mouse */
 }
 
@@ -91,8 +98,13 @@
 }
 
 .my-center-label-5 {
-    -fx-text-fill: white;
-    -fx-font-size: 16;
+    -fx-text-fill: gray;
+    -fx-font-size: 12;
+}
+
+.my-center-label-6 {
+    -fx-text-fill: gray;
+    -fx-font-size: 14;
 }
 
 .my-label-gray-medium-size {
@@ -102,20 +114,38 @@
 }
 
 .cell-gray-background {
-    -fx-background-color: rgba(169, 169, 169, 0.7);
+    -fx-background-color: #222222;
 }
 
 .cell-clear-background {
-    -fx-background-color: #f4f4f4; /* Cor de fundo */
+    -fx-background-color: #222222; /* Cor de fundo */
     -fx-background-radius: 7 7 7 7;
 }
 
 .scroll-pane {
-    -fx-background-color: transparent;
+    -fx-background-color: #333333; /* Cor de fundo escura para a ScrollPane */
 }
-/* Estilizar a área do track (trilha) do ScrollBar vertical */
-.scroll-bar:vertical .track {
-    -fx-background-color: #f0f0f0;
+
+.scroll-pane .scroll-bar:vertical {
+    -fx-background-color: #333333; /* Cor de fundo escura para a barra vertical */
+}
+
+.scroll-pane .scroll-bar:horizontal {
+    -fx-background-color: #555555; /* Cor de fundo da barra horizontal */
+}
+
+.scroll-pane .scroll-bar:increment-button,
+.scroll-pane .scroll-bar:decrement-button {
+    -fx-background-color: #777777; /* Cor de fundo das setas */
+}
+
+.scroll-pane .scroll-bar:increment-button:hover,
+.scroll-pane .scroll-bar:decrement-button:hover {
+    -fx-background-color: #999999; /* Cor de fundo das setas quando hover */
+}
+
+.grid-pane {
+    -fx-background-color: #333333; /* Cor de fundo escura para a GridPane */
 }
 
 .button-modern {
@@ -131,5 +161,5 @@
 }
 
 .button-modern:hover {
-    -fx-background-color: #f0f0f0; /* Cor de fundo ao passar o mouse sobre o botão */
+    -fx-background-color:  #444444; /* Cor de fundo ao passar o mouse sobre o botão */
 }

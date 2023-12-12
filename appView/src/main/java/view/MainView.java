@@ -2,22 +2,54 @@ package view;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Hyperlink;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Optional;
+import java.util.Properties;
 
 public class MainView extends BorderPane {
+
+    private Label labelStatus;
+    private TextField textExpression;
+    private Properties config;
+    private RadioMenuItem lightThemeItem;
+    private RadioMenuItem darkThemeItem;
+    protected String themeCurrent;
 
     public MainView() {
 
         doLayout();
+        loadConfig();
+        String themeName = this.config.getProperty("theme","Light");
+        changeTheme(themeName);
+        this.themeCurrent = "appStyle" + themeName + ".css";
+    }
 
-        getStylesheets().add("appStyle.css");
-        //getStylesheets().add("appStyleDark.css");
+    public void loadConfig(){
+        this.config = new Properties();
+        try {
+            FileReader file = new FileReader("appView/src/main/resources/iuvennisApp.config");
+            this.config.load(file);
+            file.close();
+        } catch (IOException e) {
+            showError("Configuration file not found.");
+        }
+    }
+    private void saveConfig(){
+        try {
+            this.config.store(new FileWriter("appView/src/main/resources/iuvennisApp.config"),"");
+        } catch (IOException e) {
+            showError("Not possible to save configuration");
+        }
     }
 
     private void doLayout() {
@@ -47,7 +79,7 @@ public class MainView extends BorderPane {
 
         // Text Fields
         TextField textFieldSearch = new TextField("Procurar por artista, galeria, exposição ou obra de arte");
-        textFieldSearch.setPrefSize(800, 30);
+        textFieldSearch.setPrefSize(550, 30);
         textFieldSearch.setOnMouseClicked(e -> textFieldSearch.clear());
 
         // Buttons
@@ -103,9 +135,38 @@ public class MainView extends BorderPane {
         defaultSizeMainImage(imageViewMainExhibition);
 
         // Layout Top
-        HBox hBoxSearch = new HBox(logoView, textFieldSearch, searchIconView);
+        // Create Menu
+        //Adiciona Theme no menu
+        Menu menuTheme = new Menu("Tema App");
+        ToggleGroup themeGroup = new ToggleGroup(); //Alternador de grupos
+        this.lightThemeItem = new RadioMenuItem("Dia");
+        this.darkThemeItem = new RadioMenuItem("Noite");
+        menuTheme.getItems().addAll(lightThemeItem,darkThemeItem);
+        //Toogle faz ALTERNAR entre as opções
+        lightThemeItem.setToggleGroup(themeGroup);
+        darkThemeItem.setToggleGroup(themeGroup);
+        //eventos do menu theme
+        lightThemeItem.setSelected(true);
+        lightThemeItem.setOnAction(event -> changeTheme("Light"));
+        darkThemeItem.setOnAction(event -> changeTheme("Dark"));
+
+        //MENUS
+        MenuItem aboutItem = new MenuItem("Sobre nós");
+        Menu menuAboutUs = new Menu("Ajuda");
+        menuAboutUs.getItems().addAll(aboutItem);
+        aboutItem.setOnAction(event -> showAbout());
+        MenuItem exitItem = new MenuItem("Sair");
+        exitItem.setOnAction(event -> exitApplication());
+        Menu menuHeader = new Menu("I~A App");
+        menuHeader.getItems().addAll(menuAboutUs,menuTheme,exitItem);
+        // Create Menu Bar
+        MenuBar menuBar = new MenuBar();
+        menuBar.getMenus().addAll(menuHeader);
+        menuBar.setPrefHeight(30);
+        // Set Box
+        HBox hBoxSearch = new HBox(logoView, textFieldSearch, searchIconView, menuBar);
         hBoxSearch.setSpacing(20);
-        HBox hBoxHyperlink = new HBox(hyperlinkArtwork,hyperlinkArtist,hyperlinkGallery, hyperlinkExhibition, hyperlinkSlideShow);
+        HBox hBoxHyperlink = new HBox(hyperlinkArtist, hyperlinkArtwork, hyperlinkGallery, hyperlinkExhibition, hyperlinkSlideShow);
         hBoxHyperlink.setPadding(new Insets(10,0,0,0));
         hBoxHyperlink.setPrefHeight(50);
         hBoxHyperlink.setSpacing(20);
@@ -218,6 +279,64 @@ public class MainView extends BorderPane {
 
     public void styleLabelCenterArtwork (Label label){
         label.getStyleClass().add("my-label");
+    }
+
+    private void exitApplication(){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Sair da App");
+        alert.setHeaderText("Está prestes a sair da Iuvennis Art");
+        alert.setContentText("Deseja sair da aplicação?");
+        //Colocar tela de confirmação de saida centralizada a aplicação
+        //buscar Cena e Janela.
+        alert.initOwner(this.getScene().getWindow());
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            // ... user chose OK
+            System.exit(0);
+        } else {
+            // ... user chose CANCEL or closed the dialog
+            // do nothing
+        }
+    }
+
+    //METODO PARA MOSTRAR PAINEL "ABOUT"
+    private void showAbout(){
+        Stage aboutStage = new Stage();
+        aboutStage.setTitle("Sobre nós");
+        Scene scene = new Scene(new AboutView(), 500,420);
+        aboutStage.setScene(scene);
+        aboutStage.setResizable(false);
+        aboutStage.initOwner(this.getScene().getWindow());
+        aboutStage.initModality(Modality.APPLICATION_MODAL);
+        aboutStage.show();
+    }
+
+    //METODO PARA MUDAR TEMA CSS
+    protected String changeTheme(String themeName) {
+        //Assume que o ficheiro te a estrutura: "appStyle<themeName>.css"
+        String cssFile = "appStyle" + themeName + ".css";
+        //Limpar estilo para o default e depois adiciona o estilo selecionado
+        getStylesheets().clear();
+        getStylesheets().add(cssFile);
+        //Salvar configuração
+        this.config.setProperty("theme", themeName);
+        saveConfig();
+
+        switch (themeName){
+            case "Light": lightThemeItem.setSelected(true);
+                break;
+            case "Dark": darkThemeItem.setSelected(true);
+                break;
+
+            default: lightThemeItem.setSelected(true);
+        }
+        return cssFile;
+    }
+
+    public void showError(String message) {
+        labelStatus.setText(message);
+        textExpression.getStyleClass().add("Error");
     }
 
 }

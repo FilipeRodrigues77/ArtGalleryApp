@@ -20,8 +20,9 @@ public class SceneGallery extends BorderPane {
 
     public SceneGallery() {
         doLayout();
-        getStylesheets().add("appStyle.css");
-        //getStylesheets().add("appStyleDark.css");
+        MainView mainView = new MainView();
+        String cssTheme = mainView.themeCurrent;
+        getStylesheets().add(cssTheme);
     }
 
     private void doLayout() {
@@ -72,6 +73,7 @@ public class SceneGallery extends BorderPane {
         grid.setVgap(10);
         grid.setPadding(new Insets(0, 10, 0, 0));
         grid.setGridLinesVisible(false);
+        grid.getStyleClass().add("grid-pane");
 
         for (int i = 0; i < listGalleries.size(); i++) {
 
