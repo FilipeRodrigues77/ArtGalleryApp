@@ -18,8 +18,11 @@ import java.util.List;
 import java.util.Objects;
 
 public class MainGetArtworks {
-    public static void main(String[] args) {
 
+    static String port = "8010";
+
+    public static void main(String[] args) {
+        System.out.println();
     }
 
     public static List<Artwork> getAllArtworks(){
@@ -30,7 +33,7 @@ public class MainGetArtworks {
         Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:8000/artworks")
+                .url("http://localhost:" + port + "/artworks")
                 .build();
 
         try {
@@ -45,9 +48,7 @@ public class MainGetArtworks {
                 if (response.body() != null) {
                     listArtworks = gson.fromJson(response.body().string(), listType);
                 }
-                if (listArtworks != null) {
 
-                }
             } else {
                 // Something failed, maybe the artwork does not exist
                 if (response.body() != null) {
@@ -71,7 +72,7 @@ public class MainGetArtworks {
         Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:8000/artworks/searchByArtist?idArtist="+ idArtist)
+                .url("http://localhost:" + port +"/artworks/searchByArtist?idArtist="+ idArtist)
                 .build();
 
         try {
@@ -109,7 +110,7 @@ public class MainGetArtworks {
         OkHttpClient httpClient = new OkHttpClient();
         Gson gson = new GsonBuilder().create();
 
-        String url = "http://localhost:8000/artworks/searchByCategory?category=" + category;
+        String url = "http://localhost:" + port + "/artworks/searchByCategory?category=" + category;
 
         Request getRequest = new Request.Builder()
                 .url(url)
@@ -149,7 +150,7 @@ public class MainGetArtworks {
         Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:8000/artworks/searchMedium?medium="+medium)
+                .url("http://localhost:" + port + "/artworks/searchMedium?medium="+medium)
                 .build();
 
         try {
@@ -188,7 +189,7 @@ public class MainGetArtworks {
         Gson gson = new GsonBuilder().create();
 
         //Build the url and add query parameter
-        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://localhost:8000/artworks/searchName")).newBuilder();
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://localhost:" + port +"/artworks/searchName")).newBuilder();
         urlBuilder.addQueryParameter("name", name);
         String url = urlBuilder.build().toString();
 
@@ -229,7 +230,7 @@ public class MainGetArtworks {
         OkHttpClient httpClient = new OkHttpClient();
         Gson gson = new GsonBuilder().create();
 
-        String url = "http://localhost:8000/artworks/searchByDateRange?startDate=" + startDate + "&endDate=" + endDate;
+        String url = "http://localhost:" + port +"/artworks/searchByDateRange?startDate=" + startDate + "&endDate=" + endDate;
 
         Request getRequest = new Request.Builder()
                 .url(url)
@@ -269,7 +270,7 @@ public class MainGetArtworks {
         Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:8000/artworks/searchPriceRange?min="+minPrice+"&max="+maxPrice)
+                .url("http://localhost:" + port +"h/artworks/searchPriceRange?min="+minPrice+"&max="+maxPrice)
                 .build();
 
         try {
@@ -308,7 +309,7 @@ public class MainGetArtworks {
         Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:8000/artworks/searchByGallery?idGallery=" + idGallery)
+                .url("http://localhost:" + port +"h/artworks/searchByGallery?idGallery=" + idGallery)
                 .build();
 
         try {
@@ -335,6 +336,43 @@ public class MainGetArtworks {
 
         return listArtworks;
     }
+
+    public static List<Artwork> getArtworksByExhibitionId(int idExhibition) {
+        List<Artwork> listArtworks = null;
+
+        // DESERIALIZATION
+        OkHttpClient httpClient = new OkHttpClient();
+        Gson gson = new GsonBuilder().create();
+
+        Request getRequest = new Request.Builder()
+                .url("http://localhost:" + port + "/artworks/searchByExhibition?idExhibition=" + idExhibition)
+                .build();
+
+        try {
+            Response response = httpClient.newCall(getRequest).execute();
+            System.out.println("Response code: " + response.code() + "\n");
+
+            if (response.code() == 200) {
+                // Deserialize a list of artworks
+                Type listType = new TypeToken<ArrayList<Artwork>>() {}.getType();
+
+                if (response.body() != null) {
+                    listArtworks = gson.fromJson(response.body().string(), listType);
+                }
+            } else {
+                // Something failed, maybe the artworks do not exist for the specified exhibition
+                if (response.body() != null) {
+                    System.out.println(response.body().string());
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return listArtworks;
+    }
+
 
 
 }
