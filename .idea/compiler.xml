@@ -9,11 +9,9 @@
         <module name="appView" />
         <module name="appserver" />
         <module name="appclient" />
+        <module name="appViewManager" />
         <module name="appmodel" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="appViewManager" target="17" />
-    </bytecodeTargetLevel>
   </component>
 </project>

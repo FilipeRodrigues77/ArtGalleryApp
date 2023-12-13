@@ -3,6 +3,8 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/appView/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/appView/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/appViewManager/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/appViewManager/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/appclient/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/appclient/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/appmodel/src/main/java" charset="UTF-8" />

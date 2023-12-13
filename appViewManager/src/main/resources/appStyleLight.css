@@ -1,0 +1,144 @@
+.root {
+    -fx-base: white;
+    -fx-background: white;
+}
+
+.button {
+    -fx-background-color: #f4f4f4; /* Cor de fundo */
+    -fx-text-fill: #4CAF50; /* Cor do texto */
+    -fx-font-size: 14px; /* Tamanho da fonte */
+    -fx-padding: 10px 20px; /* Preenchimento interno */
+}
+
+.label {
+    -fx-font-style: italic;
+}
+
+.my-blue-label {
+    -fx-text-fill: #0000ff; /* Cor do texto normal */
+}
+
+.my-label {
+    -fx-font-style: italic;
+    -fx-font-size: 14px; /* Tamanho da fonte */
+}
+
+.text-field {
+    -fx-background-color: #f4f4f4; /* Cor de fundo */
+    -fx-border-color: #a0a0a0; /* Cor da borda */
+    -fx-border-width: 1; /* Largura da borda */
+    -fx-border-radius: 5; /* Raio da borda (bordas arredondadas) */
+    -fx-padding: 5; /* Preenchimento interno */
+    -fx-prompt-text-fill: #808080; /* Cor do texto padrão */
+}
+
+.text-field:hover {
+    -fx-background-color: #e0e0e0; /* Cor de fundo ao passar o mouse */
+}
+
+.hyperlink {
+    -fx-text-fill: black; /* Cor do texto normal */
+    -fx-underline: false; /* Remover sublinhado padrão */
+    -fx-font-style: italic;
+}
+
+.hyperlink:hover {
+    -fx-text-fill: gray; /* Cor do texto ao passar o mouse */
+    -fx-underline: true; /* Adicionar sublinhado ao passar o mouse */
+}
+
+.hyperlink:focused {
+    -fx-focus-color: transparent; /* Remover contorno azul ao focar */
+}
+
+.actual-page-hyperlink {
+    -fx-text-fill: gray; /* Cor do texto normal */
+    -fx-underline: false; /* Remover sublinhado padrão */
+    -fx-font-style: italic;
+}
+
+.actual-page-hyperlink:hover {
+    -fx-text-fill: gray; /* Cor do texto ao passar o mouse */
+    -fx-underline: false; /* Adicionar sublinhado ao passar o mouse */
+}
+
+.actual-page-hyperlink:focused {
+    -fx-focus-color: transparent; /* Remover contorno azul ao focar */
+}
+
+.SlideShowView {
+    -fx-background-image: url('SlideShowImages/QuadroSlideShowClaroNovo.png');
+    -fx-background-size: cover;
+    -fx-background-position: center;
+}
+
+.my-center-label-1 {
+    -fx-font-weight: bold;
+    -fx-font-size: 24;
+}
+
+.my-center-label-2 {
+    -fx-text-fill: gray;
+    -fx-font-weight: bold;
+    -fx-font-size: 18;
+}
+
+.my-center-label-3 {
+    -fx-text-fill: gray;
+    -fx-font-size: 16;
+}
+
+.my-center-label-4 {
+    -fx-font-weight: bold;
+    -fx-font-size: 24;
+    -fx-background-color: transparent; /* Cor de fundo */
+}
+
+.my-center-label-5 {
+    -fx-text-fill: darkgray;
+    -fx-font-size: 12;
+}
+
+.my-center-label-6 {
+    -fx-text-fill: gray;
+    -fx-font-size: 14;
+}
+
+.my-label-gray-medium-size {
+    -fx-font-weight: bold;
+    -fx-text-fill: gray;
+    -fx-font-size: 16;
+}
+
+.cell-gray-background {
+    -fx-background-color: #f5f5f5;
+}
+
+.cell-clear-background {
+    -fx-background-color: #f4f4f4; /* Cor de fundo */
+    -fx-background-radius: 7 7 7 7;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+/* Estilizar a área do track (trilha) do ScrollBar vertical */
+.scroll-bar:vertical .track {
+    -fx-background-color: #f0f0f0;
+}
+
+.button-modern {
+   -fx-background-color: transparent; /* Fundo transparente */
+   -fx-text-fill: #808080; /* Cor do texto (cinza) */
+   -fx-font-size: 10px; /* Tamanho da fonte */
+   -fx-padding: 10 20 10 20; /* Preenchimento interno do botão (topo direita baixo esquerda) */
+   -fx-border-radius: 50; /* Raio da borda do botão */
+   -fx-background-radius: 50; /* Raio do fundo do botão */
+   -fx-border-color: #808080; /* Cor da borda */
+   -fx-border-width: 1; /* Largura da borda */
+   -fx-cursor: hand; /* Cursor ao passar o mouse sobre o botão */
+}
+
+.button-modern:hover {
+    -fx-background-color: #f0f0f0; /* Cor de fundo ao passar o mouse sobre o botão */
+}
