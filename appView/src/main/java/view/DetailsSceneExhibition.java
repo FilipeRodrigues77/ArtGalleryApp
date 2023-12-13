@@ -23,7 +23,6 @@ public class DetailsSceneExhibition extends BorderPane {
 
     private void doLayout() {
         setPadding(new Insets(20));
-
         //--------------------------------------------- HEADER ELEMENTS ---------------------------------------------
 
         // HYPERLINKS

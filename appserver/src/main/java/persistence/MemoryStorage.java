@@ -689,7 +689,6 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
         }
     }
 
-
     // to be used when refactoring :
     private List<Gallery> buildGalleries(ResultSet resultSet) throws SQLException {
         List<Gallery> galleries = new ArrayList<>();
@@ -710,32 +709,18 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
     // Exhibition methods-----------------------------------------------------------------------------------------------
     @Override
     public List<Exhibition> getAllExhibitions() throws ServiceException {
-        List<Exhibition> exhibitions = new ArrayList<>();
-        String commandSQL = "SELECT * FROM Exhibition";
 
+        String commandSQL = "SELECT * FROM Exhibition";
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(commandSQL)) {
 
-            while (resultSet.next()) {
-                Exhibition exhibition = new Exhibition();
-
-                exhibition.setId(resultSet.getInt("idExhibition"));
-                exhibition.setNameExhibition(resultSet.getString("nameExhibition"));
-                exhibition.setStartDate(resultSet.getDate("startDate").toLocalDate());
-                exhibition.setEndDate(resultSet.getDate("endDate").toLocalDate());
-                exhibition.setExdescription(resultSet.getString("Exdescription"));
-                exhibition.setExstatus(resultSet.getString("Exstatus"));
-                exhibition.setIdGallery(resultSet.getString("idGallery"));
-
-                // add a single exhibition to the list of exhibitions
-                exhibitions.add(exhibition);
-            }
+             return buildExhibitions(resultSet);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return exhibitions;
+
     }
 
     @Override
@@ -747,15 +732,11 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(commandSQL)) {
 
-            while (resultSet.next()) {
-                exhibition = new Exhibition();
-                exhibition.setId(resultSet.getInt("idExhibition"));
-                exhibition.setNameExhibition(resultSet.getString("nameExhibition"));
-                exhibition.setStartDate(resultSet.getDate("startDate").toLocalDate());
-                exhibition.setEndDate(resultSet.getDate("endDate").toLocalDate());
-                exhibition.setExdescription(resultSet.getString("Exdescription"));
-                exhibition.setExstatus(resultSet.getString("Exstatus"));
-                exhibition.setIdGallery(resultSet.getString("idGallery"));
+            List<Exhibition> exhibitions = buildExhibitions(resultSet);
+            if (!exhibitions.isEmpty()){
+                exhibition = exhibitions.get(0);
+            } else {
+                return null;
             }
 
         } catch (SQLException e) {
@@ -766,7 +747,7 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
 
     @Override
     public List<Exhibition> getExhibitionByName(String name) throws ServiceException {
-        List<Exhibition> exhibitions = new ArrayList<>();
+
         String commandSql = "SELECT * FROM Exhibition WHERE nameExhibition LIKE ?";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
@@ -775,30 +756,18 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
             Exhibition exhibition = null;
             preparedStatement.setString(1, name + "%");
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    exhibition = new Exhibition();
-                    exhibition.setId(resultSet.getInt("idExhibition"));
-                    exhibition.setNameExhibition(resultSet.getString("nameExhibition"));
-                    exhibition.setStartDate(resultSet.getDate("startDate").toLocalDate());
-                    exhibition.setEndDate(resultSet.getDate("endDate").toLocalDate());
-                    exhibition.setExdescription(resultSet.getString("Exdescription"));
-                    exhibition.setExstatus(resultSet.getString("Exstatus"));
-                    exhibition.setIdGallery(resultSet.getString("idGallery"));
-
-                    exhibitions.add(exhibition);
-                }
+                return buildExhibitions(resultSet);
             }
 
         } catch (SQLException e) {
             throw new ServiceException("Error retrieving exhibitions by name", e);
         }
 
-        return exhibitions;
     }
 
     @Override
     public List<Exhibition> getExhibitionsByGallery(int galleryId) throws ServiceException {
-        List<Exhibition> exhibitions = new ArrayList<>();
+
         String commandSql = "SELECT * FROM Exhibition WHERE idGallery = ?";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
@@ -807,30 +776,19 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
             Exhibition exhibition = null;
             preparedStatement.setInt(1, galleryId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    exhibition = new Exhibition();
-                    exhibition.setId(resultSet.getInt("idExhibition"));
-                    exhibition.setNameExhibition(resultSet.getString("nameExhibition"));
-                    exhibition.setStartDate(resultSet.getDate("startDate").toLocalDate());
-                    exhibition.setEndDate(resultSet.getDate("endDate").toLocalDate());
-                    exhibition.setExdescription(resultSet.getString("Exdescription"));
-                    exhibition.setExstatus(resultSet.getString("Exstatus"));
-                    exhibition.setIdGallery(resultSet.getString("idGallery"));
-
-                    exhibitions.add(exhibition);
-                }
+               return buildExhibitions(resultSet);
             }
 
         } catch (SQLException e) {
             throw new ServiceException("Error retrieving exhibitions by name", e);
         }
-        return exhibitions;
+
     }
 
     @Override
     public Exhibition createExhibition(Exhibition exhibition) throws ServiceException {
-        String commandSql = "INSERT INTO Exhibition (nameExhibition, startDate, endDate, Exdescription, Exstatus, idGallery ) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
+        String commandSql = "INSERT INTO Exhibition (nameExhibition, startDate, endDate, Exdescription, Exstatus, idGallery, referenceImage) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement preparedStatement = conn.prepareStatement(commandSql, Statement.RETURN_GENERATED_KEYS)) {
@@ -851,7 +809,8 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
                 preparedStatement.setString(5, "open");
             }
             //---------------------------------------------------------------------------------------------------------
-            preparedStatement.setString(6, exhibition.getIdGallery());
+            preparedStatement.setInt(6, exhibition.getIdGallery());
+            preparedStatement.setString(7, exhibition.getReferenceImage());
 
             int affectedRows = preparedStatement.executeUpdate();
 
@@ -872,7 +831,7 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
     @Override
     public Exhibition updateExhibition(Exhibition exhibition) throws ServiceException {
         String commandSql = "UPDATE Exhibition SET nameExhibition = ?, startDate = ?, endDate = ?, Exdescription = ?, " +
-                "Exstatus = ?, idGallery = ? WHERE idExhibition = " + exhibition.getId();
+                "Exstatus = ?, idGallery = ?, referenceImage = ? WHERE idExhibition = " + exhibition.getId();
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement preparedStatement = conn.prepareStatement(commandSql)) {
@@ -894,7 +853,8 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
                 preparedStatement.setString(5, "open");
             }
             //--------------------------------------------------------------------------------------------------------
-            preparedStatement.setString(6, exhibition.getIdGallery());
+            preparedStatement.setInt(6, exhibition.getIdGallery());
+            preparedStatement.setString(7, exhibition.getReferenceImage());
 
             int affectedRows = preparedStatement.executeUpdate();
             return exhibition;
@@ -926,8 +886,26 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
         }
     }
 
-    private List<Exhibition> buildExhibitions(ResultSet resultSet){
-        return null;
+    private List<Exhibition> buildExhibitions(ResultSet resultSet) throws SQLException {
+
+        List<Exhibition> exhibitions = new ArrayList<>();
+        while (resultSet.next()) {
+            Exhibition exhibition = new Exhibition();
+
+            exhibition.setId(resultSet.getInt("idExhibition"));
+            exhibition.setNameExhibition(resultSet.getString("nameExhibition"));
+            exhibition.setStartDate(resultSet.getDate("startDate").toLocalDate());
+            exhibition.setEndDate(resultSet.getDate("endDate").toLocalDate());
+            exhibition.setExdescription(resultSet.getString("Exdescription"));
+            exhibition.setExstatus(resultSet.getString("Exstatus"));
+            exhibition.setIdGallery(resultSet.getInt("idGallery"));
+            exhibition.setReferenceImage(resultSet.getString("referenceImage"));
+
+            // add a single exhibition to the list of exhibitions
+            exhibitions.add(exhibition);
+        }
+
+        return exhibitions;
     }
 
 }
