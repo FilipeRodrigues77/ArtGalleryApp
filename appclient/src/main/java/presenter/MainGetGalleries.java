@@ -45,7 +45,7 @@ public class MainGetGalleries {
                 }
                 if (listGalleries != null) {
                     for (Gallery gallery : listGalleries) {
-                        System.out.println(gallery);
+                        //System.out.println(gallery);
                     }
                 }
             } else {
