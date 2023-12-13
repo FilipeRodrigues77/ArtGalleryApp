@@ -65,7 +65,6 @@ public class SceneGallery extends BorderPane {
 
     }
 
-
     private GridPane buildMainGrid (List<Gallery> listGalleries){
 
         GridPane grid = new GridPane();

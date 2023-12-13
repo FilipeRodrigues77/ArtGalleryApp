@@ -19,6 +19,11 @@ import java.util.Objects;
  * Class used to retrieve data about artists from the database and store it in a list of Artist object.
  */
 public class MainGetArtists {
+    static String port = "8010";
+
+    public static void main(String[] args) {
+        System.out.println(getAllArtists());
+    }
 
     public static List<Artist> getAllArtists (){
 
@@ -28,7 +33,7 @@ public class MainGetArtists {
         Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:8000/artists")
+                .url("http://localhost:" + port +"/artists")
                 .build();
 
         try {
@@ -68,7 +73,7 @@ public class MainGetArtists {
         Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:8000/artists/"+artistId)
+                .url("http://localhost:" + port +"/artists/"+artistId)
                 .build();
 
         try {
@@ -108,7 +113,7 @@ public class MainGetArtists {
         Gson gson = new GsonBuilder().create();
 
         // Build the URL and add query parameter
-        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://localhost:8000/artists/searchName")).newBuilder();
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://localhost:" + port +"/artists/searchName")).newBuilder();
         urlBuilder.addQueryParameter("name", name);
         String url = urlBuilder.build().toString();
 
@@ -150,7 +155,7 @@ public class MainGetArtists {
         Gson gson = new GsonBuilder().create();
 
         // Build the URL and add query parameter
-        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://localhost:8000/artists/searchNationality")).newBuilder();
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://localhost:" + port +"/artists/searchNationality")).newBuilder();
         urlBuilder.addQueryParameter("nationality", nationality);
         String url = urlBuilder.build().toString();
 
@@ -192,7 +197,7 @@ public class MainGetArtists {
         Gson gson = new GsonBuilder().create();
 
         // Build the URL and add query parameter
-        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://localhost:8000/artists/searchBirthdate")).newBuilder();
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://localhost:" + port +"artists/searchBirthdate")).newBuilder();
         urlBuilder.addQueryParameter("birthdate", birthdate);
         String url = urlBuilder.build().toString();
 
@@ -234,7 +239,7 @@ public class MainGetArtists {
         Gson gson = new GsonBuilder().create();
 
         // Build the URL and add query parameter
-        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://localhost:8000/artists/searchDeathdate")).newBuilder();
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://localhost:" + port +"/artists/searchDeathdate")).newBuilder();
         urlBuilder.addQueryParameter("deathdate", deathdate);
         String url = urlBuilder.build().toString();
 
