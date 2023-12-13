@@ -12,5 +12,8 @@
         <module name="appmodel" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="appViewManager" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>
