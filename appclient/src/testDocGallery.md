@@ -1,3 +1,5 @@
+## Documentation for the class that retrieves data from Galleries in the REST API
+
 
 ### `getAllGalleries()`
 

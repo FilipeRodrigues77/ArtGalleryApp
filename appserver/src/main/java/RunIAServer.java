@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import static spark.Spark.*;
 
@@ -736,6 +737,86 @@ public class RunIAServer {
                     response.status(400); // Bad Request
                     JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty("message", "Please provide a valid exhibition name");
+                    return jsonObject.toString();
+                }
+            });
+
+            get("/searchByStatus", (request, response) -> {
+                // Get the status and exhibition name from the query parameters
+                String exhibitionStatus = request.queryParams("status");
+
+                if (exhibitionStatus != null && !exhibitionStatus.isEmpty()) {
+                    response.type("application/json");
+
+                    // Call the storage method to get exhibitions by status
+                    List<Exhibition> matchingExhibitions = storage.getExhibitionByStatus(exhibitionStatus);
+
+                    if (matchingExhibitions.isEmpty()) {
+                        response.status(404); // Not Found
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("message", "No matching exhibitions found for the provided status");
+                        return jsonObject.toString();
+                    } else {
+                        return gson.toJson(matchingExhibitions);
+                    }
+                } else {
+                    response.status(400); // Bad Request
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("message", "Please provide a valid exhibition status");
+                    return jsonObject.toString();
+                }
+            });
+
+            get("/searchByStartDate", (request, response) -> {
+                // Get the startDate from the query parameters
+                String dateRegexPattern = "\\d{4}-\\d{2}-\\d{2}";
+                String startDateStr = request.queryParams("startDate");
+
+                if (startDateStr != null && startDateStr.matches(dateRegexPattern)) {
+                    response.type("application/json");
+
+                    // Call the storage method to get exhibitions by startDate
+                    List<Exhibition> matchingExhibitions = storage.getExhibitionByStartDate(startDateStr);
+
+                    if (matchingExhibitions.isEmpty()) {
+                        response.status(404); // Not Found
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("message", "No matching exhibitions found for the provided startDate");
+                        return jsonObject.toString();
+                    } else {
+                        return gson.toJson(matchingExhibitions);
+                    }
+                } else {
+                    response.status(400); // Bad Request
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("message", "Please provide a valid startDate");
+                    return jsonObject.toString();
+                }
+            });
+
+            get("/searchByEndDate", (request, response) -> {
+                // Get the endDate from the query parameters
+                String dateRegexPattern = "\\d{4}-\\d{2}-\\d{2}";
+                String endDateStr = request.queryParams("endDate");
+
+                if (endDateStr != null && endDateStr.matches(dateRegexPattern)) {
+                    response.type("application/json");
+
+                    // Call the storage method to get exhibitions by endDate
+                    List<Exhibition> matchingExhibitions = storage.getExhibitionByEndDate(endDateStr);
+
+                    if (matchingExhibitions.isEmpty()) {
+                        response.status(404); // Not Found
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("message", "No matching exhibitions found for the provided endDate");
+                        return jsonObject.toString();
+                    } else {
+                        return gson.toJson(matchingExhibitions);
+                    }
+                } else {
+                    response.status(400); // Bad Request
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("message", "Please provide a valid endDate");
                     return jsonObject.toString();
                 }
             });

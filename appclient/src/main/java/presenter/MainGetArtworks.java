@@ -309,7 +309,7 @@ public class MainGetArtworks {
         Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:" + port +"h/artworks/searchByGallery?idGallery=" + idGallery)
+                .url("http://localhost:" + port +"/artworks/searchByGallery?idGallery=" + idGallery)
                 .build();
 
         try {

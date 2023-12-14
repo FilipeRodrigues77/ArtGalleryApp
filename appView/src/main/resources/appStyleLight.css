@@ -66,6 +66,9 @@
     -fx-focus-color: transparent; /* Remover contorno azul ao focar */
 }
 
+.m-label:focused {
+    -fx-focus-color: transparent;
+}
 .SlideShowView {
     -fx-background-image: url('SlideShowImages/QuadroSlideShowClaroNovo.png');
     -fx-background-size: cover;
