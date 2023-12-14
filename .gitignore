@@ -1,0 +1,17 @@
+# Arquivos Java
+*.class
+*.jar
+
+# Arquivos de compilação do Maven
+target/
+
+# Arquivos de configuração
+*.config
+
+# Arquivos de configuração do Eclipse
+.classpath
+.project
+.settings/
+
+# Arquivos de configuração do IntelliJ
+.idea/
