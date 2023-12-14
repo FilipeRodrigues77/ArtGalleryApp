@@ -10,6 +10,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import presenter.MainGetArtists;
 import presenter.MainGetArtworks;
@@ -17,6 +18,7 @@ import presenter.MainGetExhibitions;
 import presenter.MainGetGalleries;
 
 import java.util.List;
+import java.util.Objects;
 
 public class SceneExhibition extends BorderPane {
 
@@ -27,30 +29,85 @@ public class SceneExhibition extends BorderPane {
         getStylesheets().add(cssTheme);
     }
 
+
+    private void handleStartDateSelection(TextField textFieldSearch ){
+        ScrollPane finalScrollPane = new ScrollPane();
+        String searchText = textFieldSearch.getText().trim();
+        if (!searchText.isEmpty()) {
+
+            List<Exhibition> exhibitions = MainGetExhibitions.getExhibitionsByStartDate(searchText);
+            if(exhibitions != null){
+                finalScrollPane.setContent(buildMainGrid(exhibitions));
+                this.setCenter(finalScrollPane);
+            }
+            else{
+                getScene().setRoot(new ShowErrorExhibition());
+            }
+            this.setCenter(finalScrollPane);
+
+        }
+    }
+
+    private void handleEndDateSelection(TextField textFieldSearch ){
+        ScrollPane finalScrollPane = new ScrollPane();
+        String searchText = textFieldSearch.getText().trim();
+        if (!searchText.isEmpty()) {
+
+            List<Exhibition> exhibitions = MainGetExhibitions.getExhibitionsByEndDate(searchText);
+            if(exhibitions != null){
+                finalScrollPane.setContent(buildMainGrid(exhibitions));
+                this.setCenter(finalScrollPane);
+            }
+            else{
+                getScene().setRoot(new ShowErrorExhibition());
+            }
+            this.setCenter(finalScrollPane);
+
+        }
+    }
+
+
     private void doLayout() {
 
         setPadding(new Insets(20));
-
+        List<Exhibition> exhibitionList = MainGetExhibitions.getAllExhibitions();
         //--------------------------------------------- HEADER ELEMENTS ---------------------------------------------
 
         // CREATE SEARCH BY FILTER FIELDS
-        TextField textFieldSearchByStartDate = new TextField("Inicio ex. 21-02-2023:");
+        String startDateOriginalText = "Inicio ex. 21-02-2023:";
+        TextField textFieldSearchByStartDate = new TextField(startDateOriginalText);
+        setOriginalDescription(textFieldSearchByStartDate,startDateOriginalText);
         textFieldSearchDefault(textFieldSearchByStartDate);
+        textFieldSearchByStartDate.setOnKeyPressed(e-> {
+            if (e.getCode() == KeyCode.ENTER) {
+                handleStartDateSelection(textFieldSearchByStartDate);
+            }
+        });
 
-        TextField textFieldSearchByEndDate = new TextField("Data de fecho:");
+        String endDateOriginalText = "Data de fecho:";
+        TextField textFieldSearchByEndDate = new TextField(endDateOriginalText);
+        setOriginalDescription(textFieldSearchByEndDate,endDateOriginalText);
         textFieldSearchDefault(textFieldSearchByEndDate);
+        textFieldSearchByEndDate.setOnKeyPressed(e-> {
+            if (e.getCode() == KeyCode.ENTER) {
+                handleEndDateSelection(textFieldSearchByEndDate);
+            }
+        });
 
         // CREATE LABEL FOR FILTER AREA
         Label filterLabel = new Label("Filtros = ");
 
         // CREATE A MOMBOX AND ADD THE OBSERVABLELIST TO EACH MENU
         ObservableList<String> statusOptions = FXCollections.observableArrayList(
+                "Todas",
                 "Aberta",
                 "Fechada"
         );
+
         ComboBox<String> statusMenu = new ComboBox<>(statusOptions);
         statusMenu.setMaxWidth(100);
         statusMenu.setValue("Status");
+        statusMenu.setOnAction(e-> handleStatusSelection(statusMenu, exhibitionList));
 
         // SET HBOX FOR THE FILTER MENUS
         HBox hBoxMenu = new HBox(filterLabel, statusMenu, textFieldSearchByStartDate, textFieldSearchByEndDate);
@@ -63,8 +120,6 @@ public class SceneExhibition extends BorderPane {
 
 
         // ---------------------------------------------- CENTER LAYOUT ----------------------------------------------
-
-        List<Exhibition> exhibitionList = MainGetExhibitions.getAllExhibitions();
         // CREATE SCROLL_PANE TO ALLOW US TO SCROLL THROUGH THE GRID_PANE
         ScrollPane scrollPane = new ScrollPane();
         // ADD GRID_PANE INSIDE THE SCROLL_PANE OBJ
@@ -78,6 +133,31 @@ public class SceneExhibition extends BorderPane {
         setBottom(getFooterBox());
 
         // ---------------------------------------------- END  PLUS --------------------------------------------------
+
+    }
+
+    private void handleStatusSelection(ComboBox<String> statusMenu, List<Exhibition> exhibitionList){
+
+        ScrollPane finalScrollPane = new ScrollPane();
+        // get the selected item*
+        String selected = statusMenu.getSelectionModel().getSelectedItem();
+        List<Exhibition> filteredExhibitions;
+
+        if(selected != null){
+
+            if (selected.equalsIgnoreCase("Todas")){
+                finalScrollPane.setContent(buildMainGrid(exhibitionList));
+            }
+            else if (selected.equalsIgnoreCase("Aberta")){
+                filteredExhibitions = MainGetExhibitions.getExhibitionsByStatus("open");
+                finalScrollPane.setContent(buildMainGrid(filteredExhibitions));
+            }
+            else{
+                filteredExhibitions = MainGetExhibitions.getExhibitionsByStatus("closed");
+                finalScrollPane.setContent(buildMainGrid(filteredExhibitions));
+            }
+            this.setCenter(finalScrollPane);
+        }
 
     }
 
@@ -156,14 +236,14 @@ public class SceneExhibition extends BorderPane {
         return grid;
     }
 
-
-    private BorderPane doExhibitionDetailsLayout( Exhibition  exhibition ) {
+    public BorderPane doExhibitionDetailsLayout( Exhibition  exhibition ) {
         setPadding(new Insets(20));
         //--------------------------------------------- HEADER ELEMENTS ---------------------------------------------
 
         // EXHIBITION IMAGE
-        String imageExhibition = "Images/Exhibition/Exhibition26.jpg";
-        ImageView imageViewExhibition = new ImageView(new Image(imageExhibition));
+        String imageExhibition = exhibition.getReferenceImage();
+        ImageView imageViewExhibition ;
+        imageViewExhibition = new ImageView(new Image(Objects.requireNonNullElse(imageExhibition, "Images/Exhibition/Default.jpg")));
         defaultSizeExhibitionImage(imageViewExhibition);
 
         // ---------------------------------------------- TOP LAYOUT ----------------------------------------------
@@ -179,6 +259,7 @@ public class SceneExhibition extends BorderPane {
         Label labelEndDate = new Label(String.valueOf(exhibition.getEndDate()));
         Label labelAboutExhibition= new Label("Sobre a Exposição:");
         Label labelExhibitionDetails= new Label(exhibition.getExdescription());
+        Label labelExhibitionArtworks = new Label("Obras de arte");
 
         labelExhibitionDetails.setWrapText(true);
         labelAboutExhibition.getStyleClass().add("my-center-label-3");
@@ -186,54 +267,27 @@ public class SceneExhibition extends BorderPane {
 
         HBox hboxStartAndEndDate = new HBox(labelStartDate, labelEndDate);
         hboxStartAndEndDate.setSpacing(10);
+
         VBox vBoxGalleryInfo = new VBox(labelExhibitionName, labelGalleryName, hboxStartAndEndDate);
-        VBox vBoxExhibitionDetails = new VBox(labelAboutExhibition, labelExhibitionDetails);
+        vBoxGalleryInfo.setPadding(new Insets(0,0,10,0));
+        VBox vBoxExhibitionDetails = new VBox(vBoxGalleryInfo ,labelAboutExhibition, labelExhibitionDetails);
+
         HBox hBoxCenterLayout = new HBox(imageViewExhibition, vBoxExhibitionDetails);
         hBoxCenterLayout.setSpacing(10);
-        VBox vBoxCenterLayout = new VBox(hBoxCenterLayout, vBoxGalleryInfo);
+        VBox vBoxCenterLayout = new VBox(hBoxCenterLayout,labelExhibitionArtworks);
         vBoxCenterLayout.setSpacing(10);
 
-        // CREATE A GRIDPANE
-        GridPane grid = new GridPane();
-        grid.setHgap(15.4);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(0, 10, 0, 0));
-        grid.setGridLinesVisible(false);
 
-        // FILL THE GRIDPANE WITH IMAGES AND LABELS
         List<Artwork> artworks = MainGetArtworks.getArtworksByExhibitionId(exhibition.getId());
-        // Get the artworklist for this exhibition
-        for (int i = 0; i < 7; i++) {
-            int imageNum = i+1;
-            Image image = new Image("Images/Artwork/AllArtworks/square" + imageNum+ ".jpg");
-            ImageView imageViewArtwork = new ImageView(image);
-            defaultSizeExhibitionImage(imageViewArtwork);
-
-            // Create a new VBox for each iteration
-            Label labelArtworkName = new Label("Artwork " + i);
-            Label labelArtistName = new Label("Artist " + i);
-            Label labelPrice = new Label("Price " + i);
-
-            VBox vBoxLabelArtwork = new VBox(labelArtworkName, labelArtistName, labelPrice);
-
-            // CALCULATE THE COORDINATE FOR EACH CELL (4 COLUMNS)
-            int col = i % 4;
-            int row = i / 4 * 2; // MULTIPLY BY TWO TO JUMP LINE ON EACH ITTERATION
-
-            // ADD IMAGES AND LABELS TO EACH CALCULATED SPOT
-            grid.add(imageViewArtwork, col * 2, row);
-            grid.add(vBoxLabelArtwork, col * 2, row + 1);
-        }
-
-        // CREATE SCROLL_PANE TO ALLOW US TO SCROLL THROUGH THE GRID_PANE
         ScrollPane scrollPane = new ScrollPane();
-        // ADD GRID_PANE INSIDE THE SCROLL_PANE OBJ
-        scrollPane.setContent(grid);
+        // NOTE: WE CAN ONLY SEE IMAGES OF EXHIBITIONS THAT ARE OPEN
+        // WHEN WE HAVE NO
+        scrollPane.setContent(buildThiExhibitionArtworkGrid(artworks));
 
         VBox vBoxGlobalCenterLayout = new VBox(vBoxCenterLayout, scrollPane);
         vBoxGlobalCenterLayout.setSpacing(20);
-
         setCenter(vBoxGlobalCenterLayout);
+
 
         // ---------------------------------------------- BOTTOM LAYOUT ----------------------------------------------
 
@@ -399,13 +453,12 @@ public class SceneExhibition extends BorderPane {
         String searchText = textFieldSearch.getText().trim();
         if (!searchText.isEmpty()) {
 
-            List<Artist> artists = MainGetArtists.getArtistByName(searchText);
-            if(artists != null){
-                // finalScrollPane.setContent(filteredGrid(artists));
+            List<Exhibition> exhibitions = MainGetExhibitions.getExhibitionsByName(searchText);
+            if(exhibitions != null){
                 this.setCenter(finalScrollPane);
             }
             else{
-                getScene().setRoot(new ShowErrorArtist());
+                getScene().setRoot(new ShowErrorExhibition());
             }
             this.setCenter(finalScrollPane);
 
@@ -441,8 +494,8 @@ public class SceneExhibition extends BorderPane {
     }
 
     public void defaultSizeArtworkImage(ImageView imageView){
-        imageView.setFitHeight(300); // Ajuste a altura conforme necessário
-        imageView.setFitWidth(360);  // Ajuste a largura conforme necessário
+        imageView.setFitHeight(160); // Ajuste a altura conforme necessário
+        imageView.setFitWidth(160);  // Ajuste a largura conforme necessário
         //imageView.setPreserveRatio(true);
     }
 

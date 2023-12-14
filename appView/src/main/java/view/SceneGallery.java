@@ -2,6 +2,7 @@ package view;
 
 import domain.Artist;
 import domain.Artwork;
+import domain.Exhibition;
 import domain.Gallery;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -11,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import presenter.MainGetArtists;
 import presenter.MainGetArtworks;
+import presenter.MainGetExhibitions;
 import presenter.MainGetGalleries;
 
 import java.util.List;
@@ -135,25 +137,45 @@ public class SceneGallery extends BorderPane {
         Label labelGalleryName = new Label(gallery.getNameGallery());
         Label labelGalleryRegion = new Label(gallery.getRegionName());
         Label labelGalleryEmail = new Label(gallery.getEmail());
-
         labelGalleryName.getStyleClass().add("my-center-label-1");
+
+
+        Label labelArtworks = new Label("Obras de arte ");
+        Label labelExhibitions = new Label("Eventos");
+
+        HBox galleryArtworkAndEvents = new HBox(labelArtworks,labelExhibitions);
+        galleryArtworkAndEvents.setSpacing(60);
+        galleryArtworkAndEvents.setPadding(new Insets(5,0,5,0));
 
         VBox vBoxGalleryInfo = new VBox(labelGalleryName, labelGalleryRegion, labelGalleryEmail);
 
-        VBox vBoxGalleryImage = new VBox(imageViewGallery);
-        VBox vBoxCenterLayout = new VBox(vBoxGalleryImage, vBoxGalleryInfo);
+        HBox hBoxImageInfo = new HBox(imageViewGallery, vBoxGalleryInfo);
+        hBoxImageInfo.setSpacing(30);
+
+        VBox vBoxGalleryImageArtworkEvents = new VBox(hBoxImageInfo,galleryArtworkAndEvents);
+        vBoxGalleryImageArtworkEvents.setSpacing(30);
+        VBox vBoxCenterLayout = new VBox(vBoxGalleryImageArtworkEvents);
         vBoxCenterLayout.setSpacing(10);
 
-        // CREATE A GRIDPANE
 
+        List<Exhibition> galleryExhibition = MainGetExhibitions.getExhibitionsByIdGallery(gallery.getId());
         List<Artwork> galleryArtworks = MainGetArtworks.getArtworksByGalleryId(gallery.getId());
         // CREATE SCROLL_PANE TO ALLOW US TO SCROLL THROUGH THE GRID_PANE
         ScrollPane scrollPane = new ScrollPane();
         // ADD GRID_PANE INSIDE THE SCROLL_PANE OBJ
         scrollPane.setContent(buildThisGalleryArtworkGrid(galleryArtworks));
-
         VBox vBoxGlobalCenterLayout = new VBox(vBoxCenterLayout, scrollPane);
         vBoxGlobalCenterLayout.setSpacing(20);
+
+        // CHANGE
+        labelArtworks.setOnMouseClicked(e-> {
+            scrollPane.setContent(buildThisGalleryArtworkGrid(galleryArtworks));
+            labelArtworks.getStyleClass().add("actual-page-label");
+        });
+        labelExhibitions.setOnMouseClicked(e-> {
+            scrollPane.setContent(buildThisGalleryExhibitionGrid(galleryExhibition));
+            labelExhibitions.getStyleClass().add("actual-page-label");
+        });
 
         setCenter(vBoxGlobalCenterLayout);
 
@@ -165,6 +187,55 @@ public class SceneGallery extends BorderPane {
 
         return this;
 
+    }
+
+    private GridPane buildThisGalleryExhibitionGrid (List<Exhibition> exhibitionList){
+
+        GridPane grid = new GridPane();
+        grid.setHgap(15.4);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(0, 10, 0, 0));
+        grid.setGridLinesVisible(false);
+
+        for (int i = 0; i < exhibitionList.size(); i++) {
+
+            int maxTextLength = 23;
+
+            Exhibition exhibition = exhibitionList.get(i);
+            String imageExhibition = exhibition.getReferenceImage();
+            ImageView imageViewExhibition ;
+            imageViewExhibition = new ImageView(new Image(Objects.requireNonNullElse(imageExhibition, "Images/Exhibition/SmallDefault.jpg")));
+            defaultSizeArtworkImage(imageViewExhibition);
+
+            imageViewExhibition.setOnMouseClicked(e-> getScene().setRoot(new SceneExhibition().doExhibitionDetailsLayout(exhibition)));
+            // Create a new VBox for each iteration
+            String exhibitionName = exhibition.getNameExhibition();
+            Hyperlink hyperExhibitionName;
+
+            if (exhibitionName.length() < maxTextLength){
+                hyperExhibitionName = new Hyperlink(exhibitionName);
+            } else{
+                hyperExhibitionName = new Hyperlink(exhibitionName.substring(0,maxTextLength)+"...");
+            }
+            hyperExhibitionName.setOnAction(e-> getScene().setRoot(new SceneExhibition().doExhibitionDetailsLayout(exhibition)));
+
+
+            Gallery gallery = MainGetGalleries.getGalleryById(exhibition.getIdGallery());
+            String exhibitionGallery = gallery.getNameGallery();
+            Hyperlink hyperGalleryName = new Hyperlink(exhibitionGallery);
+            VBox vBoxLabelArtwork = new VBox(hyperExhibitionName, hyperGalleryName);
+            hyperGalleryName.setOnAction(e-> getScene().setRoot(new SceneGallery().doDetailsLayout(gallery)));
+
+
+            int col = i % 4;
+            int row = i / 4 * 2;
+            // ADD IMAGES AND LABELS TO EACH CALCULATED SPOT
+            grid.add(imageViewExhibition, col * 2, row);
+            grid.add(vBoxLabelArtwork, col * 2, row + 1);
+
+        }
+
+        return grid;
     }
 
     private GridPane buildThisGalleryArtworkGrid (List<Artwork> artworkList){
@@ -350,7 +421,6 @@ public class SceneGallery extends BorderPane {
         textField.setPrefSize(150, 15);
         textField.setOnMouseClicked(e -> textField.clear());
     }
-
 
     public void defaultSizeArtworkImage(ImageView imageView){
         imageView.setFitHeight(160); // Ajuste a altura conforme necessário

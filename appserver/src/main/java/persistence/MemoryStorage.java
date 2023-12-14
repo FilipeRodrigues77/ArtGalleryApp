@@ -766,6 +766,61 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
     }
 
     @Override
+    public List<Exhibition> getExhibitionByStatus(String status) throws ServiceException {
+        String commandSql = "SELECT * FROM Exhibition WHERE Exstatus = ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement preparedStatement = conn.prepareStatement(commandSql)) {
+
+            Exhibition exhibition = null;
+            preparedStatement.setString(1, status);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                return buildExhibitions(resultSet);
+            }
+
+        } catch (SQLException e) {
+            throw new ServiceException("Error retrieving exhibitions by Status", e);
+        }
+
+    }
+
+    @Override
+    public List<Exhibition> getExhibitionByStartDate(String startDate) throws ServiceException {
+
+        String commandSql = "SELECT * FROM Exhibition WHERE startDate = ?";
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement preparedStatement = conn.prepareStatement(commandSql)) {
+
+            Exhibition exhibition = null;
+            preparedStatement.setString(1, startDate);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                return buildExhibitions(resultSet);
+            }
+
+        } catch (SQLException e) {
+            throw new ServiceException("Error retrieving exhibitions by Start date", e);
+        }
+
+    }
+
+    @Override
+    public List<Exhibition> getExhibitionByEndDate(String endDate) throws ServiceException {
+        String commandSql = "SELECT * FROM Exhibition WHERE endDate = ?";
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement preparedStatement = conn.prepareStatement(commandSql)) {
+
+            Exhibition exhibition = null;
+            preparedStatement.setString(1, endDate);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                return buildExhibitions(resultSet);
+            }
+
+        } catch (SQLException e) {
+            throw new ServiceException("Error retrieving exhibitions by End date", e);
+        }
+    }
+
+    @Override
     public List<Exhibition> getExhibitionsByGallery(int galleryId) throws ServiceException {
 
         String commandSql = "SELECT * FROM Exhibition WHERE idGallery = ?";
