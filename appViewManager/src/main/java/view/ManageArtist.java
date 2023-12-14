@@ -31,10 +31,11 @@ public class ManageArtist extends BorderPane {
         //--------------------------------------------- HEADER ELEMENTS ---------------------------------------------
 
 
-        //Botão criar
+        // BUTTONS
+
         Button createButton = new Button("Criar");
-        //createButton.setOnAction(e -> list.getScene().setRoot(new PersonViewer(persons, null)));
-        //Botão editar
+        createButton.setOnAction(e -> getScene().setRoot(new CreateArtistView()));
+
         Button editButton = new Button("Editar");
         /*editButton.setOnAction(e -> {
             Person person = list.getSelectionModel().getSelectedItem();
