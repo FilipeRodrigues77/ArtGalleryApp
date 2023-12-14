@@ -1,7 +1,6 @@
 package view;
 
 import domain.Artist;
-import domain.Artwork;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -10,17 +9,11 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import presenter.MainCreateArtists;
-import presenter.MainGetArtists;
-import presenter.MainGetArtworks;
-import presenter.MainGetGalleries;
+import presenter.MainUpdateArtists;
 
-import java.util.List;
-
-public class CreateArtistView extends BorderPane {
+public class EditArtistView extends BorderPane {
 
     private TextField textFieldArtistName;
     private TextField textFieldBirthday;
@@ -31,14 +24,14 @@ public class CreateArtistView extends BorderPane {
     private Spinner<Integer> yearBirthdaySpinner;
     private Spinner<Integer> yearDeathdaySpinner;
 
-    public CreateArtistView() {
-        doLayout();
+    public EditArtistView(Artist artist) {
+        initialize(artist);
         ManageMainView manageMainView = new ManageMainView();
         String cssTheme = manageMainView.themeCurrent;
         getStylesheets().add(cssTheme);
     }
 
-    private void doLayout() {
+    private void initialize(Artist artist) {
         // Vamos criar aqui o layout deste painel
         setPadding(new Insets(20));
 
@@ -60,12 +53,13 @@ public class CreateArtistView extends BorderPane {
         statusMenu.setMaxWidth(120);
         statusMenu.setValue("Nacionalidade");
         statusMenu.getStyleClass().add("combo-box");
+        statusMenu.setValue(artist.getNationality());
 
         // SPINNER
-        this.yearBirthdaySpinner = new Spinner<>(0, 2999, 1990);
+        this.yearBirthdaySpinner = new Spinner<>(0, 2999, Integer.parseInt(artist.getBirthdate()));
         yearBirthdaySpinner.setEditable(true);
 
-        this.yearDeathdaySpinner = new Spinner<>(0, 2999,0);
+        this.yearDeathdaySpinner = new Spinner<>(0, 2999, Integer.parseInt(artist.getDeathdate()));
         yearDeathdaySpinner.setEditable(true);
 
         // LABELS
@@ -75,11 +69,11 @@ public class CreateArtistView extends BorderPane {
         Label labelBiography = new Label("Biografia (max.10000 caracteres):");
         Label labelSlug = new Label("Slug (nome-separado-por-hifén-em-minúsculo):");
 
-        this.textFieldArtistName = new TextField();
-        this.textFieldBirthday = new TextField();
-        this.textFieldDeathday = new TextField();
-        this.textFieldBiography = new TextField();
-        this.textFieldSlug = new TextField();
+        this.textFieldArtistName = new TextField(artist.getName());
+        this.textFieldBirthday = new TextField(artist.getBirthdate());
+        this.textFieldDeathday = new TextField(artist.getDeathdate());
+        this.textFieldBiography = new TextField(artist.getBiography());
+        this.textFieldSlug = new TextField(artist.getSlug());
 
         textFieldBiography.setPrefSize(520,200);
 
@@ -104,19 +98,17 @@ public class CreateArtistView extends BorderPane {
         // ---------------------------------------------- BOTTOM LAYOUT ----------------------------------------------
 
         // ADD THE BOTTOM ELEMENTS INSIDE THE DESIGNATED HBOX
-        this.setBottom(getFooterBox());
-
-    }
-
-    private VBox getFooterBox (){
         // Buttons
-        Button createArtistButton = new Button("Criar Artista");
+        Button saveChangesButton = new Button("Salvar Alterações");
         Button cancelButton = new Button("Cancelar");
 
-        createArtistButton.getStyleClass().add("button-modern");
+        saveChangesButton.getStyleClass().add("button-modern");
         cancelButton.getStyleClass().add("button-modern");
 
-        createArtistButton.setOnAction(event -> createArtist());
+        saveChangesButton.setOnAction(event -> {
+            saveChangesArtist(artist);
+            System.out.println(artist);
+        });
 
         // GIT IMAGE
         String imageGitHubPath = "Icons/Github.png";
@@ -132,7 +124,7 @@ public class CreateArtistView extends BorderPane {
         Label labelButtonStatus = new Label("I~A © 2023 I~A  Todos os direitos reservados");
 
         // DEFINE A HBOX THAT WILL CONTAIN THE IMAGES (ADD SIMULTANEOUSLY)
-        HBox hBoxButtons = new HBox(createArtistButton, cancelButton);
+        HBox hBoxButtons = new HBox(saveChangesButton, cancelButton);
         hBoxButtons.setSpacing(30);
         hBoxButtons.setAlignment(Pos.CENTER_RIGHT);
         HBox hBoxBottomImages = new HBox(imageViewLinkedin,imageViewGitHub);
@@ -145,8 +137,10 @@ public class CreateArtistView extends BorderPane {
         VBox vBoxBottomLayout = new VBox(hBoxButtons, hBoxBottomLayout);
         vBoxBottomLayout.setSpacing(20);
 
-        return vBoxBottomLayout;
+        this.setBottom(vBoxBottomLayout);
+
     }
+
 
     private VBox getHeaderBox (){
 
@@ -219,28 +213,18 @@ public class CreateArtistView extends BorderPane {
         //imageView.setPreserveRatio(true);
     }
 
-    private void createArtist() {
+    private void saveChangesArtist(Artist artist) {
         //STRINGS ATTRIBUTES FOR OBJECT
-        String name = textFieldArtistName.getText();
-        String biography = textFieldBiography.getText();
-        String birthdate = yearBirthdaySpinner.getValue().toString();
-        String deathdate = yearDeathdaySpinner.getValue().toString();
-        String slug = textFieldSlug.getText();
-        String nationality = statusMenu.getValue();
-        String refenceImage = "Images/Artist/ArtistSquare/square0.jpg";
+        artist.setName(textFieldArtistName.getText());
+        artist.setBiography(textFieldBiography.getText());
+        artist.setBirthdate(yearBirthdaySpinner.getValue().toString());
+        artist.setDeathdate(yearDeathdaySpinner.getValue().toString());
+        artist.setSlug(textFieldSlug.getText());
+        artist.setNationality(statusMenu.getValue());
 
-        //CREATE NEW OBJECT
-        Artist newArtist = new Artist();
-        newArtist.setName(name);
-        newArtist.setBiography(biography);
-        newArtist.setBirthdate(birthdate);
-        newArtist.setDeathdate(deathdate);
-        newArtist.setSlug(slug);
-        newArtist.setNationality(nationality);
-        newArtist.setReferenceImage(refenceImage);
 
         //ADD TO DATABASE
-        MainCreateArtists.addArtist(newArtist);
+        MainUpdateArtists.updateArtist(artist);
 
     }
 
