@@ -6,18 +6,23 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 import presenter.*;
 
 import java.util.List;
 
 public class ManageArtist extends BorderPane {
+    private ObservableList<Artist> observableListArtist;
+    private ListView<Artist> listViewArtist;
 
     public ManageArtist() {
+
         doLayout();
         ManageMainView manageMainView = new ManageMainView();
         String cssTheme = manageMainView.themeCurrent;
@@ -25,11 +30,16 @@ public class ManageArtist extends BorderPane {
     }
 
     private void doLayout() {
+
         // Vamos criar aqui o layout deste painel
         setPadding(new Insets(20));
 
         //--------------------------------------------- HEADER ELEMENTS ---------------------------------------------
 
+        // CREATE A LIST VIEW
+        List<Artist> listArtists = MainGetArtists.getAllArtists();
+        this.observableListArtist = FXCollections.observableArrayList(listArtists);
+        this.listViewArtist = new ListView<>(observableListArtist);
 
         // BUTTONS
 
@@ -37,6 +47,8 @@ public class ManageArtist extends BorderPane {
         createButton.setOnAction(e -> getScene().setRoot(new CreateArtistView()));
 
         Button editButton = new Button("Editar");
+        editButton.setOnAction(e -> editSelectedArtist());
+
         /*editButton.setOnAction(e -> {
             Person person = list.getSelectionModel().getSelectedItem();
             if (person != null) {
@@ -72,11 +84,6 @@ public class ManageArtist extends BorderPane {
 
 
         // ---------------------------------------------- CENTER LAYOUT ----------------------------------------------
-
-        // CREATE A LIST VIEW
-        List<Artist> listArtists = MainGetArtists.getAllArtists();
-        ObservableList<Artist> observableListArtist = FXCollections.observableArrayList(listArtists);
-        ListView<Artist> listViewArtist = new ListView<>(observableListArtist);
 
         this.setCenter(listViewArtist);
 
@@ -331,6 +338,17 @@ public class ManageArtist extends BorderPane {
         imageView.setFitHeight(160); // Ajuste a altura conforme necessário
         imageView.setFitWidth(160);  // Ajuste a largura conforme necessário
         //imageView.setPreserveRatio(true);
+    }
+
+    private void editSelectedArtist() {
+        Artist selectedArtist = listViewArtist.getSelectionModel().getSelectedItem();
+
+        if (selectedArtist != null) {
+            // Chame o método show da EditArtistView para editar o artista
+            getScene().setRoot(new EditArtistView(selectedArtist));
+            // Atualize a lista após a edição
+            listViewArtist.refresh();
+        }
     }
 
 }
