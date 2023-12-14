@@ -36,7 +36,7 @@ public class ManageMainView extends BorderPane {
     public void loadConfig(){
         this.config = new Properties();
         try {
-            FileReader file = new FileReader("appView/src/main/resources/iuvennisApp.config");
+            FileReader file = new FileReader("appViewManager/src/main/resources/iuvennisApp.config");
             this.config.load(file);
             file.close();
         } catch (IOException e) {
@@ -45,7 +45,7 @@ public class ManageMainView extends BorderPane {
     }
     private void saveConfig(){
         try {
-            this.config.store(new FileWriter("appView/src/main/resources/iuvennisApp.config"),"");
+            this.config.store(new FileWriter("appViewManager/src/main/resources/iuvennisApp.config"),"");
         } catch (IOException e) {
             showError("Not possible to save configuration");
         }

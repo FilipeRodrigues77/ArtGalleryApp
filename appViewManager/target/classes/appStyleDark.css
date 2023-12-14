@@ -164,3 +164,22 @@
 .button-modern:hover {
     -fx-background-color:  #444444; /* Cor de fundo ao passar o mouse sobre o botão */
 }
+
+.combo-box {
+    -fx-background-color: #333; /* Cor de fundo escura */
+    -fx-text-fill: white; /* Cor do texto */
+    -fx-border-color: #555; /* Cor da borda */
+    -fx-border-width: 1; /* Largura da borda */
+    -fx-border-radius: 3; /* Raio da borda */
+}
+
+/* Estilo da seta na ComboBox */
+.combo-box .arrow-button {
+    -fx-background-color: #333; /* Cor de fundo escura para a seta */
+}
+
+/* Estilo do menu suspenso da ComboBox */
+.combo-box-popup .list-view {
+    -fx-background-color: #333; /* Cor de fundo escura para o menu suspenso */
+    -fx-text-fill: white; /* Cor do texto no menu suspenso */
+}
