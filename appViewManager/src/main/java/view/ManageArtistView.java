@@ -45,31 +45,15 @@ public class ManageArtistView extends BorderPane {
         Button editButton = new Button("Editar");
         editButton.setOnAction(e -> editSelectedArtist());
 
-        /*editButton.setOnAction(e -> {
-            Person person = list.getSelectionModel().getSelectedItem();
-            if (person != null) {
-                list.getScene().setRoot(new PersonViewer(persons, person));
-            }
-        });
+        Button deleteButton = new Button("Apagar");
+        deleteButton.setOnAction((e -> removeSelectedArtist()));
 
-         */
-        //Botão apagar
-        Button removeButton = new Button("Apagar");
-        /*removeButton.setOnAction(e -> {
-            Person person = list.getSelectionModel().getSelectedItem();
-            if (person != null) {
-                personsList.remove(person);
-//                persons.removePerson(person);
-                persons.remove(person);
-            }
-
-         */
         createButton.getStyleClass().add("button-modern");
         editButton.getStyleClass().add("button-modern");
-        removeButton.getStyleClass().add("button-modern");
+        deleteButton.getStyleClass().add("button-modern");
         // ADD ELEMENTS FOR THE MENU HBOX
         // SET HBOX FOR THE FILTER MENUS
-        HBox hBoxMenu = new HBox(createButton, editButton, removeButton);
+        HBox hBoxMenu = new HBox(createButton, editButton, deleteButton);
         hBoxMenu.setSpacing(50);
         hBoxMenu.setAlignment(Pos.CENTER);
 
@@ -197,22 +181,21 @@ public class ManageArtistView extends BorderPane {
                 this.setCenter(listViewArtistFiltered);
             }
             else{
-                getScene().setRoot(new ShowErrorArtistView());
+                getScene().setRoot(new ShowErrorView());
             }
 
         }
     }
-
     // image treatment
     public void defaultSizeIcon (ImageView imageView){
-        imageView.setFitHeight(18); // Ajuste a altura conforme necessário
-        imageView.setFitWidth(18);  // Ajuste a largura conforme necessário
+        imageView.setFitHeight(18);
+        imageView.setFitWidth(18);
         // imageView.setPreserveRatio(true);
     }
 
     public void defaultSizeArtistImage(ImageView imageView){
-        imageView.setFitHeight(160); // Ajuste a altura conforme necessário
-        imageView.setFitWidth(160);  // Ajuste a largura conforme necessário
+        imageView.setFitHeight(160);
+        imageView.setFitWidth(160);
         //imageView.setPreserveRatio(true);
     }
 
@@ -220,11 +203,37 @@ public class ManageArtistView extends BorderPane {
         Artist selectedArtist = listViewArtist.getSelectionModel().getSelectedItem();
 
         if (selectedArtist != null) {
-            // Chame o método show da EditArtistView para editar o artista
             getScene().setRoot(new EditArtistView(selectedArtist));
-            // Atualize a lista após a edição
             listViewArtist.refresh();
         }
+    }
+
+    private void removeSelectedArtist() {
+        Artist selectedArtist = listViewArtist.getSelectionModel().getSelectedItem();
+
+        if (selectedArtist != null) {
+            // ALERT DELETE MESSAGE
+            Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmation.setTitle("Deletar Artista");
+            confirmation.setHeaderText("Iuvennis Art - Base de Dados (Confirmar Exclusão)");
+            confirmation.setContentText("Tem certeza que deseja DELETAR o Artista? Essa alteração não tem retorno.");
+
+            ButtonType buttonYes = new ButtonType("Sim");
+            ButtonType buttonNo = new ButtonType("Não");
+            confirmation.getButtonTypes().setAll(buttonYes, buttonNo);
+
+            confirmation.showAndWait().ifPresent(response -> {
+                if (response == buttonYes) {
+                    // EXCLUDE OBJECT
+                    MainRemoveArtists.removeArtist(selectedArtist);
+                    listViewArtist.getItems().remove(selectedArtist);
+                }
+            });
+
+            // ATUALIZE LISTVIEW
+            listViewArtist.refresh();
+        }
+
     }
 
 }

@@ -192,7 +192,7 @@ public class ManageArtworkView extends BorderPane {
                 this.setCenter(listViewArtworkFiltered);
             }
             else{
-                getScene().setRoot(new ShowErrorArtworkView());
+                getScene().setRoot(new ShowErrorView());
             }
 
         }

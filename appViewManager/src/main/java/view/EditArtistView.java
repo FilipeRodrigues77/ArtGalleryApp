@@ -11,7 +11,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import locality.NationalityList;
+import presenter.MainCreateArtists;
 import presenter.MainUpdateArtists;
+
+import java.util.Objects;
 
 public class EditArtistView extends BorderPane {
 
@@ -23,6 +27,7 @@ public class EditArtistView extends BorderPane {
     private ComboBox<String> statusMenu;
     private Spinner<Integer> yearBirthdaySpinner;
     private Spinner<Integer> yearDeathdaySpinner;
+    private Label labelSucessMensage;
 
     public EditArtistView(Artist artist) {
         initialize(artist);
@@ -46,8 +51,7 @@ public class EditArtistView extends BorderPane {
         // ---------------------------------------------- CENTER LAYOUT ----------------------------------------------
         // COMBO BOX
         ObservableList<String> statusOptions = FXCollections.observableArrayList(
-                "Brazilian",
-                "Cape Verdean"
+                NationalityList.getAllNationality()
         );
         this.statusMenu = new ComboBox<>(statusOptions);
         statusMenu.setMaxWidth(120);
@@ -56,10 +60,23 @@ public class EditArtistView extends BorderPane {
         statusMenu.setValue(artist.getNationality());
 
         // SPINNER
-        this.yearBirthdaySpinner = new Spinner<>(0, 2999, Integer.parseInt(artist.getBirthdate()));
+        int birthday;
+        if(artist.getBirthdate() == null || artist.getBirthdate().isBlank()){
+            birthday = 0;
+        } else {
+            birthday = Integer.parseInt(artist.getBirthdate());
+        }
+        int deathday;
+        if(artist.getDeathdate() == null || artist.getDeathdate().isBlank()){
+            deathday = 0;
+        } else {
+            deathday = Integer.parseInt(artist.getDeathdate());
+        }
+
+        this.yearBirthdaySpinner = new Spinner<>(0, 2999,  birthday);
         yearBirthdaySpinner.setEditable(true);
 
-        this.yearDeathdaySpinner = new Spinner<>(0, 2999, Integer.parseInt(artist.getDeathdate()));
+        this.yearDeathdaySpinner = new Spinner<>(0, 2999, deathday);
         yearDeathdaySpinner.setEditable(true);
 
         // LABELS
@@ -110,6 +127,8 @@ public class EditArtistView extends BorderPane {
             System.out.println(artist);
         });
 
+        cancelButton.setOnAction(e -> getScene().setRoot(new ManageArtistView()));
+
         // GIT IMAGE
         String imageGitHubPath = "Icons/Github.png";
         ImageView imageViewGitHub = new ImageView(new Image(imageGitHubPath));
@@ -123,10 +142,14 @@ public class EditArtistView extends BorderPane {
         // LABEL
         Label labelButtonStatus = new Label("I~A © 2023 I~A  Todos os direitos reservados");
 
-        // DEFINE A HBOX THAT WILL CONTAIN THE IMAGES (ADD SIMULTANEOUSLY)
+        // DEFINE A HBOX
         HBox hBoxButtons = new HBox(saveChangesButton, cancelButton);
         hBoxButtons.setSpacing(30);
         hBoxButtons.setAlignment(Pos.CENTER_RIGHT);
+        this.labelSucessMensage = new Label("");
+        VBox vBoxButtons = new VBox(hBoxButtons, labelSucessMensage);
+        vBoxButtons.setSpacing(10);
+
         HBox hBoxBottomImages = new HBox(imageViewLinkedin,imageViewGitHub);
         hBoxBottomImages.setSpacing(10);
 
@@ -134,7 +157,7 @@ public class EditArtistView extends BorderPane {
         HBox hBoxBottomLayout = new HBox(labelButtonStatus,hBoxBottomImages);
         hBoxBottomLayout.setPadding(new Insets(20,0,0,0));
         hBoxBottomLayout.setSpacing(500);
-        VBox vBoxBottomLayout = new VBox(hBoxButtons, hBoxBottomLayout);
+        VBox vBoxBottomLayout = new VBox(vBoxButtons, hBoxBottomLayout);
         vBoxBottomLayout.setSpacing(20);
 
         this.setBottom(vBoxBottomLayout);
@@ -224,7 +247,17 @@ public class EditArtistView extends BorderPane {
 
 
         //ADD TO DATABASE
-        MainUpdateArtists.updateArtist(artist);
+        if (artist.getName() == null || artist.getName().trim().isEmpty()
+                || artist.getName().isBlank() || Objects.equals(statusMenu.getValue(), "Nacionalidade") ||
+                statusMenu.getValue().trim().isEmpty() || statusMenu.getValue().isBlank()) {
+            System.out.println("Campo vazio. Não é possível atualizar.");
+            labelSucessMensage.setText("Não foi possível atualizar!");
+        } else {
+            MainUpdateArtists.updateArtist(artist);
+            labelSucessMensage.setText("Alterações efetuadas com sucesso!");
+            System.out.println("atualizado com sucesso");
+
+        }
 
     }
 

@@ -12,12 +12,16 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import presenter.MainGetGalleries;
+import presenter.MainRemoveGallery;
 
 import java.util.List;
 
 public class ManageGalleryView extends BorderPane {
+    private ObservableList<Gallery> observableListGallery;
+    private ListView<Gallery> listViewGallery;
 
     public ManageGalleryView() {
+
         doLayout();
         ManageMainView manageMainView = new ManageMainView();
         String cssTheme = manageMainView.themeCurrent;
@@ -25,42 +29,34 @@ public class ManageGalleryView extends BorderPane {
     }
 
     private void doLayout() {
+
         // Vamos criar aqui o layout deste painel
         setPadding(new Insets(20));
 
         //--------------------------------------------- HEADER ELEMENTS ---------------------------------------------
 
+        // CREATE A LIST VIEW
+        List<Gallery> listGalleries = MainGetGalleries.getAllGalleries();
+        this.observableListGallery = FXCollections.observableArrayList(listGalleries);
+        this.listViewGallery = new ListView<>(observableListGallery);
 
-        //Botão criar
+        // BUTTONS
+
         Button createButton = new Button("Criar");
-        //createButton.setOnAction(e -> list.getScene().setRoot(new PersonViewer(persons, null)));
-        //Botão editar
+        createButton.setOnAction(e -> getScene().setRoot(new CreateGalleryView()));
+
         Button editButton = new Button("Editar");
-        /*editButton.setOnAction(e -> {
-            Person person = list.getSelectionModel().getSelectedItem();
-            if (person != null) {
-                list.getScene().setRoot(new PersonViewer(persons, person));
-            }
-        });
+        editButton.setOnAction(e -> editSelectedGallery());
 
-         */
-        //Botão apagar
-        Button removeButton = new Button("Apagar");
-        /*removeButton.setOnAction(e -> {
-            Person person = list.getSelectionModel().getSelectedItem();
-            if (person != null) {
-                personsList.remove(person);
-//                persons.removePerson(person);
-                persons.remove(person);
-            }
+        Button deleteButton = new Button("Apagar");
+        deleteButton.setOnAction((e -> removeSelectedGallery()));
 
-         */
         createButton.getStyleClass().add("button-modern");
         editButton.getStyleClass().add("button-modern");
-        removeButton.getStyleClass().add("button-modern");
+        deleteButton.getStyleClass().add("button-modern");
         // ADD ELEMENTS FOR THE MENU HBOX
         // SET HBOX FOR THE FILTER MENUS
-        HBox hBoxMenu = new HBox(createButton, editButton, removeButton);
+        HBox hBoxMenu = new HBox(createButton, editButton, deleteButton);
         hBoxMenu.setSpacing(50);
         hBoxMenu.setAlignment(Pos.CENTER);
 
@@ -71,11 +67,6 @@ public class ManageGalleryView extends BorderPane {
 
 
         // ---------------------------------------------- CENTER LAYOUT ----------------------------------------------
-
-        // CREATE A LIST VIEW
-        List<Gallery> listgalleries = MainGetGalleries.getAllGalleries();
-        ObservableList<Gallery> observableListGallery = FXCollections.observableArrayList(listgalleries);
-        ListView<Gallery> listViewGallery = new ListView<>(observableListGallery);
 
         this.setCenter(listViewGallery);
 
@@ -157,7 +148,7 @@ public class ManageGalleryView extends BorderPane {
         hBoxHyperlink.setSpacing(20);
 
         // CONFIGURE ACTION TO CHANGE SCENARIO
-        hyperlinkArtist.setOnAction(e -> getScene().setRoot(new ManageArtistView()));
+        hyperlinkArtist.setOnAction(e -> getScene().setRoot(new ManageGalleryView()));
         hyperlinkMain.setOnAction(e -> getScene().setRoot(new ManageMainView()));
         hyperlinkGallery.setOnAction(e -> getScene().setRoot(new ManageGalleryView()));
         hyperlinkExhibition.setOnAction(e -> getScene().setRoot(new ManageExhibitionView()));
@@ -193,20 +184,53 @@ public class ManageGalleryView extends BorderPane {
                 this.setCenter(listViewGalleryFiltered);
             }
             else{
-                getScene().setRoot(new ShowErrorArtistView());
-                //getScene().setRoot(new ShowErrorGalley());
+                getScene().setRoot(new ShowErrorView());
             }
 
         }
     }
-
     // image treatment
     public void defaultSizeIcon (ImageView imageView){
-        imageView.setFitHeight(18); // Ajuste a altura conforme necessário
-        imageView.setFitWidth(18);  // Ajuste a largura conforme necessário
+        imageView.setFitHeight(18);
+        imageView.setFitWidth(18);
         // imageView.setPreserveRatio(true);
     }
 
+    private void editSelectedGallery() {
+        Gallery selectedGallery = listViewGallery.getSelectionModel().getSelectedItem();
 
+        if (selectedGallery != null) {
+            getScene().setRoot(new EditGalleryView(selectedGallery));
+            listViewGallery.refresh();
+        }
+    }
+
+    private void removeSelectedGallery() {
+        Gallery selectedGallery = listViewGallery.getSelectionModel().getSelectedItem();
+
+        if (selectedGallery != null) {
+            // ALERT DELETE MESSAGE
+            Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmation.setTitle("Deletar Galeria");
+            confirmation.setHeaderText("Iuvennis Art - Base de Dados (Confirmar Exclusão)");
+            confirmation.setContentText("Tem certeza que deseja DELETAR a galeria? Essa alteração não tem retorno.");
+
+            ButtonType buttonYes = new ButtonType("Sim");
+            ButtonType buttonNo = new ButtonType("Não");
+            confirmation.getButtonTypes().setAll(buttonYes, buttonNo);
+
+            confirmation.showAndWait().ifPresent(response -> {
+                if (response == buttonYes) {
+                    // EXCLUDE OBJECT
+                    MainRemoveGallery.removeGallery(selectedGallery);
+                    listViewGallery.getItems().remove(selectedGallery);
+                }
+            });
+
+            // ATUALIZE LISTVIEW
+            listViewGallery.refresh();
+        }
+
+    }
 
 }

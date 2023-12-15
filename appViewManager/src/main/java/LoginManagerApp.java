@@ -37,14 +37,14 @@ public class LoginManagerApp extends Application {
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
 
-        Label lblLogin = new Label("Login:");
-        grid.add(lblLogin, 0, 1);
+        Label labelLogin = new Label("Login:");
+        grid.add(labelLogin, 0, 1);
 
         usernameField = new TextField();
         grid.add(usernameField, 1, 1);
 
-        Label lblPassword = new Label("Senha:");
-        grid.add(lblPassword, 0, 2);
+        Label labelPassword = new Label("Senha:");
+        grid.add(labelPassword, 0, 2);
 
         passwordField = new PasswordField();
         grid.add(passwordField, 1, 2);

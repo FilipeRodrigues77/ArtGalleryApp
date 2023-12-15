@@ -10,10 +10,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+public class ShowErrorView extends BorderPane {
 
-public class ShowErrorArtworkView extends BorderPane {
-
-    public ShowErrorArtworkView() {
+    public ShowErrorView() {
         doLayout();
     }
 
@@ -25,11 +24,11 @@ public class ShowErrorArtworkView extends BorderPane {
         arrowView.setFitHeight(25);
         arrowView.setFitWidth(50);
         this.setTop(arrowView);
-        arrowView.setOnMouseClicked(e -> getScene().setRoot(new ManageArtworkView()));
+        arrowView.setOnMouseClicked(e -> getScene().setRoot(new ManageMainView()));
 
         VBox logoErrorMessage = new VBox();
 
-        Text message = new Text("Ups, não encontramos nenhuma obra de arte :(");
+        Text message = new Text("Ups, não encontramos o que procurava :(");
         Text message2 = new Text("Neste caso, vais ter mesmo é de apreciar a nossa logo ;)");
         message.setFont(Font.font("Inter", 20));
         message.setFill(Color.GRAY);
