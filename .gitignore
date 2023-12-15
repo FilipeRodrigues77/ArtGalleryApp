@@ -7,7 +7,7 @@ target/
 
 # Arquivos de configuração
 *.config
-
+.config
 # Arquivos de configuração do Eclipse
 .classpath
 .project
