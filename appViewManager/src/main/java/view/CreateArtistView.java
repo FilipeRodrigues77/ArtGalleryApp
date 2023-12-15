@@ -1,7 +1,6 @@
 package view;
 
 import domain.Artist;
-import domain.Artwork;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -10,15 +9,9 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import presenter.MainCreateArtists;
-import presenter.MainGetArtists;
-import presenter.MainGetArtworks;
-import presenter.MainGetGalleries;
-
-import java.util.List;
 
 public class CreateArtistView extends BorderPane {
 
@@ -181,11 +174,11 @@ public class CreateArtistView extends BorderPane {
         hBoxHyperlink.setSpacing(20);
 
         // CONFIGURE ACTION TO CHANGE SCENARIO
-        hyperlinkArtist.setOnAction(e -> getScene().setRoot(new ManageArtist()));
+        hyperlinkArtist.setOnAction(e -> getScene().setRoot(new ManageArtistView()));
         hyperlinkMain.setOnAction(e -> getScene().setRoot(new ManageMainView()));
-        hyperlinkGallery.setOnAction(e -> getScene().setRoot(new ManageGallery()));
-        hyperlinkExhibition.setOnAction(e -> getScene().setRoot(new ManageExhibition()));
-        hyperLinkArtwork.setOnAction(e -> getScene().setRoot(new ManageArtwork()));
+        hyperlinkGallery.setOnAction(e -> getScene().setRoot(new ManageGalleryView()));
+        hyperlinkExhibition.setOnAction(e -> getScene().setRoot(new ManageExhibitionView()));
+        hyperLinkArtwork.setOnAction(e -> getScene().setRoot(new ManageArtworkView()));
         hyperlinkArtist.getStyleClass().add("actual-page-hyperlink");
 
         VBox vBoxTop = new VBox(hBoxHeader,hBoxHyperlink);
@@ -240,7 +233,13 @@ public class CreateArtistView extends BorderPane {
         newArtist.setReferenceImage(refenceImage);
 
         //ADD TO DATABASE
-        MainCreateArtists.addArtist(newArtist);
+        if (newArtist.getName() == null || newArtist.getName().trim().isEmpty()) {
+            System.out.println("Campo vazio. Não é possível atualizar.");
+        } else {
+            MainCreateArtists.addArtist(newArtist);
+            System.out.println("atualizado com sucesso");
+        }
+
 
     }
 

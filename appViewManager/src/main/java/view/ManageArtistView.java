@@ -1,8 +1,6 @@
 package view;
 
 import domain.Artist;
-import domain.Artwork;
-import domain.Exhibition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -10,20 +8,17 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import presenter.MainGetArtists;
-import presenter.MainGetArtworks;
-import presenter.MainGetExhibitions;
-import presenter.MainGetGalleries;
+import javafx.scene.layout.*;
+import presenter.*;
 
 import java.util.List;
 
-public class ManageExhibition extends BorderPane {
+public class ManageArtistView extends BorderPane {
+    private ObservableList<Artist> observableListArtist;
+    private ListView<Artist> listViewArtist;
 
-    public ManageExhibition() {
+    public ManageArtistView() {
+
         doLayout();
         ManageMainView manageMainView = new ManageMainView();
         String cssTheme = manageMainView.themeCurrent;
@@ -31,17 +26,25 @@ public class ManageExhibition extends BorderPane {
     }
 
     private void doLayout() {
+
         // Vamos criar aqui o layout deste painel
         setPadding(new Insets(20));
 
         //--------------------------------------------- HEADER ELEMENTS ---------------------------------------------
 
+        // CREATE A LIST VIEW
+        List<Artist> listArtists = MainGetArtists.getAllArtists();
+        this.observableListArtist = FXCollections.observableArrayList(listArtists);
+        this.listViewArtist = new ListView<>(observableListArtist);
 
-        //Botão criar
+        // BUTTONS
+
         Button createButton = new Button("Criar");
-        //createButton.setOnAction(e -> list.getScene().setRoot(new PersonViewer(persons, null)));
-        //Botão editar
+        createButton.setOnAction(e -> getScene().setRoot(new CreateArtistView()));
+
         Button editButton = new Button("Editar");
+        editButton.setOnAction(e -> editSelectedArtist());
+
         /*editButton.setOnAction(e -> {
             Person person = list.getSelectionModel().getSelectedItem();
             if (person != null) {
@@ -78,12 +81,7 @@ public class ManageExhibition extends BorderPane {
 
         // ---------------------------------------------- CENTER LAYOUT ----------------------------------------------
 
-        // CREATE A LIST VIEW
-        List<Exhibition> listExhibition = MainGetExhibitions.getAllExhibitions();
-        ObservableList<Exhibition> observableListExhibition = FXCollections.observableArrayList(listExhibition);
-        ListView<Exhibition> listViewExhibition = new ListView<>(observableListExhibition);
-
-        this.setCenter(listViewExhibition);
+        this.setCenter(listViewArtist);
 
         // ---------------------------------------------- BOTTOM LAYOUT ----------------------------------------------
 
@@ -129,7 +127,7 @@ public class ManageExhibition extends BorderPane {
         Hyperlink hyperLinkArtwork = new Hyperlink("Obras de Arte");
 
         // Text Fields
-        String searchOrigText = "Procurar por nome da exposição";
+        String searchOrigText = "Procurar por nome do artista";
         TextField textFieldSearch = new TextField(searchOrigText);
         setOriginalDescription(textFieldSearch,searchOrigText);
         textFieldSearch.setPrefSize(550, 30);
@@ -163,12 +161,12 @@ public class ManageExhibition extends BorderPane {
         hBoxHyperlink.setSpacing(20);
 
         // CONFIGURE ACTION TO CHANGE SCENARIO
-        hyperlinkArtist.setOnAction(e -> getScene().setRoot(new ManageArtist()));
+        hyperlinkArtist.setOnAction(e -> getScene().setRoot(new ManageArtistView()));
         hyperlinkMain.setOnAction(e -> getScene().setRoot(new ManageMainView()));
-        hyperlinkGallery.setOnAction(e -> getScene().setRoot(new ManageGallery()));
-        hyperlinkExhibition.setOnAction(e -> getScene().setRoot(new ManageExhibition()));
-        hyperLinkArtwork.setOnAction(e -> getScene().setRoot(new ManageArtwork()));
-        hyperlinkExhibition.getStyleClass().add("actual-page-hyperlink");
+        hyperlinkGallery.setOnAction(e -> getScene().setRoot(new ManageGalleryView()));
+        hyperlinkExhibition.setOnAction(e -> getScene().setRoot(new ManageExhibitionView()));
+        hyperLinkArtwork.setOnAction(e -> getScene().setRoot(new ManageArtworkView()));
+        hyperlinkArtist.getStyleClass().add("actual-page-hyperlink");
 
         VBox vBoxTop = new VBox(hBoxHeader,hBoxHyperlink);
         setMargin(vBoxTop, new Insets(0, 0, 20, 0));
@@ -192,17 +190,18 @@ public class ManageExhibition extends BorderPane {
         String searchText = textFieldSearch.getText().trim();
         if (!searchText.isEmpty()) {
 
-            //List<Exhibition> exhibitions = MainGetExhibitions.getExhibitionByName(searchText);
-            //if(exhibitions != null){
-                //ObservableList<Exhibition> observableListExhibitionFiltered = FXCollections.observableArrayList(exhibitions);
-                //ListView<Exhibition> listViewExhibitionFiltered = new ListView<>(observableListExhibitionFiltered);
-                //this.setCenter(listViewExhibitionFiltered);
+            List<Artist> artists = MainGetArtists.getArtistByName(searchText);
+            if(artists != null){
+                ObservableList<Artist> observableListArtistFiltered = FXCollections.observableArrayList(artists);
+                ListView<Artist> listViewArtistFiltered = new ListView<>(observableListArtistFiltered);
+                this.setCenter(listViewArtistFiltered);
             }
             else{
-                //getScene().setRoot(new ShowErrorExhibition());
+                getScene().setRoot(new ShowErrorArtistView());
             }
 
         }
+    }
 
     // image treatment
     public void defaultSizeIcon (ImageView imageView){
@@ -211,5 +210,21 @@ public class ManageExhibition extends BorderPane {
         // imageView.setPreserveRatio(true);
     }
 
+    public void defaultSizeArtistImage(ImageView imageView){
+        imageView.setFitHeight(160); // Ajuste a altura conforme necessário
+        imageView.setFitWidth(160);  // Ajuste a largura conforme necessário
+        //imageView.setPreserveRatio(true);
+    }
+
+    private void editSelectedArtist() {
+        Artist selectedArtist = listViewArtist.getSelectionModel().getSelectedItem();
+
+        if (selectedArtist != null) {
+            // Chame o método show da EditArtistView para editar o artista
+            getScene().setRoot(new EditArtistView(selectedArtist));
+            // Atualize a lista após a edição
+            listViewArtist.refresh();
+        }
+    }
 
 }

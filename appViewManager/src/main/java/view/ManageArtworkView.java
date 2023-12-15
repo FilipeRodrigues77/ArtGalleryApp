@@ -1,6 +1,5 @@
 package view;
 
-import domain.Artist;
 import domain.Artwork;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,18 +9,15 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import presenter.MainGetArtists;
 import presenter.MainGetArtworks;
-import presenter.MainGetGalleries;
 
 import java.util.List;
 
-public class ManageArtwork extends BorderPane {
+public class ManageArtworkView extends BorderPane {
 
-    public ManageArtwork() {
+    public ManageArtworkView() {
         doLayout();
         ManageMainView manageMainView = new ManageMainView();
         String cssTheme = manageMainView.themeCurrent;
@@ -160,11 +156,11 @@ public class ManageArtwork extends BorderPane {
         hBoxHyperlink.setSpacing(20);
 
         // CONFIGURE ACTION TO CHANGE SCENARIO
-        hyperlinkArtist.setOnAction(e -> getScene().setRoot(new ManageArtist()));
+        hyperlinkArtist.setOnAction(e -> getScene().setRoot(new ManageArtistView()));
         hyperlinkMain.setOnAction(e -> getScene().setRoot(new ManageMainView()));
-        hyperlinkGallery.setOnAction(e -> getScene().setRoot(new ManageGallery()));
-        hyperlinkExhibition.setOnAction(e -> getScene().setRoot(new ManageExhibition()));
-        hyperLinkArtwork.setOnAction(e -> getScene().setRoot(new ManageArtwork()));
+        hyperlinkGallery.setOnAction(e -> getScene().setRoot(new ManageGalleryView()));
+        hyperlinkExhibition.setOnAction(e -> getScene().setRoot(new ManageExhibitionView()));
+        hyperLinkArtwork.setOnAction(e -> getScene().setRoot(new ManageArtworkView()));
         hyperLinkArtwork.getStyleClass().add("actual-page-hyperlink");
 
         VBox vBoxTop = new VBox(hBoxHeader,hBoxHyperlink);
@@ -196,7 +192,7 @@ public class ManageArtwork extends BorderPane {
                 this.setCenter(listViewArtworkFiltered);
             }
             else{
-                getScene().setRoot(new ShowErrorArtwork());
+                getScene().setRoot(new ShowErrorArtworkView());
             }
 
         }

@@ -26,12 +26,9 @@ public class AboutView extends BorderPane {
         Label titleLabel = new Label("Sobre Iuvenni ManagerApp");
         titleLabel.getStyleClass().add("my-center-label-3");
 
-        String aboutText = "Temos como missão criar uma aplicação que conecta nosso público-alvo a artistas, galerias, " +
-                "exposições com uma interface em português. " + "\n\n" +
-                "Nossa aplicação busca promover a apreciação da arte e o acesso a uma ampla variedade de obras, " +
-                "com uma visualização simples e direcionada ao " +
-                "nosso nicho de mercado, jovens adultos, de modo a proporcionar uma experiência única ao " +
-                "utilizador final.";
+        String aboutText = "Sistema Gestor da Base de Dados Iuvennis Art" + "\n\n" +
+                "Temos como missão criar uma aplicação que conecta nossos gestores a Base de Dados " +
+                "de forma eficiente e segura com uma interface em português.";
 
         Label aboutLabel = new Label(aboutText);
         VBox vBoxTop = new VBox(titleLabel, aboutLabel);

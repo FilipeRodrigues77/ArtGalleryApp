@@ -175,11 +175,11 @@ public class EditArtistView extends BorderPane {
         hBoxHyperlink.setSpacing(20);
 
         // CONFIGURE ACTION TO CHANGE SCENARIO
-        hyperlinkArtist.setOnAction(e -> getScene().setRoot(new ManageArtist()));
+        hyperlinkArtist.setOnAction(e -> getScene().setRoot(new ManageArtistView()));
         hyperlinkMain.setOnAction(e -> getScene().setRoot(new ManageMainView()));
-        hyperlinkGallery.setOnAction(e -> getScene().setRoot(new ManageGallery()));
-        hyperlinkExhibition.setOnAction(e -> getScene().setRoot(new ManageExhibition()));
-        hyperLinkArtwork.setOnAction(e -> getScene().setRoot(new ManageArtwork()));
+        hyperlinkGallery.setOnAction(e -> getScene().setRoot(new ManageGalleryView()));
+        hyperlinkExhibition.setOnAction(e -> getScene().setRoot(new ManageExhibitionView()));
+        hyperLinkArtwork.setOnAction(e -> getScene().setRoot(new ManageArtworkView()));
         hyperlinkArtist.getStyleClass().add("actual-page-hyperlink");
 
         VBox vBoxTop = new VBox(hBoxHeader,hBoxHyperlink);

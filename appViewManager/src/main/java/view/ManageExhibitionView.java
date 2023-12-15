@@ -1,8 +1,6 @@
 package view;
 
-import domain.Artist;
-import domain.Artwork;
-import domain.Gallery;
+import domain.Exhibition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -11,18 +9,15 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import presenter.MainGetArtists;
-import presenter.MainGetArtworks;
-import presenter.MainGetGalleries;
+import presenter.MainGetExhibitions;
 
 import java.util.List;
 
-public class ManageGallery extends BorderPane {
+public class ManageExhibitionView extends BorderPane {
 
-    public ManageGallery() {
+    public ManageExhibitionView() {
         doLayout();
         ManageMainView manageMainView = new ManageMainView();
         String cssTheme = manageMainView.themeCurrent;
@@ -78,11 +73,11 @@ public class ManageGallery extends BorderPane {
         // ---------------------------------------------- CENTER LAYOUT ----------------------------------------------
 
         // CREATE A LIST VIEW
-        List<Gallery> listgalleries = MainGetGalleries.getAllGalleries();
-        ObservableList<Gallery> observableListGallery = FXCollections.observableArrayList(listgalleries);
-        ListView<Gallery> listViewGallery = new ListView<>(observableListGallery);
+        List<Exhibition> listExhibition = MainGetExhibitions.getAllExhibitions();
+        ObservableList<Exhibition> observableListExhibition = FXCollections.observableArrayList(listExhibition);
+        ListView<Exhibition> listViewExhibition = new ListView<>(observableListExhibition);
 
-        this.setCenter(listViewGallery);
+        this.setCenter(listViewExhibition);
 
         // ---------------------------------------------- BOTTOM LAYOUT ----------------------------------------------
 
@@ -128,7 +123,7 @@ public class ManageGallery extends BorderPane {
         Hyperlink hyperLinkArtwork = new Hyperlink("Obras de Arte");
 
         // Text Fields
-        String searchOrigText = "Procurar por região da galeria";
+        String searchOrigText = "Procurar por nome da exposição";
         TextField textFieldSearch = new TextField(searchOrigText);
         setOriginalDescription(textFieldSearch,searchOrigText);
         textFieldSearch.setPrefSize(550, 30);
@@ -162,12 +157,12 @@ public class ManageGallery extends BorderPane {
         hBoxHyperlink.setSpacing(20);
 
         // CONFIGURE ACTION TO CHANGE SCENARIO
-        hyperlinkArtist.setOnAction(e -> getScene().setRoot(new ManageArtist()));
+        hyperlinkArtist.setOnAction(e -> getScene().setRoot(new ManageArtistView()));
         hyperlinkMain.setOnAction(e -> getScene().setRoot(new ManageMainView()));
-        hyperlinkGallery.setOnAction(e -> getScene().setRoot(new ManageGallery()));
-        hyperlinkExhibition.setOnAction(e -> getScene().setRoot(new ManageExhibition()));
-        hyperLinkArtwork.setOnAction(e -> getScene().setRoot(new ManageArtwork()));
-        hyperlinkGallery.getStyleClass().add("actual-page-hyperlink");
+        hyperlinkGallery.setOnAction(e -> getScene().setRoot(new ManageGalleryView()));
+        hyperlinkExhibition.setOnAction(e -> getScene().setRoot(new ManageExhibitionView()));
+        hyperLinkArtwork.setOnAction(e -> getScene().setRoot(new ManageArtworkView()));
+        hyperlinkExhibition.getStyleClass().add("actual-page-hyperlink");
 
         VBox vBoxTop = new VBox(hBoxHeader,hBoxHyperlink);
         setMargin(vBoxTop, new Insets(0, 0, 20, 0));
@@ -191,19 +186,17 @@ public class ManageGallery extends BorderPane {
         String searchText = textFieldSearch.getText().trim();
         if (!searchText.isEmpty()) {
 
-            List<Gallery> galleries = MainGetGalleries.getGalleriesByRegion(searchText);
-            if(galleries != null){
-                ObservableList<Gallery> observableListGalleryFiltered = FXCollections.observableArrayList(galleries);
-                ListView<Gallery> listViewGalleryFiltered = new ListView<>(observableListGalleryFiltered);
-                this.setCenter(listViewGalleryFiltered);
+            //List<Exhibition> exhibitions = MainGetExhibitions.getExhibitionByName(searchText);
+            //if(exhibitions != null){
+                //ObservableList<Exhibition> observableListExhibitionFiltered = FXCollections.observableArrayList(exhibitions);
+                //ListView<Exhibition> listViewExhibitionFiltered = new ListView<>(observableListExhibitionFiltered);
+                //this.setCenter(listViewExhibitionFiltered);
             }
             else{
-                getScene().setRoot(new ShowErrorArtist());
-                //getScene().setRoot(new ShowErrorGalley());
+                //getScene().setRoot(new ShowErrorExhibition());
             }
 
         }
-    }
 
     // image treatment
     public void defaultSizeIcon (ImageView imageView){
@@ -211,7 +204,6 @@ public class ManageGallery extends BorderPane {
         imageView.setFitWidth(18);  // Ajuste a largura conforme necessário
         // imageView.setPreserveRatio(true);
     }
-
 
 
 }

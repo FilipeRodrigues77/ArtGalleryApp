@@ -25,12 +25,13 @@ public class ManageMainView extends BorderPane {
     protected String themeCurrent;
 
     public ManageMainView() {
-
         doLayout();
         loadConfig();
         String themeName = this.config.getProperty("theme","Light");
         changeTheme(themeName);
         this.themeCurrent = "appStyle" + themeName + ".css";
+        getStylesheets().add(themeCurrent);
+        getStyleClass().add("wallpaper");
     }
 
     public void loadConfig(){
@@ -107,21 +108,23 @@ public class ManageMainView extends BorderPane {
         ImageView imageViewLinkedin = new ImageView(new Image(imageLinkedin));
         defaultSizeIcon(imageViewLinkedin);
 
-        String imageMainArtwork = "Images/Main/exampleMainArtwork.png";
+        /*String imageMainArtwork = "Images/Main/wallpaperIuvennisArt.png";
         ImageView imageViewMainArtwork = new ImageView(new Image(imageMainArtwork));
         defaultSizeMainImage(imageViewMainArtwork);
 
-        String imageMainArtist = "Images/Main/exampleMainArtist.png";
+        String imageMainArtist = "Images/Main/WallpaperIA01.png";
         ImageView imageViewMainArtist = new ImageView(new Image(imageMainArtist));
         defaultSizeMainImage(imageViewMainArtist);
 
-        String imageMainGallery = "Images/Main/exampleMainMuseum.png";
+        String imageMainGallery = "Images/Main/WallpaperIA03.png";
         ImageView imageViewMainGallery = new ImageView(new Image(imageMainGallery));
         defaultSizeMainImage(imageViewMainGallery);
 
-        String imageMainExhibition = "Images/Main/exampleMainExhibition.png";
+        String imageMainExhibition = "Images/Main/Back02.png";
         ImageView imageViewMainExhibition = new ImageView(new Image(imageMainExhibition));
         defaultSizeMainImage(imageViewMainExhibition);
+
+         */
 
         // Layout Top
         // Create Menu
@@ -182,10 +185,10 @@ public class ManageMainView extends BorderPane {
         grid.setGridLinesVisible(false);
         grid.setPadding(new Insets(0,0,10,0));
 
-        grid.add(imageViewMainArtist,1,0);
-        grid.add(imageViewMainArtwork,1,1);
-        grid.add(imageViewMainExhibition,1,2);
-        grid.add(imageViewMainGallery,1,3);
+        //grid.add(imageViewMainArtist,1,0);
+        //grid.add(imageViewMainArtwork,1,0,2,2);
+        //grid.add(imageViewMainExhibition,1,3);
+        //grid.add(imageViewMainGallery,1,2);
 
         VBox vBoxArtwork = new VBox(labelCenterArtwork,buttonArtwork);
         vBoxArtwork.setSpacing(10);
@@ -232,15 +235,15 @@ public class ManageMainView extends BorderPane {
         setCenter(grid);
 
         // Configure action buttons
-        buttonArtwork.setOnAction(e -> getScene().setRoot(new ManageArtwork()));
-        buttonArtist.setOnAction(e -> getScene().setRoot(new ManageArtist()));
-        buttonGallery.setOnAction(e -> getScene().setRoot(new ManageGallery()));
-        buttonExhibition.setOnAction(e -> getScene().setRoot(new ManageExhibition()));
+        buttonArtwork.setOnAction(e -> getScene().setRoot(new ManageArtworkView()));
+        buttonArtist.setOnAction(e -> getScene().setRoot(new ManageArtistView()));
+        buttonGallery.setOnAction(e -> getScene().setRoot(new ManageGalleryView()));
+        buttonExhibition.setOnAction(e -> getScene().setRoot(new ManageExhibitionView()));
 
-        hyperlinkArtwork.setOnAction(e -> getScene().setRoot(new ManageArtwork()));
-        hyperlinkArtist.setOnAction(e -> getScene().setRoot(new ManageArtist()));
-        hyperlinkGallery.setOnAction(e -> getScene().setRoot(new ManageGallery()));
-        hyperlinkExhibition.setOnAction(e -> getScene().setRoot(new ManageExhibition()));
+        hyperlinkArtwork.setOnAction(e -> getScene().setRoot(new ManageArtworkView()));
+        hyperlinkArtist.setOnAction(e -> getScene().setRoot(new ManageArtistView()));
+        hyperlinkGallery.setOnAction(e -> getScene().setRoot(new ManageGalleryView()));
+        hyperlinkExhibition.setOnAction(e -> getScene().setRoot(new ManageExhibitionView()));
 
     }
 
@@ -253,7 +256,7 @@ public class ManageMainView extends BorderPane {
     public void defaultSizeMainImage (ImageView imageView){
         imageView.setFitHeight(100);
         imageView.setFitWidth(365);
-        // imageView.setPreserveRatio(true);
+        imageView.setPreserveRatio(true);
     }
 
     public void defaultButtonLayout (Button button){

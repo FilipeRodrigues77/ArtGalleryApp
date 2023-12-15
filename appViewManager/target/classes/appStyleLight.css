@@ -159,3 +159,9 @@
 .combo-box-popup .list-view {
     -fx-background-color: #f0f0f0; /* Cor de fundo do menu suspenso */
 }
+
+.wallpaper {
+    -fx-background-image: url('Images/Main/wallpaperIuvennisArtLarge.png');
+    -fx-background-size: cover;
+    -fx-background-position: center;
+}
