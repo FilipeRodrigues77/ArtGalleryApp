@@ -16,15 +16,26 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Class used to retrieve data about artists from the database and store it in a list of Artist object.
+ * The MainGetArtists class is responsible for retrieving information about artists
+ * by making various types of GET requests to a specified endpoint using OkHttpClient.
+ * It includes methods for getting all artists, getting an artist by ID, searching for
+ * artists by name, nationality, birthdate, and deathdate.
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
  */
 public class MainGetArtists {
+
     static String port = "8010";
 
-    public static void main(String[] args) {
-        System.out.println(getAllArtists());
-    }
+    // public static void main(String[] args) {}
 
+    /**
+     * Retrieves a list of all artists from the server.
+     *
+     * @return A list of Artist objects representing all artists.
+     */
     public static List<Artist> getAllArtists (){
 
         List<Artist> listArtist = null;
@@ -64,6 +75,12 @@ public class MainGetArtists {
         return listArtist;
     }
 
+    /**
+     * Retrieves a specific artist by ID from the server.
+     *
+     * @param artistId The unique identifier of the artist.
+     * @return An Artist object representing the artist with the specified ID.
+     */
     public static Artist getArtistById (int artistId ) {
 
         Artist artist = null;
@@ -105,6 +122,12 @@ public class MainGetArtists {
         return artist;
     }
 
+    /**
+     * Searches for artists by name on the server.
+     *
+     * @param name The name to be used as a search parameter.
+     * @return A list of Artist objects matching the specified name.
+     */
     public static List<Artist> getArtistByName (String name) {
         List<Artist> listArtists = null;
 
@@ -147,6 +170,12 @@ public class MainGetArtists {
         return listArtists;
     }
 
+    /**
+     * Searches for artists by nationality on the server.
+     *
+     * @param nationality The nationality to be used as a search parameter.
+     * @return A list of Artist objects matching the specified nationality.
+     */
     public static List<Artist> getArtistByNationality (String nationality) {
         List<Artist> listArtists = null;
 
@@ -189,6 +218,12 @@ public class MainGetArtists {
         return listArtists;
     }
 
+    /**
+     * Searches for artists by birthdate on the server.
+     *
+     * @param birthdate The birthdate to be used as a search parameter.
+     * @return A list of Artist objects matching the specified birthdate.
+     */
     public static List<Artist> getArtistByBirthdate (String birthdate) {
         List<Artist> listArtists = null;
 
@@ -231,6 +266,12 @@ public class MainGetArtists {
         return listArtists;
     }
 
+    /**
+     * Searches for artists by deathdate on the server.
+     *
+     * @param deathdate The deathdate to be used as a search parameter.
+     * @return A list of Artist objects matching the specified deathdate.
+     */
     public static List<Artist> getArtistByDeathdate (String deathdate) {
         List<Artist> listArtists = null;
 
@@ -272,6 +313,5 @@ public class MainGetArtists {
 
         return listArtists;
     }
-
 
 }

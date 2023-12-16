@@ -13,13 +13,26 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Class used to retrieve data about artists from the database and store it in a list of Artist object.
+ * MainCreateArtists is a class responsible for adding new artists to a server.
+ * It uses the OkHttpClient library to perform HTTP POST requests and Gson for
+ * JSON serialization. The server endpoint is specified as "http://localhost:port/artists",
+ * where 'port' is a configurable static variable.
+ *
+ * @author Nuely Furtado & Filipe Alves
+ * @version v1.0
  */
 public class MainCreateArtists {
+
+    /**
+     * The default port to be used in the server endpoint URL.
+     */
     static String port = "8010";
 
-    public static void main(String[] args) {}
-
+    /**
+     * Adds a new artist to the server by sending an HTTP POST request.
+     *
+     * @param newArtist The Artist object representing the new artist to be added.
+     */
     public static void addArtist(Artist newArtist) {
 
         OkHttpClient httpClient = new OkHttpClient();
@@ -38,7 +51,6 @@ public class MainCreateArtists {
             if (response.code() == 201) {
                 System.out.println("Artist added successfully!");
             } else {
-
                 if (response.body() != null) {
                     System.out.println(response.body().string());
                 }
@@ -48,5 +60,6 @@ public class MainCreateArtists {
             System.out.println(e.getMessage());
         }
     }
-
 }
+
+

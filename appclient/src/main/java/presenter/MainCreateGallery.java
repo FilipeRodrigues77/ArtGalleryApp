@@ -8,16 +8,29 @@ import okhttp3.*;
 
 import java.io.IOException;
 
+
 /**
- * Class used to retrieve data about galleries from the database and store it in a list of Gallery object.
+ * The MainCreateGallery class is responsible for adding a new Gallery
+ * by making a POST request to a specified endpoint using OkHttpClient.
+ * It includes a method {@code addGallery} for this purpose.
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
  */
 public class MainCreateGallery {
+
+    /**
+     * The default port used for communication with the server.
+     */
     static String port = "8010";
 
-    public static void main(String[] args) {}
-
+    /**
+     * Adds a new Gallery by sending a POST request to the server.
+     *
+     * @param newGallery The Gallery object to be added.
+     */
     public static void addGallery(Gallery newGallery) {
-
         OkHttpClient httpClient = new OkHttpClient();
         Gson gson = new GsonBuilder().create();
         String galleryJson = gson.toJson(newGallery);
@@ -34,7 +47,6 @@ public class MainCreateGallery {
             if (response.code() == 201) {
                 System.out.println("Gallery added successfully!");
             } else {
-
                 if (response.body() != null) {
                     System.out.println(response.body().string());
                 }
@@ -44,5 +56,5 @@ public class MainCreateGallery {
             System.out.println(e.getMessage());
         }
     }
-
 }
+

@@ -8,7 +8,23 @@ import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 
+/**
+ * A custom Gson TypeAdapter for serializing and deserializing LocalDate objects.
+ * This adapter is used to convert LocalDate objects to and from JSON format.
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
+ */
 public class LocalDateAdapter extends TypeAdapter<LocalDate> {
+
+    /**
+     * Writes a LocalDate object to JSON format.
+     *
+     * @param jsonWriter The JsonWriter object to write JSON data.
+     * @param localDate The LocalDate object to be serialized.
+     * @throws IOException If an I/O error occurs during writing.
+     */
     @Override
     public void write(JsonWriter jsonWriter, LocalDate localDate) throws IOException {
         if (localDate == null) {
@@ -26,6 +42,13 @@ public class LocalDateAdapter extends TypeAdapter<LocalDate> {
         jsonWriter.endObject();
     }
 
+    /**
+     * Reads a LocalDate object from JSON format.
+     *
+     * @param jsonReader The JsonReader object to read JSON data.
+     * @return The deserialized LocalDate object.
+     * @throws IOException If an I/O error occurs during reading.
+     */
     @Override
     public LocalDate read(JsonReader jsonReader) throws IOException {
         if (jsonReader.peek() == JsonToken.NULL) {

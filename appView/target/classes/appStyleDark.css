@@ -16,6 +16,27 @@
     -fx-text-fill: lightgray; /* Cor do texto normal */
 }
 
+.my-desc-hyperlink {
+
+    -fx-font-style: bold;
+    -fx-text-fill: black;
+    -fx-font-size: 13px;
+}
+
+.my-desc2-hyperlink {
+
+    -fx-text-fill: gray;
+    -fx-font-style: italic;
+    -fx-font-size: 12px;
+}
+
+.my-desc2-price-hyperlink {
+
+    -fx-text-fill: black;
+    -fx-font-style: italic;
+    -fx-font-size: 12px;
+}
+
 .my-blue-label {
     -fx-text-fill: #6495ed; /* Cor do texto normal */
 }
@@ -55,6 +76,12 @@
 }
 
 .actual-page-hyperlink {
+    -fx-text-fill: lightgray; /* Cor do texto normal */
+    -fx-underline: false; /* Remover sublinhado padrão */
+    -fx-font-style: italic;
+}
+
+.actual-page-label {
     -fx-text-fill: lightgray; /* Cor do texto normal */
     -fx-underline: false; /* Remover sublinhado padrão */
     -fx-font-style: italic;

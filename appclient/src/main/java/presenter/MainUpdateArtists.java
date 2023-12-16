@@ -8,15 +8,24 @@ import okhttp3.*;
 import java.io.IOException;
 
 /**
- * Class used to retrieve data about artists from the database and store it in a list of Artist object.
+ * The MainUpdateArtists class is responsible for updating an artist by sending a PUT request
+ * to a specified endpoint using OkHttpClient. It includes a method for updating a specific artist.
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
  */
 public class MainUpdateArtists {
+
     static String port = "8010";
 
-    public static void main(String[] args) {
+    // public static void main(String[] args) {}
 
-    }
-
+    /**
+     * Updates the specified artist by sending a PUT request to the server.
+     *
+     * @param selectedArtist The Artist object representing the artist to be updated.
+     */
     public static void updateArtist(Artist selectedArtist) {
 
         OkHttpClient httpClient = new OkHttpClient();

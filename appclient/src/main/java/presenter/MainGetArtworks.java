@@ -17,14 +17,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The MainGetArtworks class is responsible for retrieving information about artworks
+ * by making various types of GET requests to a specified endpoint using OkHttpClient.
+ * It includes methods for getting all artworks, getting artworks by artist ID, category,
+ * medium, name, date range, price range, gallery ID, and exhibition ID.
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
+ */
 public class MainGetArtworks {
 
     static String port = "8010";
 
-    public static void main(String[] args) {
-        System.out.println();
-    }
+    // public static void main(String[] args) {}
 
+    /**
+     * Retrieves a list of all artworks from the server.
+     *
+     * @return A list of Artwork objects representing all artworks.
+     */
     public static List<Artwork> getAllArtworks(){
 
         List<Artwork> listArtworks = null;
@@ -64,6 +77,12 @@ public class MainGetArtworks {
 
     }
 
+    /**
+     * Retrieves a list of artworks by a specific artist ID from the server.
+     *
+     * @param idArtist The unique identifier of the artist.
+     * @return A list of Artwork objects representing artworks by the specified artist.
+     */
     public static List<Artwork> getArtworksByArtistId (int idArtist){
 
         List<Artwork> listArtworks = null;
@@ -103,6 +122,12 @@ public class MainGetArtworks {
 
     }
 
+    /**
+     * Retrieves a list of artworks by a specific category from the server.
+     *
+     * @param category The category to be used as a search parameter.
+     * @return A list of Artwork objects representing artworks in the specified category.
+     */
     public static List<Artwork> getArtworksByCategory (String category) {
 
         List<Artwork> listArtworks = null;
@@ -142,6 +167,12 @@ public class MainGetArtworks {
         return listArtworks;
     }
 
+    /**
+     * Retrieves a list of artworks by a specific medium from the server.
+     *
+     * @param medium The medium to be used as a search parameter.
+     * @return A list of Artwork objects representing artworks with the specified medium.
+     */
     public static List<Artwork> getArtworksByMedium (String medium){
 
         List<Artwork> listArtworks = null;
@@ -181,6 +212,12 @@ public class MainGetArtworks {
 
     }
 
+    /**
+     * Retrieves a list of artworks by a specific name from the server.
+     *
+     * @param name The name to be used as a search parameter.
+     * @return A list of Artwork objects representing artworks with the specified name.
+     */
     public static List<Artwork> getArtworkByName (String name) {
         List<Artwork> listArtworks = null;
 
@@ -223,6 +260,13 @@ public class MainGetArtworks {
         return listArtworks;
     }
 
+    /**
+     * Retrieves a list of artworks within a specified date range from the server.
+     *
+     * @param startDate The start date of the range.
+     * @param endDate   The end date of the range.
+     * @return A list of Artwork objects representing artworks within the specified date range.
+     */
     public static List<Artwork> getArtworksByDate (String startDate, String endDate) {
 
         List<Artwork> listArtworks = null;
@@ -262,6 +306,13 @@ public class MainGetArtworks {
         return listArtworks;
     }
 
+    /**
+     * Retrieves a list of artworks within a specified price range from the server.
+     *
+     * @param minPrice The minimum price of the range.
+     * @param maxPrice The maximum price of the range.
+     * @return A list of Artwork objects representing artworks within the specified price range.
+     */
     public static List<Artwork> getArtworksByPrice (double minPrice, double maxPrice){
 
         List<Artwork> listArtworks = null;
@@ -301,6 +352,12 @@ public class MainGetArtworks {
 
     }
 
+    /**
+     * Retrieves a list of artworks by a specific gallery ID from the server.
+     *
+     * @param idGallery The unique identifier of the gallery.
+     * @return A list of Artwork objects representing artworks in the specified gallery.
+     */
     public static List<Artwork> getArtworksByGalleryId(int idGallery) {
         List<Artwork> listArtworks = null;
 
@@ -337,6 +394,12 @@ public class MainGetArtworks {
         return listArtworks;
     }
 
+    /**
+     * Retrieves a list of artworks by a specific exhibition ID from the server.
+     *
+     * @param idExhibition The unique identifier of the exhibition.
+     * @return A list of Artwork objects representing artworks in the specified exhibition.
+     */
     public static List<Artwork> getArtworksByExhibitionId(int idExhibition) {
         List<Artwork> listArtworks = null;
 
@@ -372,7 +435,5 @@ public class MainGetArtworks {
 
         return listArtworks;
     }
-
-
 
 }

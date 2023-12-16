@@ -8,17 +8,24 @@ import okhttp3.*;
 import java.io.IOException;
 
 /**
- * Class used to retrieve data about artists from the database and remove it in a list of Artist object.
+ * The MainRemoveArtists class is responsible for removing an artist by sending a DELETE request
+ * to a specified endpoint using OkHttpClient. It includes a method for removing a specific artist.
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
  */
 public class MainRemoveArtists {
+
     static String port = "8010";
 
-    public static void main(String[] args) {
-        Artist artist = MainGetArtists.getArtistById(59);
-        System.out.println(artist);
-        removeArtist(artist);
-    }
+    // public static void main(String[] args) {}
 
+    /**
+     * Removes the specified artist by sending a DELETE request to the server.
+     *
+     * @param selectedArtist The Artist object representing the artist to be removed.
+     */
     public static void removeArtist(Artist selectedArtist) {
 
         OkHttpClient httpClient = new OkHttpClient();
