@@ -165,3 +165,22 @@
     -fx-background-size: cover;
     -fx-background-position: center;
 }
+
+#loginGrid {
+    -fx-background-color: #f0f0f0; /* Cor de fundo */
+}
+
+#lblLogin, #lblPassword {
+    -fx-font-size: 14pt; /* Tamanho da fonte */
+    -fx-text-fill: #333333; /* Cor do texto */
+}
+
+#btnLogin {
+    -fx-background-color: #4CAF50; /* Cor de fundo do botão */
+    -fx-text-fill: white; /* Cor do texto do botão */
+    -fx-font-size: 14pt; /* Tamanho da fonte do botão */
+}
+
+#btnLogin:hover {
+    -fx-background-color: #45a049; /* Cor de fundo do botão quando hover */
+}

@@ -66,7 +66,6 @@ public class SceneExhibition extends BorderPane {
         }
     }
 
-
     private void doLayout() {
 
         setPadding(new Insets(20));
@@ -338,9 +337,14 @@ public class SceneExhibition extends BorderPane {
             } else{
                 hyperGalleryName = new Hyperlink(galleryName.substring(0,maxTextLength)+"...");
             }
+            hyperGalleryName.getStyleClass().add("my-desc2-hyperlink");
 
-            String price = String.valueOf(artwork.getPrice());
+
+            String currency = "€";
+            String price = String.valueOf(currency + artwork.getPrice());
             Hyperlink hyperPrice = new Hyperlink(price);
+            hyperPrice.getStyleClass().add("my-desc2-price-hyperlink");
+
             VBox vBoxLabelArtwork = new VBox(hyperArtworkName, hyperGalleryName, hyperPrice);
 
             // CALCULATE THE COORDINATE FOR EACH CELL (4 COLUMNS)
@@ -406,6 +410,11 @@ public class SceneExhibition extends BorderPane {
         setOriginalDescription(textFieldSearch,searchOrigText);
         textFieldSearch.setPrefSize(550, 30);
         textFieldSearch.setOnMouseClicked(e -> textFieldSearch.clear());
+        textFieldSearch.setOnKeyPressed(e-> {
+            if (e.getCode() == KeyCode.ENTER) {
+                handleSearchIconSelection(textFieldSearch);
+            }
+        });
 
         // I~A LOGO
         Image logo = new Image("Images/logo/logoIA-02.png");

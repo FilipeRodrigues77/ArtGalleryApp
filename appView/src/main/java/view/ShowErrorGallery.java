@@ -10,9 +10,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-public class ShowErrorArtist extends BorderPane {
+public class ShowErrorGallery  extends BorderPane {
 
-    public ShowErrorArtist() {
+    public ShowErrorGallery() {
         doLayout();
     }
 
@@ -28,12 +28,10 @@ public class ShowErrorArtist extends BorderPane {
 
         VBox logoErrorMessage = new VBox();
 
-        Text message = new Text("Ups, não encontramos nenhum artista :(");
-        Text message2 = new Text("Neste caso, vais ter mesmo é de apreciar a nossa logo ;)");
+        Text message = new Text("Ups, não encontramos nenhuma galeria para esta regição:(");
         message.setFont(Font.font("Inter", 20));
         message.setFill(Color.GRAY);
-        message2.setFont(Font.font("Inter", 20));
-        message2.setFill(Color.GRAY);
+
 
 
         Image logo = new Image("Images/logo/logoIA-01.png");
@@ -41,11 +39,10 @@ public class ShowErrorArtist extends BorderPane {
         // logoView.setOpacity(0.5);
         logoView.setFitHeight(200);
         logoView.setFitWidth(200);
-        logoErrorMessage.getChildren().addAll(logoView,message, message2);
+        logoErrorMessage.getChildren().addAll(logoView,message);
         logoErrorMessage.setSpacing(10);
         logoErrorMessage.setAlignment(Pos.CENTER);
         this.setCenter(logoErrorMessage);
 
     }
-
 }

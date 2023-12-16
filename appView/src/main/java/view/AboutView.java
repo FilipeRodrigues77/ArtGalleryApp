@@ -23,7 +23,7 @@ public class AboutView extends BorderPane {
         // ---------------------------------------------- TOP LAYOUT ----------------------------------------------
 
 
-        Label titleLabel = new Label("Sobre Iuvenni Art");
+        Label titleLabel = new Label("Sobre Iuvenis Art");
         titleLabel.getStyleClass().add("my-center-label-3");
 
         String aboutText = "Temos como missão criar uma aplicação que conecta nosso público-alvo a artistas, galerias, " +

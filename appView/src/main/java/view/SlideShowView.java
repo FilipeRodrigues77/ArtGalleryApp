@@ -2,6 +2,7 @@ package view;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -24,12 +25,18 @@ public class SlideShowView extends BorderPane {
 
     public SlideShowView() {
         // Configuração do layout
+
+        this.setPadding(new Insets(0,10,20,10));
         MainView mainView = new MainView();
         String cssTheme = mainView.themeCurrent;
         getStylesheets().add(cssTheme);
-        getStyleClass().add("SlideShowView");
+
         StackPane centerPane = new StackPane();
         centerPane.setAlignment(Pos.CENTER);
+
+        ImageView frame = new ImageView(new Image("SlideShowImages/QuadroSlideShowClaroNovo.png"));
+        frame.setFitHeight(500);
+        frame.setFitWidth(750);
 
         File folder = new File(FOLDER_PATH);
 
@@ -43,13 +50,10 @@ public class SlideShowView extends BorderPane {
                 randomOrder = generateRandomOrder(imageFiles.length);
 
                 ImageView imageView = new ImageView();
-                imageView.setFitWidth(400); // ajuste a largura conforme necessário
-                imageView.setFitHeight(400); // ajuste a altura conforme necessário
+                imageView.setFitWidth(410);
+                imageView.setFitHeight(410);
 
-                // Adiciona a imagem inicial ao ImageView
-                showImage(imageView, currentIndex);
-
-                centerPane.getChildren().add(imageView);
+                imageView.setLayoutY(100);
 
                 // Adiciona o botão "Fechar"
                 Button buttonMain = new Button("Retornar");
@@ -57,12 +61,20 @@ public class SlideShowView extends BorderPane {
                 buttonMain.getStyleClass().add("button-modern");
                 setBottom(buttonMain);
 
+                // ADDING THE ARTWORK IMAGES
+                centerPane.getChildren().addAll(imageView,frame);
+
+
                 // Configuração do Timeline para mudar de imagem a cada 3 segundos
                 Timeline timeline = new Timeline(
                         new KeyFrame(Duration.seconds(3), event -> showNextImage(imageView))
                 );
                 timeline.setCycleCount(Timeline.INDEFINITE);
                 timeline.play();
+
+                showImage(imageView, currentIndex);
+
+
             } else {
                 System.out.println("A pasta não contém arquivos de imagem.");
                 getScene().setRoot(new MainView());
@@ -73,6 +85,7 @@ public class SlideShowView extends BorderPane {
         }
 
         setCenter(centerPane);
+
     }
 
     private void showImage(ImageView imageView, int index) {
@@ -105,4 +118,5 @@ public class SlideShowView extends BorderPane {
         Stage stage = (Stage) getScene().getWindow();
         stage.close();
     }
+
 }

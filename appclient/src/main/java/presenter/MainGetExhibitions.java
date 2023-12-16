@@ -19,6 +19,7 @@ import java.util.List;
  * Class used to retrieve data about exhibitions from the database and store it in a list of Exhibitions object.
  */
 public class MainGetExhibitions {
+
     static String port = "8010";
 
     public static void main(String[] args) {
