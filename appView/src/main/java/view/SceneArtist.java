@@ -3,6 +3,7 @@ package view;
 import domain.Artist;
 import domain.Artwork;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -106,16 +107,21 @@ public class SceneArtist extends BorderPane {
         defaultSizeIcon(imageViewLinkedin);
 
         // LABEL
-        Label labelButtonStatus = new Label("I~A © 2023 I~A  Todos os direitos reservados");
+        Label labelBottomStatus = new Label("I~A © 2023 I~A  Todos os direitos reservados");
 
         // DEFINE A HBOX THAT WILL CONTAIN THE IMAGES (ADD SIMULTANEOUSLY)
         HBox hBoxBottomImages = new HBox(imageViewLinkedin,imageViewGitHub);
         hBoxBottomImages.setSpacing(10);
+        HBox.setHgrow(hBoxBottomImages, javafx.scene.layout.Priority.ALWAYS);
+        hBoxBottomImages.setAlignment(Pos.CENTER_RIGHT);
 
         // HBOX BOTTOM
-        HBox hBoxBottomLayout = new HBox(labelButtonStatus,hBoxBottomImages);
+        HBox hBoxBottomStatus = new HBox(labelBottomStatus);
+        HBox.setHgrow(hBoxBottomStatus, javafx.scene.layout.Priority.ALWAYS);
+        hBoxBottomStatus.setAlignment(Pos.CENTER_LEFT);
+        HBox hBoxBottomLayout = new HBox(hBoxBottomStatus,hBoxBottomImages);
         hBoxBottomLayout.setPadding(new Insets(20,0,0,0));
-        hBoxBottomLayout.setSpacing(500);
+        setBottom(hBoxBottomLayout);
 
         return hBoxBottomLayout;
     }
@@ -135,6 +141,11 @@ public class SceneArtist extends BorderPane {
         setOriginalDescription(textFieldSearch,searchOrigText);
         textFieldSearch.setPrefSize(550, 30);
         textFieldSearch.setOnMouseClicked(e -> textFieldSearch.clear());
+        textFieldSearch.setOnKeyPressed(e-> {
+            if (e.getCode() == KeyCode.ENTER) {
+                handleSearchIconSelection(textFieldSearch);
+            }
+        });
 
         // I~A LOGO
         Image logo = new Image("Images/logo/logoIA-02.png");
@@ -286,21 +297,21 @@ public class SceneArtist extends BorderPane {
 
             String artistName = artist.getName();
             Hyperlink hyperArtistName;
-
             if (artistName.length() < maxTextLength){
                 hyperArtistName = new Hyperlink(artistName);
             } else{
                 hyperArtistName = new Hyperlink(artistName.substring(0,maxTextLength)+"...");
             }
+            hyperArtistName.getStyleClass().add("my-desc-hyperlink");
 
             String artistOrigen = MainGetArtists.getArtistById(artist.getId()).getNationality();
             Hyperlink hyperArtistOrigen;
-
             if (artistOrigen.length() < maxTextLength){
                 hyperArtistOrigen = new Hyperlink(artistOrigen);
             } else{
                 hyperArtistOrigen = new Hyperlink(artistOrigen.substring(0,maxTextLength)+"...");
             }
+            hyperArtistOrigen.getStyleClass().add("my-desc2-hyperlink");
 
             String birthDate = artist.getBirthdate();
             String deathDate = artist.getDeathdate();
@@ -311,6 +322,7 @@ public class SceneArtist extends BorderPane {
             else {
                 hyperBirthDeathDate = new Hyperlink(birthDate );
             }
+            hyperBirthDeathDate.getStyleClass().add("my-desc2-hyperlink");
 
             VBox vBoxLabelArtist = new VBox(hyperArtistName, hyperArtistOrigen, hyperBirthDeathDate);
             // CALCULATE THE COORDINATE FOR EACH CELL (4 COLUMNS)
@@ -413,8 +425,10 @@ public class SceneArtist extends BorderPane {
         // LABELS
         Label labelArtistName = new Label(artist.getName());
         Label labelNationality = new Label(artist.getNationality());
-        Label labelBirthday = new Label(artist.getBirthdate());
-        Label labelDeathday = new Label(artist.getDeathdate());
+
+        String birthDeathdate = artist.getBirthdate() + "  | "+ artist.getDeathdate();
+        Label labelBirthDeathdate = new Label(birthDeathdate);
+
         Label labelHeaderAboutArtist = new Label("Sobre o Artista");
         Label labelBiography = new Label(artist.getBiography());
         labelBiography.setWrapText(true);
@@ -424,7 +438,7 @@ public class SceneArtist extends BorderPane {
         ScrollPane scrollPaneBiography = new ScrollPane(labelBiography);
         scrollPaneBiography.getStyleClass().add("scroll-pane");
 
-        VBox vBoxArtistInfo = new VBox(labelArtistName, labelNationality, labelBirthday, labelDeathday);
+        VBox vBoxArtistInfo = new VBox(labelArtistName, labelNationality,labelBirthDeathdate);
         VBox vBoxArtistImage = new VBox(imageViewArtist);
         HBox hBoxCenterLayout = new HBox(vBoxArtistImage, vBoxArtistInfo);
         hBoxCenterLayout.setSpacing(50);

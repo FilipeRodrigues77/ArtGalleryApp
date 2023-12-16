@@ -3,6 +3,7 @@ package view;
 import domain.Artist;
 import domain.Artwork;
 import javafx.geometry.Pos;
+import javafx.scene.input.KeyCode;
 import presenter.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -310,7 +311,9 @@ public class SceneArtwork extends BorderPane {
 
         Label labelArtworkSizeCM = new Label(artwork.getDimensionCm().substring(1,artwork.getDimensionCm().length()-1));
         Label labelArtworkSizeIN = new Label(artwork.getDimensionIN().substring(1,artwork.getDimensionIN().length()-1));
-        Label labelPrice = new Label(String.valueOf(artwork.getPrice()));
+
+        String currency = "€";
+        Label labelPrice = new Label(String.valueOf(currency + artwork.getPrice()));
 
         // See artist button
         // This should be a button that links to the artists details page:
@@ -370,16 +373,21 @@ public class SceneArtwork extends BorderPane {
         defaultSizeIcon(imageViewLinkedin);
 
         // LABEL
-        Label labelButtonStatus = new Label("I~A © 2023 I~A  Todos os direitos reservados");
+        Label labelBottomStatus = new Label("I~A © 2023 I~A  Todos os direitos reservados");
 
         // DEFINE A HBOX THAT WILL CONTAIN THE IMAGES (ADD SIMULTANEOUSLY)
         HBox hBoxBottomImages = new HBox(imageViewLinkedin,imageViewGitHub);
         hBoxBottomImages.setSpacing(10);
+        HBox.setHgrow(hBoxBottomImages, javafx.scene.layout.Priority.ALWAYS);
+        hBoxBottomImages.setAlignment(Pos.CENTER_RIGHT);
 
         // HBOX BOTTOM
-        HBox hBoxBottomLayout = new HBox(labelButtonStatus,hBoxBottomImages);
+        HBox hBoxBottomStatus = new HBox(labelBottomStatus);
+        HBox.setHgrow(hBoxBottomStatus, javafx.scene.layout.Priority.ALWAYS);
+        hBoxBottomStatus.setAlignment(Pos.CENTER_LEFT);
+        HBox hBoxBottomLayout = new HBox(hBoxBottomStatus,hBoxBottomImages);
         hBoxBottomLayout.setPadding(new Insets(20,0,0,0));
-        hBoxBottomLayout.setSpacing(500);
+        setBottom(hBoxBottomLayout);
 
         return hBoxBottomLayout;
     }
@@ -401,6 +409,11 @@ public class SceneArtwork extends BorderPane {
         setOriginalDescription(textFieldSearch,searchOrigText);
         textFieldSearch.setPrefSize(550, 30);
         textFieldSearch.setOnMouseClicked(e -> textFieldSearch.clear());
+        textFieldSearch.setOnKeyPressed(e-> {
+            if (e.getCode() == KeyCode.ENTER) {
+                handleSearchIconSelection(textFieldSearch);
+            }
+        });
 
         // IMAGES
 
@@ -479,6 +492,7 @@ public class SceneArtwork extends BorderPane {
             } else{
                 hyperArtworkName = new Hyperlink(artworkName.substring(0,maxTextLength)+"...");
             }
+            hyperArtworkName.getStyleClass().add("my-desc-hyperlink");
 
 
             String artistName = MainGetArtists.getArtistById(artwork.getIdArtist()).getName();
@@ -488,7 +502,7 @@ public class SceneArtwork extends BorderPane {
             } else{
                 hyperArtistName = new Hyperlink(artistName.substring(0,maxTextLength)+"...");
             }
-
+            hyperArtistName.getStyleClass().add("my-desc2-hyperlink");
 
             String galleryName = MainGetGalleries.getGalleryById(artwork.getIdGallery()).getNameGallery();
             Hyperlink hyperGalleryName;
@@ -497,10 +511,12 @@ public class SceneArtwork extends BorderPane {
             } else{
                 hyperGalleryName = new Hyperlink(galleryName.substring(0,maxTextLength)+"...");
             }
+            hyperGalleryName.getStyleClass().add("my-desc2-hyperlink");
 
-
-            String price = String.valueOf(artwork.getPrice());
+            String currency = "€";
+            String price = String.valueOf(currency + artwork.getPrice());
             Hyperlink hyperPrice = new Hyperlink(price);
+            hyperPrice.getStyleClass().add("my-desc2-price-hyperlink");
 
             hyperArtworkName.setOnAction(e-> setArtworkLabelsOnAction(artwork));
 

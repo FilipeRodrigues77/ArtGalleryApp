@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 
 import com.google.gson.reflect.TypeToken;
 import domain.Gallery;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -141,4 +143,45 @@ public class MainGetGalleries {
         return listGalleries;
     }
 
+    public static List<Gallery> getGalleryByName(String name) {
+        List<Gallery> listGalleries = null;
+
+        // DESERIALIZATION
+        OkHttpClient httpClient = new OkHttpClient();
+        Gson gson = new GsonBuilder().create();
+
+        // Build the URL and add the query parameter
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://localhost:" + port + "/galleries/search")).newBuilder();
+        urlBuilder.addQueryParameter("name", name);
+        String url = urlBuilder.build().toString();
+
+        Request getRequest = new Request.Builder()
+                .url(url)
+                .build();
+
+        try {
+            Response response = httpClient.newCall(getRequest).execute();
+            System.out.println("Response code: " + response.code() + "\n");
+
+            if (response.code() == 200) {
+                // Deserialize a list of galleries
+                Type listType = new TypeToken<ArrayList<Gallery>>() {}.getType();
+
+                if (response.body() != null) {
+                    listGalleries = gson.fromJson(response.body().string(), listType);
+                }
+
+            } else {
+                // Something failed, maybe the gallery does not exist
+                if (response.body() != null) {
+                    System.out.println(response.body().string());
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return listGalleries;
+    }
 }

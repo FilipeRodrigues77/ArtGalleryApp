@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import presenter.MainGetArtists;
 import presenter.MainGetArtworks;
@@ -33,8 +34,17 @@ public class SceneGallery extends BorderPane {
 
         //--------------------------------------------- HEADER ELEMENTS ---------------------------------------------
 
-        TextField textFieldSearchByRegion = new TextField("Região: (inglês):");
+        String regionOrigText = "Região: (inglês):";
+        TextField textFieldSearchByRegion = new TextField(regionOrigText);
+        setOriginalDescription(textFieldSearchByRegion,regionOrigText);
         textFieldSearchDefault(textFieldSearchByRegion);
+        textFieldSearchByRegion.setOnKeyPressed(e-> {
+            if (e.getCode() == KeyCode.ENTER) {
+                handleRegionSelection(textFieldSearchByRegion);
+            }
+        });
+
+
 
         // CREATE LABEL FOR FILTER AREA
         Label filterLabel = new Label("Filtros = ");
@@ -139,7 +149,6 @@ public class SceneGallery extends BorderPane {
         Label labelGalleryEmail = new Label(gallery.getEmail());
         labelGalleryName.getStyleClass().add("my-center-label-1");
 
-
         Label labelArtworks = new Label("Obras de arte ");
         Label labelExhibitions = new Label("Eventos");
 
@@ -169,10 +178,12 @@ public class SceneGallery extends BorderPane {
 
         // CHANGE
         labelArtworks.setOnMouseClicked(e-> {
+            labelExhibitions.getStyleClass().remove("actual-page-label");
             scrollPane.setContent(buildThisGalleryArtworkGrid(galleryArtworks));
             labelArtworks.getStyleClass().add("actual-page-label");
         });
         labelExhibitions.setOnMouseClicked(e-> {
+            labelArtworks.getStyleClass().remove("actual-page-label");
             scrollPane.setContent(buildThisGalleryExhibitionGrid(galleryExhibition));
             labelExhibitions.getStyleClass().add("actual-page-label");
         });
@@ -267,8 +278,11 @@ public class SceneGallery extends BorderPane {
                 hyperArtworkName = new Hyperlink(artworkName.substring(0,maxTextLength)+"...");
             }
 
-            String price = String.valueOf(artwork.getPrice());
+            String currency = "€";
+            String price = String.valueOf(currency + artwork.getPrice());
             Hyperlink hyperPrice = new Hyperlink(price);
+            hyperPrice.getStyleClass().add("my-desc2-price-hyperlink");
+
             VBox vBoxLabelArtwork = new VBox(hyperArtworkName, hyperPrice);
 
             // CALCULATE THE COORDINATE FOR EACH CELL (4 COLUMNS)
@@ -345,6 +359,12 @@ public class SceneGallery extends BorderPane {
         setOriginalDescription(textFieldSearch,searchOrigText);
         textFieldSearch.setPrefSize(550, 30);
         textFieldSearch.setOnMouseClicked(e -> textFieldSearch.clear());
+        textFieldSearch.setOnKeyPressed(e-> {
+            if (e.getCode() == KeyCode.ENTER) {
+                handleSearchIconSelection(textFieldSearch);
+            }
+        });
+
 
         // I~A LOGO
         Image logo = new Image("Images/logo/logoIA-02.png");
@@ -387,18 +407,36 @@ public class SceneGallery extends BorderPane {
 
     }
 
+    private void handleRegionSelection(TextField textFieldSearch ){
+        ScrollPane finalScrollPane = new ScrollPane();
+        String searchText = textFieldSearch.getText().trim();
+        if (!searchText.isEmpty()) {
+
+            List<Gallery> galleries = MainGetGalleries.getGalleriesByRegion(searchText);
+            if(galleries != null){
+                finalScrollPane.setContent(buildMainGrid(galleries));
+                this.setCenter(finalScrollPane);
+            }
+            else{
+                getScene().setRoot(new ShowErrorGallery());
+            }
+            this.setCenter(finalScrollPane);
+
+        }
+    }
+
     private void handleSearchIconSelection(TextField textFieldSearch ){
         ScrollPane finalScrollPane = new ScrollPane();
         String searchText = textFieldSearch.getText().trim();
         if (!searchText.isEmpty()) {
 
-            List<Artist> artists = MainGetArtists.getArtistByName(searchText);
-            if(artists != null){
-                // finalScrollPane.setContent(filteredGrid(artists));
+            List<Gallery> galleries = MainGetGalleries.getGalleryByName(searchText);
+            if(galleries != null){
+                finalScrollPane.setContent(buildMainGrid(galleries));
                 this.setCenter(finalScrollPane);
             }
             else{
-                getScene().setRoot(new ShowErrorArtist());
+                getScene().setRoot(new ShowErrorGallery());
             }
             this.setCenter(finalScrollPane);
 
@@ -427,4 +465,5 @@ public class SceneGallery extends BorderPane {
         imageView.setFitWidth(160);  // Ajuste a largura conforme necessário
         imageView.setPreserveRatio(true);
     }
+
 }
