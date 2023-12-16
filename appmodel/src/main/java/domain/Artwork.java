@@ -1,10 +1,22 @@
 package domain;
 
-import com.google.gson.annotations.SerializedName;
-
+/**
+ * The {@code Artwork} class represents an artwork with various attributes such as ID, price, dimensions,
+ * name, medium, creation date, category, collecting institution, slug reference to the artist,
+ * reference image URL, gallery ID, and artist ID.
+ *
+ * <p>An artwork object can be instantiated either with an empty constructor or with a constructor
+ * that initializes its attributes.</p>
+ *
+ * <p>This class also provides getter and setter methods for accessing and modifying the attributes of an artwork.</p>
+ *
+ * <p>The {@code toString()} method is overridden to provide a formatted string representation of the artwork object.</p>
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
+ */
 public class Artwork {
-
-
 
     private int id;
     private double price;
@@ -20,13 +32,30 @@ public class Artwork {
     private int idGallery;
     private int idArtist;
 
-
-
-
+    /**
+     * Constructs an empty {@code Artwork} object.
+     * This constructor is useful for creating an artwork object without initializing its attributes.
+     */
     public Artwork() {
-
     }
 
+    /**
+     * Constructs an {@code Artwork} object with the specified attributes.
+     *
+     * @param id The unique identifier of the artwork.
+     * @param price The price of the artwork.
+     * @param dimensionCm The dimensions of the artwork in centimeters.
+     * @param dimensionIN The dimensions of the artwork in inches.
+     * @param name The name of the artwork.
+     * @param medium The medium used for creating the artwork.
+     * @param creationDate The creation date of the artwork.
+     * @param category The category of the artwork.
+     * @param collectingInstitution The collecting institution associated with the artwork.
+     * @param slugReferenceArtist The slug reference to the artist associated with the artwork.
+     * @param referenceImage The reference image URL associated with the artwork.
+     * @param idGallery The unique identifier of the gallery associated with the artwork.
+     * @param idArtist The unique identifier of the artist associated with the artwork.
+     */
     public Artwork(int id, double price, String dimensionCm, String dimensionIN,
                    String name, String medium, String creationDate, String category,
                    String collectingInstitution, String slugReferenceArtist,
@@ -47,6 +76,7 @@ public class Artwork {
         this.idArtist = idArtist;
     }
 
+    // Getter and setter methods for each attribute are provided below.
     public int getId() {
         return id;
     }
@@ -151,6 +181,11 @@ public class Artwork {
         this.idGallery = idGallery;
     }
 
+    /**
+     * Returns a formatted string representation of the {@code Artwork} object.
+     *
+     * @return A formatted string containing the attributes of the artwork.
+     */
     @Override
     public String toString() {
         return "Artwork{\n" +

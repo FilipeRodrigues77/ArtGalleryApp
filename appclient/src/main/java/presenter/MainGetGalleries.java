@@ -16,14 +16,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-
 /**
- * Class used to retrieve data about galleries from the database and store it in a list of Gallery object.
+ * The MainGetGalleries class is responsible for retrieving information about galleries
+ * by making various types of GET requests to a specified endpoint using OkHttpClient.
+ * It includes methods for getting all galleries, a specific gallery by ID, galleries by region,
+ * and galleries by name.
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
  */
 public class MainGetGalleries {
 
     static String port = "8010";
 
+    /**
+     * Retrieves a list of all galleries from the server.
+     *
+     * @return A list of Gallery objects representing all galleries.
+     */
     public static List<Gallery> getAllGalleries () {
 
         List<Gallery> listGalleries = null;
@@ -66,6 +77,12 @@ public class MainGetGalleries {
         return listGalleries;
     }
 
+    /**
+     * Retrieves information about a specific gallery based on its ID.
+     *
+     * @param galleryId The unique identifier of the gallery.
+     * @return A Gallery object representing the specified gallery.
+     */
     public static Gallery getGalleryById(int galleryId ) {
 
         Gallery gallery = null;
@@ -107,6 +124,12 @@ public class MainGetGalleries {
         return gallery;
     }
 
+    /**
+     * Retrieves a list of galleries based on a specified region.
+     *
+     * @param region The region to be used as a search parameter.
+     * @return A list of Gallery objects representing galleries in the specified region.
+     */
     public static List<Gallery> getGalleriesByRegion(String region) {
         List<Gallery> listGalleries = null;
 
@@ -143,6 +166,12 @@ public class MainGetGalleries {
         return listGalleries;
     }
 
+    /**
+     * Retrieves a list of galleries based on a specified name.
+     *
+     * @param name The name to be used as a search parameter.
+     * @return A list of Gallery objects representing galleries with the specified name.
+     */
     public static List<Gallery> getGalleryByName(String name) {
         List<Gallery> listGalleries = null;
 

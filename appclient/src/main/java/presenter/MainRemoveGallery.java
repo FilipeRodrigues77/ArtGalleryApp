@@ -9,17 +9,22 @@ import okhttp3.*;
 import java.io.IOException;
 
 /**
- * Class used to retrieve data about galleries from the database and remove it in a list of Gallery object.
+ * The MainRemoveGallery class is responsible for removing a gallery by sending a DELETE request
+ * to a specified endpoint using OkHttpClient. It includes a method for removing a specific gallery.
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
  */
 public class MainRemoveGallery {
+
     static String port = "8010";
-
-    public static void main(String[] args) {
-        Gallery gallery = MainGetGalleries.getGalleryById(10);
-        System.out.println(gallery);
-
-    }
-
+    // public static void main(String[] args) {}
+    /**
+     * Removes the specified gallery by sending a DELETE request to the server.
+     *
+     * @param selectedGallery The Gallery object representing the gallery to be removed.
+     */
     public static void removeGallery(Gallery selectedGallery) {
 
         OkHttpClient httpClient = new OkHttpClient();

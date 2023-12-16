@@ -2,6 +2,21 @@ package domain;
 
 import java.time.LocalDate;
 
+/**
+ * The {@code Exhibition} class represents an exhibition with various attributes such as ID, name,
+ * start date, end date, description, status, gallery ID, and reference image URL.
+ *
+ * <p>An exhibition object can be instantiated either with an empty constructor or with a constructor
+ * that initializes its attributes.</p>
+ *
+ * <p>This class also provides getter and setter methods for accessing and modifying the attributes of an exhibition.</p>
+ *
+ * <p>The {@code toString()} method is overridden to provide a formatted string representation of the exhibition object.</p>
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
+ */
 public class Exhibition {
 
     private int id;
@@ -17,6 +32,18 @@ public class Exhibition {
 
     }
 
+    /**
+     * Constructs an {@code Exhibition} object with the specified attributes.
+     *
+     * @param id The unique identifier of the exhibition.
+     * @param nameExhibition The name of the exhibition.
+     * @param startDate The start date of the exhibition.
+     * @param endDate The end date of the exhibition.
+     * @param exdescription The description of the exhibition.
+     * @param exstatus The status of the exhibition.
+     * @param idGallery The unique identifier of the gallery associated with the exhibition.
+     * @param referenceImage The reference image URL associated with the exhibition.
+     */
     public Exhibition(int id, String nameExhibition, LocalDate startDate, LocalDate endDate,
                       String exdescription, String exstatus, int idGallery, String referenceImage) {
 
@@ -30,6 +57,7 @@ public class Exhibition {
         this. referenceImage = referenceImage;
     }
 
+    // Getter and setter methods for each attribute are provided below.
     public int getId() {
         return id;
     }
@@ -94,6 +122,12 @@ public class Exhibition {
         this.referenceImage = referenceImage;
     }
 
+
+    /**
+     * Returns a formatted string representation of the {@code Exhibition} object.
+     *
+     * @return A formatted string containing the attributes of the exhibition.
+     */
     @Override
     public String toString() {
         return "Exhibition{\n" +
