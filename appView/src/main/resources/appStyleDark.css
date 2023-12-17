@@ -17,21 +17,19 @@
 }
 
 .my-desc-hyperlink {
-
-    -fx-font-style: bold;
+    -fx-font-style: italic;
+    -fx-font-weight: bold;
     -fx-text-fill: black;
     -fx-font-size: 13px;
 }
 
 .my-desc2-hyperlink {
-
     -fx-text-fill: gray;
     -fx-font-style: italic;
     -fx-font-size: 12px;
 }
 
 .my-desc2-price-hyperlink {
-
     -fx-text-fill: black;
     -fx-font-style: italic;
     -fx-font-size: 12px;
@@ -190,4 +188,21 @@
 
 .button-modern:hover {
     -fx-background-color:  #444444; /* Cor de fundo ao passar o mouse sobre o botão */
+}
+
+.combo-box {
+    -fx-border-color: #bbbcbd;
+    -fx-border-width: 1px;
+    -fx-border-radius: 50;
+    -fx-text-fill: #808080;
+    -fx-font-size: 12px;
+}
+
+.text-field {
+    -fx-border-color: #bbbcbd;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-font-size: 12px;
+    -fx-text-fill: #808080;
+    -fx-prompt-text-fill: #808080;
 }

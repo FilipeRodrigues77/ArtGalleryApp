@@ -10,12 +10,30 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+/**
+ * The {@code ShowErrorArtist} class represents a scene displayed when no
+ * artist is found.
+ * The class extends {@code BorderPane} and provides a layout with a
+ * back arrow, error messages, and the application logo.
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
+ */
 public class ShowErrorArtist extends BorderPane {
 
+    /**
+     * Constructs a new {@code ShowErrorArtist} object.
+     * The method initialises the layout and displays an error message along with the application logo.
+     */
     public ShowErrorArtist() {
         doLayout();
     }
 
+    /**
+     * Sets up the layout for the error scene, including a back arrow, error messages,
+     * and the application logo.
+     */
     private void doLayout() {
         setPadding(new Insets(20));
 

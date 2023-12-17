@@ -12,7 +12,7 @@ integrate art-related functionalities into their applications, providing a
 backend for managing diverse aspects of the art industry.
 
 ### Base URL
-- The base URL for accessing the API is http://localhost:8000, and all 
+- The base URL for accessing the API is http://localhost:8010, and all 
 endpoints are appended to this base URL.
 
 ### Technologies Used

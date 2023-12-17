@@ -2,7 +2,6 @@ package presenter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import domain.Artist;
 import domain.Gallery;
 import okhttp3.*;
 
@@ -23,7 +22,7 @@ public class MainCreateGallery {
     /**
      * The default port used for communication with the server.
      */
-    static String port = "8010";
+    static final String PORT = "8010";
 
     /**
      * Adds a new Gallery by sending a POST request to the server.
@@ -36,7 +35,7 @@ public class MainCreateGallery {
         String galleryJson = gson.toJson(newGallery);
 
         Request postRequest = new Request.Builder()
-                .url("http://localhost:" + port + "/galleries")
+                .url("http://localhost:" + PORT + "/galleries")
                 .post(RequestBody.create(MediaType.parse("application/json"), galleryJson))
                 .build();
 

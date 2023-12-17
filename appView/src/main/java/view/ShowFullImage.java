@@ -6,12 +6,27 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 
-
+/**
+ * The {@code ShowFullImage} class represents a scene that displays a full-size image
+ * of an artwork. It extends {@code BorderPane} and provides a layout with a back arrow
+ * and the full-size image of the artwork.
+ *
+ * @author Nuely Furtado and Filipe Alves
+ * @version v1.0
+ */
 public class ShowFullImage extends BorderPane {
 
     double sceneSize ;
     Artwork artwork;
 
+    /**
+     * Constructs a new {@code ShowFullImage} object with the specified image reference,
+     * artwork, and scene size. Initializes the layout and displays the full-size image.
+     *
+     * @param imageToShowRef The image reference to be displayed.
+     * @param artwork        The artwork associated with the full-size image.
+     * @param sceneSize      The size of the scene where the full-size image is displayed.
+     */
     public ShowFullImage(String imageToShowRef,Artwork artwork, double sceneSize) {
         doLayout(imageToShowRef);
         this.artwork = artwork;
@@ -19,6 +34,12 @@ public class ShowFullImage extends BorderPane {
 
     }
 
+    /**
+     * Sets up the layout for the scene, including a back arrow and the full-size image of
+     * the artwork.
+     *
+     * @param reference The image reference to be displayed.
+     */
     private void doLayout(String reference ) {
 
         setPadding(new Insets(20));

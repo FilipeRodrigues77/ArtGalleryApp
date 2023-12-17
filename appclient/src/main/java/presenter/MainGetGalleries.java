@@ -28,7 +28,7 @@ import java.util.Objects;
  */
 public class MainGetGalleries {
 
-    static String port = "8010";
+    static final String PORT = "8010";
 
     /**
      * Retrieves a list of all galleries from the server.
@@ -43,7 +43,7 @@ public class MainGetGalleries {
         Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:" + port +"/galleries")  // Update the URL to the endpoint for galleries
+                .url("http://localhost:" + PORT +"/galleries")  // Update the URL to the endpoint for galleries
                 .build();
 
         try {
@@ -92,7 +92,7 @@ public class MainGetGalleries {
         Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:" + port +"/galleries/"+galleryId)
+                .url("http://localhost:" + PORT +"/galleries/"+galleryId)
                 .build();
 
         try {
@@ -138,7 +138,7 @@ public class MainGetGalleries {
         Gson gson = new GsonBuilder().create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:" + port +"/galleries/searchByRegion?region=" + region)
+                .url("http://localhost:" + PORT +"/galleries/searchByRegion?region=" + region)
                 .build();
 
         try {
@@ -180,7 +180,7 @@ public class MainGetGalleries {
         Gson gson = new GsonBuilder().create();
 
         // Build the URL and add the query parameter
-        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://localhost:" + port + "/galleries/search")).newBuilder();
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://localhost:" + PORT + "/galleries/search")).newBuilder();
         urlBuilder.addQueryParameter("name", name);
         String url = urlBuilder.build().toString();
 

@@ -108,21 +108,20 @@
 }
 
 .my-desc-hyperlink {
-
-    -fx-font-style: bold;
+    -fx-font-style: italic;
+    -fx-font-weight: bold;
     -fx-text-fill: black;
     -fx-font-size: 13px;
 }
 
 .my-desc2-hyperlink {
-
     -fx-text-fill: gray;
+
     -fx-font-style: italic;
     -fx-font-size: 12px;
 }
 
 .my-desc2-price-hyperlink {
-
     -fx-text-fill: black;
     -fx-font-style: italic;
     -fx-font-size: 12px;
@@ -158,17 +157,38 @@
 }
 
 .button-modern {
-   -fx-background-color: transparent; /* Fundo transparente */
-   -fx-text-fill: #808080; /* Cor do texto (cinza) */
-   -fx-font-size: 10px; /* Tamanho da fonte */
-   -fx-padding: 10 20 10 20; /* Preenchimento interno do botão (topo direita baixo esquerda) */
-   -fx-border-radius: 50; /* Raio da borda do botão */
-   -fx-background-radius: 50; /* Raio do fundo do botão */
-   -fx-border-color: #808080; /* Cor da borda */
-   -fx-border-width: 1; /* Largura da borda */
-   -fx-cursor: hand; /* Cursor ao passar o mouse sobre o botão */
+   -fx-background-color: transparent;
+   -fx-text-fill: #808080;
+   -fx-font-size: 12px;
+   -fx-padding: 10 20 10 20;
+   -fx-border-radius: 50;
+   -fx-background-radius: 50;
+   -fx-border-color: #808080;
+   -fx-border-width: 1;
+   -fx-cursor: hand;
 }
 
 .button-modern:hover {
-    -fx-background-color: #f0f0f0; /* Cor de fundo ao passar o mouse sobre o botão */
+    -fx-background-color: #f0f0f0;
+
+}
+
+.combo-box {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #bbbcbd;
+    -fx-border-width: 1px;
+    -fx-border-radius: 50;
+    -fx-text-fill: #808080;
+    -fx-font-size: 12px;
+}
+
+.text-field {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #bbbcbd;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-font-size: 12px;
+
+    -fx-text-fill: #808080;
+    -fx-prompt-text-fill: #808080;
 }

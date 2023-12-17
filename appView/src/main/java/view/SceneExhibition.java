@@ -1,6 +1,5 @@
 package view;
 
-import domain.Artist;
 import domain.Artwork;
 import domain.Exhibition;
 import javafx.collections.FXCollections;
@@ -12,7 +11,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
-import presenter.MainGetArtists;
 import presenter.MainGetArtworks;
 import presenter.MainGetExhibitions;
 import presenter.MainGetGalleries;
@@ -20,8 +18,23 @@ import presenter.MainGetGalleries;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The SceneExhibition class represents the graphical user interface for displaying and interacting
+ * with a list of art exhibitions.
+ * It extends the BorderPane class and incorporates features such as search filters,
+ * exhibition details, and navigation links.
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
+ */
 public class SceneExhibition extends BorderPane {
 
+    /**
+     * Constructs a new SceneExhibition object, initialising the layout and adding event listeners
+     * for various user interactions.
+     * It also sets the current theme based on the MainView's theme.
+     */
     public SceneExhibition() {
         doLayout();
         MainView mainView = new MainView();
@@ -29,43 +42,10 @@ public class SceneExhibition extends BorderPane {
         getStylesheets().add(cssTheme);
     }
 
-
-    private void handleStartDateSelection(TextField textFieldSearch ){
-        ScrollPane finalScrollPane = new ScrollPane();
-        String searchText = textFieldSearch.getText().trim();
-        if (!searchText.isEmpty()) {
-
-            List<Exhibition> exhibitions = MainGetExhibitions.getExhibitionsByStartDate(searchText);
-            if(exhibitions != null){
-                finalScrollPane.setContent(buildMainGrid(exhibitions));
-                this.setCenter(finalScrollPane);
-            }
-            else{
-                getScene().setRoot(new ShowErrorExhibition());
-            }
-            this.setCenter(finalScrollPane);
-
-        }
-    }
-
-    private void handleEndDateSelection(TextField textFieldSearch ){
-        ScrollPane finalScrollPane = new ScrollPane();
-        String searchText = textFieldSearch.getText().trim();
-        if (!searchText.isEmpty()) {
-
-            List<Exhibition> exhibitions = MainGetExhibitions.getExhibitionsByEndDate(searchText);
-            if(exhibitions != null){
-                finalScrollPane.setContent(buildMainGrid(exhibitions));
-                this.setCenter(finalScrollPane);
-            }
-            else{
-                getScene().setRoot(new ShowErrorExhibition());
-            }
-            this.setCenter(finalScrollPane);
-
-        }
-    }
-
+    /**
+     * Configures the layout of the SceneExhibition, including header, center, and bottom sections.
+     * Initializes search filters, status menus, and exhibition details for display.
+     */
     private void doLayout() {
 
         setPadding(new Insets(20));
@@ -73,7 +53,7 @@ public class SceneExhibition extends BorderPane {
         //--------------------------------------------- HEADER ELEMENTS ---------------------------------------------
 
         // CREATE SEARCH BY FILTER FIELDS
-        String startDateOriginalText = "Inicio ex. 21-02-2023:";
+        String startDateOriginalText = "Inicio ex. aaaa-mm-dd";
         TextField textFieldSearchByStartDate = new TextField(startDateOriginalText);
         setOriginalDescription(textFieldSearchByStartDate,startDateOriginalText);
         textFieldSearchDefault(textFieldSearchByStartDate);
@@ -83,7 +63,7 @@ public class SceneExhibition extends BorderPane {
             }
         });
 
-        String endDateOriginalText = "Data de fecho:";
+        String endDateOriginalText = "Fecho ex. aaaa-mm-dd";
         TextField textFieldSearchByEndDate = new TextField(endDateOriginalText);
         setOriginalDescription(textFieldSearchByEndDate,endDateOriginalText);
         textFieldSearchDefault(textFieldSearchByEndDate);
@@ -135,31 +115,12 @@ public class SceneExhibition extends BorderPane {
 
     }
 
-    private void handleStatusSelection(ComboBox<String> statusMenu, List<Exhibition> exhibitionList){
-
-        ScrollPane finalScrollPane = new ScrollPane();
-        // get the selected item*
-        String selected = statusMenu.getSelectionModel().getSelectedItem();
-        List<Exhibition> filteredExhibitions;
-
-        if(selected != null){
-
-            if (selected.equalsIgnoreCase("Todas")){
-                finalScrollPane.setContent(buildMainGrid(exhibitionList));
-            }
-            else if (selected.equalsIgnoreCase("Aberta")){
-                filteredExhibitions = MainGetExhibitions.getExhibitionsByStatus("open");
-                finalScrollPane.setContent(buildMainGrid(filteredExhibitions));
-            }
-            else{
-                filteredExhibitions = MainGetExhibitions.getExhibitionsByStatus("closed");
-                finalScrollPane.setContent(buildMainGrid(filteredExhibitions));
-            }
-            this.setCenter(finalScrollPane);
-        }
-
-    }
-
+    /**
+     * Builds the main grid for displaying exhibitions.
+     *
+     * @param exhibitionList The list of all exhibitions to be displayed.
+     * @return The GridPane representing the main grid layout.
+     */
     private GridPane buildMainGrid(List<Exhibition> exhibitionList){
 
         // CREATE A GRIDPANE
@@ -235,6 +196,13 @@ public class SceneExhibition extends BorderPane {
         return grid;
     }
 
+    /**
+     * Creates a detailed layout for displaying exhibition information, including image,
+     * labels, and related artworks.
+     *
+     * @param exhibition The exhibition object for which details are displayed.
+     * @return The updated BorderPane with the detailed exhibition layout.
+     */
     public BorderPane doExhibitionDetailsLayout( Exhibition  exhibition ) {
         setPadding(new Insets(20));
         //--------------------------------------------- HEADER ELEMENTS ---------------------------------------------
@@ -281,7 +249,7 @@ public class SceneExhibition extends BorderPane {
         ScrollPane scrollPane = new ScrollPane();
         // NOTE: WE CAN ONLY SEE IMAGES OF EXHIBITIONS THAT ARE OPEN
         // WHEN WE HAVE NO
-        scrollPane.setContent(buildThiExhibitionArtworkGrid(artworks));
+        scrollPane.setContent(buildThisExhibitionArtworkGrid(artworks));
 
         VBox vBoxGlobalCenterLayout = new VBox(vBoxCenterLayout, scrollPane);
         vBoxGlobalCenterLayout.setSpacing(20);
@@ -298,7 +266,14 @@ public class SceneExhibition extends BorderPane {
 
     }
 
-    private GridPane buildThiExhibitionArtworkGrid(List<Artwork> artworkList){
+    /**
+     * Constructs and returns a GridPane containing details of the provided artworks.
+     * Each artwork is represented by an image and accompanying labels.
+     *
+     * @param artworkList The list of artworks to be displayed.
+     * @return The GridPane containing artwork details.
+     */
+    private GridPane buildThisExhibitionArtworkGrid(List<Artwork> artworkList){
 
         GridPane grid = new GridPane();
         grid.setHgap(15.4);
@@ -341,7 +316,7 @@ public class SceneExhibition extends BorderPane {
 
 
             String currency = "€";
-            String price = String.valueOf(currency + artwork.getPrice());
+            String price = currency + artwork.getPrice();
             Hyperlink hyperPrice = new Hyperlink(price);
             hyperPrice.getStyleClass().add("my-desc2-price-hyperlink");
 
@@ -361,6 +336,11 @@ public class SceneExhibition extends BorderPane {
         return grid;
     }
 
+    /**
+     * Constructs and returns an HBox containing footer information, including social media icons.
+     *
+     * @return The HBox containing footer information.
+     */
     private HBox getFooterBox (){
 
         // GIT IMAGE
@@ -393,6 +373,11 @@ public class SceneExhibition extends BorderPane {
         return hBoxBottomLayout;
     }
 
+    /**
+     * Constructs and returns a VBox containing header elements, including navigation links and search bar.
+     *
+     * @return The VBox containing header elements.
+     */
     private VBox getHeaderBox (){
 
         // HYPERLINKS
@@ -457,6 +442,90 @@ public class SceneExhibition extends BorderPane {
 
     }
 
+    /**
+     * Handles the selection of the status filter menu.
+     * It filters and displays exhibitions based on the selected status.
+     *
+     * @param statusMenu     The ComboBox containing status filter options.
+     * @param exhibitionList  The list of all exhibitions.
+     */
+    private void handleStatusSelection(ComboBox<String> statusMenu, List<Exhibition> exhibitionList){
+
+        ScrollPane finalScrollPane = new ScrollPane();
+        // get the selected item*
+        String selected = statusMenu.getSelectionModel().getSelectedItem();
+        List<Exhibition> filteredExhibitions;
+
+        if(selected != null){
+
+            if (selected.equalsIgnoreCase("Todas")){
+                finalScrollPane.setContent(buildMainGrid(exhibitionList));
+            }
+            else if (selected.equalsIgnoreCase("Aberta")){
+                filteredExhibitions = MainGetExhibitions.getExhibitionsByStatus("open");
+                finalScrollPane.setContent(buildMainGrid(filteredExhibitions));
+            }
+            else{
+                filteredExhibitions = MainGetExhibitions.getExhibitionsByStatus("closed");
+                finalScrollPane.setContent(buildMainGrid(filteredExhibitions));
+            }
+            this.setCenter(finalScrollPane);
+        }
+
+    }
+
+    /**
+     * Handles the user's selection of the start date filter, updating the displayed exhibitions accordingly.
+     *
+     * @param textFieldSearch The TextField representing the start date filter.
+     */
+    private void handleStartDateSelection(TextField textFieldSearch ){
+        ScrollPane finalScrollPane = new ScrollPane();
+        String searchText = textFieldSearch.getText().trim();
+        if (!searchText.isEmpty()) {
+
+            List<Exhibition> exhibitions = MainGetExhibitions.getExhibitionsByStartDate(searchText);
+            if(exhibitions != null){
+                finalScrollPane.setContent(buildMainGrid(exhibitions));
+                this.setCenter(finalScrollPane);
+            }
+            else{
+                getScene().setRoot(new ShowErrorExhibition());
+            }
+            this.setCenter(finalScrollPane);
+
+        }
+    }
+
+    /**
+     * Handles the user's selection of the end date filter, updating the displayed exhibitions accordingly.
+     *
+     * @param textFieldSearch The TextField representing the end date filter.
+     */
+    private void handleEndDateSelection(TextField textFieldSearch ){
+        ScrollPane finalScrollPane = new ScrollPane();
+        String searchText = textFieldSearch.getText().trim();
+        if (!searchText.isEmpty()) {
+
+            List<Exhibition> exhibitions = MainGetExhibitions.getExhibitionsByEndDate(searchText);
+            if(exhibitions != null){
+                finalScrollPane.setContent(buildMainGrid(exhibitions));
+                this.setCenter(finalScrollPane);
+            }
+            else{
+                getScene().setRoot(new ShowErrorExhibition());
+            }
+            this.setCenter(finalScrollPane);
+
+        }
+    }
+
+    /**
+     * Handles the user's selection of the search icon, updating the displayed
+     * exhibitions based on the search text.
+     *
+     * @param textFieldSearch The TextField representing the search bar.
+     */
     private void handleSearchIconSelection(TextField textFieldSearch ){
         ScrollPane finalScrollPane = new ScrollPane();
         String searchText = textFieldSearch.getText().trim();
@@ -474,6 +543,12 @@ public class SceneExhibition extends BorderPane {
         }
     }
 
+    /**
+     * Sets the original description for a TextField, displaying the provided text when the field is not focused.
+     *
+     * @param textField      The TextField for which the original description is set.
+     * @param originalText   The original text to be displayed when the TextField is not focused.
+     */
     private void setOriginalDescription(TextField textField, String originalText){
 
         textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -485,27 +560,46 @@ public class SceneExhibition extends BorderPane {
         });
     }
 
+    /**
+     * Sets the default size for social media icons.
+     *
+     * @param imageView The ImageView for the social media icon.
+     */
     public void defaultSizeIcon (ImageView imageView){
         imageView.setFitHeight(18); // Ajuste a altura conforme necessário
         imageView.setFitWidth(18);  // Ajuste a largura conforme necessário
         // imageView.setPreserveRatio(true);
     }
 
+    /**
+     * Sets the default size for Exhibition images.
+     *
+     * @param imageView The ImageView for the artwork image.
+     */
     public void defaultSizeExhibitionImage(ImageView imageView){
-        imageView.setFitHeight(250); // Ajuste a altura conforme necessário
-        imageView.setFitWidth(380);  // Ajuste a largura conforme necessário
+        imageView.setFitHeight(250);
+        imageView.setFitWidth(380);
         imageView.setPreserveRatio(true);
     }
 
+    /**
+     * Sets default size and behavior for search-related TextField.
+     *
+     * @param textField The TextField for which to set default size and behavior.
+     */
     public void textFieldSearchDefault(TextField textField) {
         textField.setPrefSize(150, 15);
         textField.setOnMouseClicked(e -> textField.clear());
     }
 
+    /**
+     * Sets the default size for artwork images.
+     *
+     * @param imageView The ImageView for the artwork image.
+     */
     public void defaultSizeArtworkImage(ImageView imageView){
-        imageView.setFitHeight(160); // Ajuste a altura conforme necessário
-        imageView.setFitWidth(160);  // Ajuste a largura conforme necessário
-        //imageView.setPreserveRatio(true);
+        imageView.setFitHeight(160);
+        imageView.setFitWidth(160);
     }
 
 }

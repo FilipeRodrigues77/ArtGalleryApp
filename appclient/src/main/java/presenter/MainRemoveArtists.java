@@ -17,7 +17,7 @@ import java.io.IOException;
  */
 public class MainRemoveArtists {
 
-    static String port = "8010";
+    static final String PORT = "8010";
 
     // public static void main(String[] args) {}
 
@@ -33,7 +33,7 @@ public class MainRemoveArtists {
         String artistJson = gson.toJson(selectedArtist);
 
         Request deleteRequest = new Request.Builder()
-                .url("http://localhost:" + port + "/artists/" + selectedArtist.getId())
+                .url("http://localhost:" + PORT + "/artists/" + selectedArtist.getId())
                 .delete(RequestBody.create(MediaType.parse("application/json"), artistJson))
                 .build();
 

@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class MainGetExhibitions {
 
-    static String port = "8010";
+    static final String PORT = "8010";
 
     public static void main(String[] args) {
         System.out.println(getExhibitionsByIdGallery(2));
@@ -46,7 +46,7 @@ public class MainGetExhibitions {
         Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, new LocalDateAdapter()).create();
 
         Request getRequest = new Request.Builder()
-                .url( "http://localhost:" + port +"/exhibitions")  // Update the URL to the endpoint for exhibitions
+                .url( "http://localhost:" + PORT +"/exhibitions")  // Update the URL to the endpoint for exhibitions
                 .build();
 
         try {
@@ -88,7 +88,7 @@ public class MainGetExhibitions {
         Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, new LocalDateAdapter()).create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:" + port + "/exhibitions/searchByStatus?status=" + status)
+                .url("http://localhost:" + PORT + "/exhibitions/searchByStatus?status=" + status)
                 .build();
 
         try {
@@ -129,7 +129,7 @@ public class MainGetExhibitions {
         Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, new LocalDateAdapter()).create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:" + port + "/exhibitions/searchByStartDate?startDate=" + startDate)
+                .url("http://localhost:" + PORT + "/exhibitions/searchByStartDate?startDate=" + startDate)
                 .build();
 
         try {
@@ -170,7 +170,7 @@ public class MainGetExhibitions {
         Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, new LocalDateAdapter()).create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:" + port + "/exhibitions/searchByEndDate?endDate=" + endDate)
+                .url("http://localhost:" + PORT + "/exhibitions/searchByEndDate?endDate=" + endDate)
                 .build();
 
         try {
@@ -211,7 +211,7 @@ public class MainGetExhibitions {
         Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, new LocalDateAdapter()).create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:" + port + "/exhibitions/search?name=" + name)
+                .url("http://localhost:" + PORT + "/exhibitions/search?name=" + name)
                 .build();
 
         try {
@@ -252,7 +252,7 @@ public class MainGetExhibitions {
         Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, new LocalDateAdapter()).create();
 
         Request getRequest = new Request.Builder()
-                .url("http://localhost:" + port + "/exhibitions/searchByGallery?idGallery=" + idGallery)
+                .url("http://localhost:" + PORT + "/exhibitions/searchByGallery?idGallery=" + idGallery)
                 .build();
 
         try {
