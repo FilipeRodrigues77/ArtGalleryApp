@@ -2,7 +2,6 @@ package presenter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import domain.Artist;
 import domain.Gallery;
 import okhttp3.*;
 
@@ -18,7 +17,7 @@ import java.io.IOException;
  */
 public class MainRemoveGallery {
 
-    static String port = "8010";
+    static final String PORT = "8010";
     // public static void main(String[] args) {}
     /**
      * Removes the specified gallery by sending a DELETE request to the server.
@@ -32,7 +31,7 @@ public class MainRemoveGallery {
         String galleryJson = gson.toJson(selectedGallery);
 
         Request deleteRequest = new Request.Builder()
-                .url("http://localhost:" + port + "/galleries/" + selectedGallery.getId())
+                .url("http://localhost:" + PORT + "/galleries/" + selectedGallery.getId())
                 .delete(RequestBody.create(MediaType.parse("application/json"), galleryJson))
                 .build();
 

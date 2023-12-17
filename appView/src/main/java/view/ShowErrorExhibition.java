@@ -10,12 +10,29 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+/**
+ * The {@code ShowErrorExhibition} class represents a scene that is displayed when no
+ * exhibition is found. It extends {@code BorderPane} and provides a layout with a
+ * back arrow, error messages, and the application logo.
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
+ */
 public class ShowErrorExhibition extends BorderPane {
 
+    /**
+     * Constructs a new {@code ShowErrorExhibition} object. Initializes the layout and
+     * displays an error message along with the application logo.
+     */
     public ShowErrorExhibition() {
         doLayout();
     }
 
+    /**
+     * Sets up the layout for the error scene, including a back arrow, error messages,
+     * and the application logo.
+     */
     private void doLayout() {
         setPadding(new Insets(20));
 

@@ -2,15 +2,10 @@ package presenter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import domain.Artist;
 import okhttp3.*;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * MainCreateArtists is a class responsible for adding new artists to a server.
@@ -26,7 +21,7 @@ public class MainCreateArtists {
     /**
      * The default port to be used in the server endpoint URL.
      */
-    static String port = "8010";
+    static final String PORT = "8010";
 
     /**
      * Adds a new artist to the server by sending an HTTP POST request.
@@ -40,7 +35,7 @@ public class MainCreateArtists {
         String artistJson = gson.toJson(newArtist);
 
         Request postRequest = new Request.Builder()
-                .url("http://localhost:" + port + "/artists")
+                .url("http://localhost:" + PORT + "/artists")
                 .post(RequestBody.create(MediaType.parse("application/json"), artistJson))
                 .build();
 

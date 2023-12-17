@@ -10,12 +10,29 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+/**
+ * The {@code ShowErrorGallery} class represents a scene that is displayed when no
+ * gallery is found for a specific region. It extends {@code BorderPane} and provides
+ * a layout with a back arrow, error message, and the application logo.
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
+ */
 public class ShowErrorGallery  extends BorderPane {
 
+    /**
+     * Constructs a new {@code ShowErrorGallery} object. Initializes the layout and
+     * displays an error message along with the application logo.
+     */
     public ShowErrorGallery() {
         doLayout();
     }
 
+    /**
+     * Sets up the layout for the error scene, including a back arrow, error message,
+     * and the application logo.
+     */
     private void doLayout() {
         setPadding(new Insets(20));
 
@@ -24,7 +41,7 @@ public class ShowErrorGallery  extends BorderPane {
         arrowView.setFitHeight(25);
         arrowView.setFitWidth(50);
         this.setTop(arrowView);
-        arrowView.setOnMouseClicked(e -> getScene().setRoot(new SceneArtist()));
+        arrowView.setOnMouseClicked(e -> getScene().setRoot(new SceneGallery()));
 
         VBox logoErrorMessage = new VBox();
 

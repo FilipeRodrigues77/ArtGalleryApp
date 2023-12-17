@@ -1,6 +1,5 @@
 package view;
 
-import domain.Artist;
 import domain.Artwork;
 import domain.Exhibition;
 import domain.Gallery;
@@ -11,7 +10,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
-import presenter.MainGetArtists;
 import presenter.MainGetArtworks;
 import presenter.MainGetExhibitions;
 import presenter.MainGetGalleries;
@@ -19,8 +17,24 @@ import presenter.MainGetGalleries;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The {@code SceneGallery} class represents the main gallery scene in an art
+ * application.
+ * It extends {@code BorderPane} and provides a layout with header,
+ * center grid of galleries, and a footer with social media links and.
+ * The class incorporates features such as search filters,
+ * gallery details, and navigation links.
+ *
+ * @author Nuely Furtado
+ * @author  Filipe Alves
+ * @version v1.0
+ */
 public class SceneGallery extends BorderPane {
 
+    /**
+     * Constructs a new {@code SceneGallery} object.
+     * Initialises the layout and sets up the main gallery view with filters.
+     */
     public SceneGallery() {
         doLayout();
         MainView mainView = new MainView();
@@ -28,8 +42,11 @@ public class SceneGallery extends BorderPane {
         getStylesheets().add(cssTheme);
     }
 
+    /**
+     * Sets up the layout for the scene, including header, center grid, and footer.
+     */
     private void doLayout() {
-        // Vamos criar aqui o layout deste painel
+
         setPadding(new Insets(20));
 
         //--------------------------------------------- HEADER ELEMENTS ---------------------------------------------
@@ -77,6 +94,121 @@ public class SceneGallery extends BorderPane {
 
     }
 
+    /**
+     * Constructs and returns the footer box containing social media icons and a
+     * copyright label.
+     *
+     * @return The constructed HBox representing the footer.
+     */
+    private HBox getFooterBox (){
+
+        // GIT IMAGE
+        String imageGitHubPath = "Icons/Github.png";
+        ImageView imageViewGitHub = new ImageView(new Image(imageGitHubPath));
+        defaultSizeIcon(imageViewGitHub);
+
+        // LINKEDIN IMAGE
+        String imageLinkedin = "Icons/Linkedin.png";
+        ImageView imageViewLinkedin = new ImageView(new Image(imageLinkedin));
+        defaultSizeIcon(imageViewLinkedin);
+
+        // LABEL
+        Label labelBottomStatus = new Label("I~A © 2023 I~A  Todos os direitos reservados");
+
+        // DEFINE A HBOX THAT WILL CONTAIN THE IMAGES (ADD SIMULTANEOUSLY)
+        HBox hBoxBottomImages = new HBox(imageViewLinkedin,imageViewGitHub);
+        hBoxBottomImages.setSpacing(10);
+        HBox.setHgrow(hBoxBottomImages, javafx.scene.layout.Priority.ALWAYS);
+        hBoxBottomImages.setAlignment(Pos.CENTER_RIGHT);
+
+        // HBOX BOTTOM
+        HBox hBoxBottomStatus = new HBox(labelBottomStatus);
+        HBox.setHgrow(hBoxBottomStatus, javafx.scene.layout.Priority.ALWAYS);
+        hBoxBottomStatus.setAlignment(Pos.CENTER_LEFT);
+        HBox hBoxBottomLayout = new HBox(hBoxBottomStatus,hBoxBottomImages);
+        hBoxBottomLayout.setPadding(new Insets(20,0,0,0));
+        setBottom(hBoxBottomLayout);
+
+        return hBoxBottomLayout;
+    }
+
+    /**
+     * Constructs and returns the header box containing hyperlinks, search bar,
+     * logo, and search icon.
+     *
+     * @return The constructed VBox representing the header.
+     */
+    private VBox getHeaderBox (){
+
+        // HYPERLINKS
+        Hyperlink hyperlinkArtist = new Hyperlink("Artistas");
+        Hyperlink hyperlinkMain = new Hyperlink("     home ^");
+        Hyperlink hyperlinkGallery = new Hyperlink("Galerias");
+        Hyperlink hyperlinkExhibition = new Hyperlink("Exposições");
+        Hyperlink hyperLinkArtwork = new Hyperlink("Obras de Arte");
+
+        hyperlinkGallery.getStyleClass().add("actual-page-hyperlink");
+
+        // Text Fields
+        String searchOrigText = "Procurar por artista, galeria, exposição ou obra de arte";
+        TextField textFieldSearch = new TextField(searchOrigText);
+        setOriginalDescription(textFieldSearch,searchOrigText);
+        textFieldSearch.setPrefSize(550, 30);
+        textFieldSearch.setOnMouseClicked(e -> textFieldSearch.clear());
+        textFieldSearch.setOnKeyPressed(e-> {
+            if (e.getCode() == KeyCode.ENTER) {
+                handleSearchTextFieldSelection(textFieldSearch);
+            }
+        });
+
+
+        // I~A LOGO
+        Image logo = new Image("Images/logo/logoIA-02.png");
+        ImageView logoView = new ImageView(logo);
+        logoView.preserveRatioProperty();
+        logoView.setFitWidth(27);
+        logoView.setFitHeight(27);
+        logoView.setSmooth(true);
+
+        // SEARCH ICON
+        Image searchIcon = new Image("Icons/searchIcon-03.png");
+        ImageView searchIconView = new ImageView(searchIcon);
+        searchIconView.preserveRatioProperty();
+        searchIconView.setFitWidth(20);
+        searchIconView.setFitHeight(20);
+        searchIconView.setSmooth(true);
+        searchIconView.setOnMouseClicked(e -> handleSearchTextFieldSelection(textFieldSearch));
+
+        // ADD PAGE HEADER ELEMENTS --
+        HBox hBoxHeader = new HBox(logoView,textFieldSearch, searchIconView, hyperlinkMain);
+        hBoxHeader.setSpacing(20);
+
+        // ADD THE HYPERLINKS
+        HBox hBoxHyperlink = new HBox(hyperlinkArtist,hyperLinkArtwork,hyperlinkGallery, hyperlinkExhibition);
+        hBoxHyperlink.setPadding(new Insets(10,0,0,0));
+        hBoxHyperlink.setPrefHeight(50);
+        hBoxHyperlink.setSpacing(20);
+
+        // CONFIGURE ACTION TO CHANGE SCENARIO
+        hyperlinkArtist.setOnAction(e -> getScene().setRoot(new SceneArtist()));
+        hyperlinkMain.setOnAction(e -> getScene().setRoot(new MainView()));
+        hyperlinkGallery.setOnAction(e -> getScene().setRoot(new SceneGallery()));
+        hyperlinkExhibition.setOnAction(e -> getScene().setRoot(new SceneExhibition()));
+        hyperLinkArtwork.setOnAction(e -> getScene().setRoot(new SceneArtwork()));
+
+        VBox vBoxTop = new VBox(hBoxHeader,hBoxHyperlink);
+        setMargin(vBoxTop, new Insets(0, 0, 20, 0));
+
+        return  vBoxTop;
+
+    }
+
+    /**
+     * Builds the main grid of galleries displayed in the center of the scene.
+     *
+     * @param listGalleries List of galleries to be displayed.
+     * @return The constructed GridPane representing the gallery grid.
+     */
     private GridPane buildMainGrid (List<Gallery> listGalleries){
 
         GridPane grid = new GridPane();
@@ -126,9 +258,16 @@ public class SceneGallery extends BorderPane {
         return grid;
     }
 
+    /**
+     * Constructs the details layout for a specific gallery, including gallery
+     * information, artwork grid, and exhibition grid.
+     *
+     * @param gallery The gallery for which the details layout is constructed.
+     * @return The BorderPane representing the details layout for the gallery.
+     */
     private BorderPane doDetailsLayout(Gallery gallery) {
-        setPadding(new Insets(20));
 
+        setPadding(new Insets(20));
         //--------------------------------------------- HEADER ELEMENTS ---------------------------------------------
 
         // GALLERY IMAGE
@@ -200,6 +339,12 @@ public class SceneGallery extends BorderPane {
 
     }
 
+    /**
+     * Builds a grid of exhibitions for a specific gallery.
+     *
+     * @param exhibitionList List of exhibitions to be displayed.
+     * @return The constructed GridPane representing the exhibition grid.
+     */
     private GridPane buildThisGalleryExhibitionGrid (List<Exhibition> exhibitionList){
 
         GridPane grid = new GridPane();
@@ -249,6 +394,12 @@ public class SceneGallery extends BorderPane {
         return grid;
     }
 
+    /**
+     * Builds a grid of artworks for a specific gallery.
+     *
+     * @param artworkList List of artworks to be displayed.
+     * @return The constructed GridPane representing the artwork grid.
+     */
     private GridPane buildThisGalleryArtworkGrid (List<Artwork> artworkList){
 
         GridPane grid = new GridPane();
@@ -299,6 +450,13 @@ public class SceneGallery extends BorderPane {
         return grid;
     }
 
+    /**
+     * Sets the original description for a TextField and restores it if the field
+     * is left empty.
+     *
+     * @param textField    The TextField to set the description for.
+     * @param originalText The original text description for the TextField.
+     */
     private void setOriginalDescription(TextField textField, String originalText){
 
         textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -310,103 +468,11 @@ public class SceneGallery extends BorderPane {
         });
     }
 
-    private HBox getFooterBox (){
-
-        // GIT IMAGE
-        String imageGitHubPath = "Icons/Github.png";
-        ImageView imageViewGitHub = new ImageView(new Image(imageGitHubPath));
-        defaultSizeIcon(imageViewGitHub);
-
-        // LINKEDIN IMAGE
-        String imageLinkedin = "Icons/Linkedin.png";
-        ImageView imageViewLinkedin = new ImageView(new Image(imageLinkedin));
-        defaultSizeIcon(imageViewLinkedin);
-
-        // LABEL
-        Label labelBottomStatus = new Label("I~A © 2023 I~A  Todos os direitos reservados");
-
-        // DEFINE A HBOX THAT WILL CONTAIN THE IMAGES (ADD SIMULTANEOUSLY)
-        HBox hBoxBottomImages = new HBox(imageViewLinkedin,imageViewGitHub);
-        hBoxBottomImages.setSpacing(10);
-        HBox.setHgrow(hBoxBottomImages, javafx.scene.layout.Priority.ALWAYS);
-        hBoxBottomImages.setAlignment(Pos.CENTER_RIGHT);
-
-        // HBOX BOTTOM
-        HBox hBoxBottomStatus = new HBox(labelBottomStatus);
-        HBox.setHgrow(hBoxBottomStatus, javafx.scene.layout.Priority.ALWAYS);
-        hBoxBottomStatus.setAlignment(Pos.CENTER_LEFT);
-        HBox hBoxBottomLayout = new HBox(hBoxBottomStatus,hBoxBottomImages);
-        hBoxBottomLayout.setPadding(new Insets(20,0,0,0));
-        setBottom(hBoxBottomLayout);
-
-        return hBoxBottomLayout;
-    }
-
-    private VBox getHeaderBox (){
-
-        // HYPERLINKS
-        Hyperlink hyperlinkArtist = new Hyperlink("Artistas");
-        Hyperlink hyperlinkMain = new Hyperlink("     home ^");
-        Hyperlink hyperlinkGallery = new Hyperlink("Galerias");
-        Hyperlink hyperlinkExhibition = new Hyperlink("Exposições");
-        Hyperlink hyperLinkArtwork = new Hyperlink("Obras de Arte");
-
-        hyperlinkGallery.getStyleClass().add("actual-page-hyperlink");
-
-        // Text Fields
-        String searchOrigText = "Procurar por artista, galeria, exposição ou obra de arte";
-        TextField textFieldSearch = new TextField(searchOrigText);
-        setOriginalDescription(textFieldSearch,searchOrigText);
-        textFieldSearch.setPrefSize(550, 30);
-        textFieldSearch.setOnMouseClicked(e -> textFieldSearch.clear());
-        textFieldSearch.setOnKeyPressed(e-> {
-            if (e.getCode() == KeyCode.ENTER) {
-                handleSearchIconSelection(textFieldSearch);
-            }
-        });
-
-
-        // I~A LOGO
-        Image logo = new Image("Images/logo/logoIA-02.png");
-        ImageView logoView = new ImageView(logo);
-        logoView.preserveRatioProperty();
-        logoView.setFitWidth(27);
-        logoView.setFitHeight(27);
-        logoView.setSmooth(true);
-
-        // SEARCH ICON
-        Image searchIcon = new Image("Icons/searchIcon-03.png");
-        ImageView searchIconView = new ImageView(searchIcon);
-        searchIconView.preserveRatioProperty();
-        searchIconView.setFitWidth(20);
-        searchIconView.setFitHeight(20);
-        searchIconView.setSmooth(true);
-        searchIconView.setOnMouseClicked(e -> handleSearchIconSelection(textFieldSearch));
-
-        // ADD PAGE HEADER ELEMENTS --
-        HBox hBoxHeader = new HBox(logoView,textFieldSearch, searchIconView, hyperlinkMain);
-        hBoxHeader.setSpacing(20);
-
-        // ADD THE HYPERLINKS
-        HBox hBoxHyperlink = new HBox(hyperlinkArtist,hyperLinkArtwork,hyperlinkGallery, hyperlinkExhibition);
-        hBoxHyperlink.setPadding(new Insets(10,0,0,0));
-        hBoxHyperlink.setPrefHeight(50);
-        hBoxHyperlink.setSpacing(20);
-
-        // CONFIGURE ACTION TO CHANGE SCENARIO
-        hyperlinkArtist.setOnAction(e -> getScene().setRoot(new SceneArtist()));
-        hyperlinkMain.setOnAction(e -> getScene().setRoot(new MainView()));
-        hyperlinkGallery.setOnAction(e -> getScene().setRoot(new SceneGallery()));
-        hyperlinkExhibition.setOnAction(e -> getScene().setRoot(new SceneExhibition()));
-        hyperLinkArtwork.setOnAction(e -> getScene().setRoot(new SceneArtwork()));
-
-        VBox vBoxTop = new VBox(hBoxHeader,hBoxHyperlink);
-        setMargin(vBoxTop, new Insets(0, 0, 20, 0));
-
-        return  vBoxTop;
-
-    }
-
+    /**
+     * Handles the region selection when the user presses Enter on the region search bar.
+     *
+     * @param textFieldSearch The TextField containing the region search bar.
+     */
     private void handleRegionSelection(TextField textFieldSearch ){
         ScrollPane finalScrollPane = new ScrollPane();
         String searchText = textFieldSearch.getText().trim();
@@ -425,7 +491,12 @@ public class SceneGallery extends BorderPane {
         }
     }
 
-    private void handleSearchIconSelection(TextField textFieldSearch ){
+    /**
+     * Handles the search icon selection or when the user presses Enter in the main search bar.
+     *
+     * @param textFieldSearch The TextField containing the main search bar.
+     */
+    private void handleSearchTextFieldSelection(TextField textFieldSearch ){
         ScrollPane finalScrollPane = new ScrollPane();
         String searchText = textFieldSearch.getText().trim();
         if (!searchText.isEmpty()) {
@@ -443,26 +514,46 @@ public class SceneGallery extends BorderPane {
         }
     }
 
+    /**
+     * Sets the default size for social media icons.
+     *
+     * @param imageView The ImageView for the social media icon.
+     */
     public void defaultSizeIcon (ImageView imageView){
         imageView.setFitHeight(18); // Ajuste a altura conforme necessário
         imageView.setFitWidth(18);  // Ajuste a largura conforme necessário
         // imageView.setPreserveRatio(true);
     }
 
+    /**
+     * Sets the default size for Gallery images.
+     *
+     * @param imageView The ImageView for the Gallery image.
+     */
     public void defaultSizeGalleryImage(ImageView imageView){
-        imageView.setFitHeight(250); // Ajuste a altura conforme necessário
-        imageView.setFitWidth(380);  // Ajuste a largura conforme necessário
+        imageView.setFitHeight(250);
+        imageView.setFitWidth(380);
         imageView.setPreserveRatio(true);
     }
 
+    /**
+     * Sets default size and behavior for search-related TextField.
+     *
+     * @param textField The TextField for which to set default size and behavior.
+     */
     public void textFieldSearchDefault(TextField textField) {
         textField.setPrefSize(150, 15);
         textField.setOnMouseClicked(e -> textField.clear());
     }
 
+    /**
+     * Sets the default size for artwork images.
+     *
+     * @param imageView The ImageView for the artwork image.
+     */
     public void defaultSizeArtworkImage(ImageView imageView){
-        imageView.setFitHeight(160); // Ajuste a altura conforme necessário
-        imageView.setFitWidth(160);  // Ajuste a largura conforme necessário
+        imageView.setFitHeight(160);
+        imageView.setFitWidth(160);
         imageView.setPreserveRatio(true);
     }
 

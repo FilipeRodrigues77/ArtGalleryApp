@@ -17,12 +17,30 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * The {@code SlideShowView} class represents a slide show of artwork images. It extends
+ * {@code BorderPane} and provides a layout with a slideshow of images from a specified
+ * folder. The images are displayed in a random order, and the slideshow automatically
+ * progresses to the next image every 3 seconds. Users can also manually navigate through
+ * the images.
+ * <p>
+ * The class includes methods for showing the next image and generating a random order for
+ * image indices.
+ *
+ * @author [Your Name]
+ * @version [Version Number]
+ */
 public class SlideShowView extends BorderPane {
 
-    private static final String FOLDER_PATH = "appView/src/main/resources/Images/Artwork/AllArtworks";
+    private static final String FOLDER_PATH = "appView/src/main/resources/Images/SlideShowImages";
     private List<Integer> randomOrder;
     private int currentIndex = 0;
 
+
+    /**
+     * Constructs a new {@code SlideShowView} object. Initializes the layout, loads the
+     * images from the specified folder, and starts the slideshow.
+     */
     public SlideShowView() {
         // Configuração do layout
 
@@ -88,6 +106,12 @@ public class SlideShowView extends BorderPane {
 
     }
 
+    /**
+     * Displays the specified image in the given {@code ImageView}.
+     *
+     * @param imageView The {@code ImageView} to display the image.
+     * @param index     The index of the image to be displayed.
+     */
     private void showImage(ImageView imageView, int index) {
         File folder = new File(FOLDER_PATH);
         File[] imageFiles = folder.listFiles((dir, name) ->
@@ -100,11 +124,22 @@ public class SlideShowView extends BorderPane {
         }
     }
 
+    /**
+     * Shows the next image in the slideshow.
+     *
+     * @param imageView The {@code ImageView} to display the next image.
+     */
     private void showNextImage(ImageView imageView) {
         currentIndex = (currentIndex + 1) % randomOrder.size();
         showImage(imageView, currentIndex);
     }
 
+    /**
+     * Generates a random order for the image indices.
+     *
+     * @param size The size of the list to generate.
+     * @return A list of randomly ordered integers.
+     */
     private List<Integer> generateRandomOrder(int size) {
         List<Integer> order = new ArrayList<>();
         for (int i = 0; i < size; i++) {
@@ -114,6 +149,9 @@ public class SlideShowView extends BorderPane {
         return order;
     }
 
+    /**
+     * Closes the slideshow and returns to the main view.
+     */
     private void closeSlideshow() {
         Stage stage = (Stage) getScene().getWindow();
         stage.close();

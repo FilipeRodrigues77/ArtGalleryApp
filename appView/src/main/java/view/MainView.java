@@ -1,6 +1,5 @@
 package view;
 
-import domain.Artist;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -10,15 +9,22 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import presenter.MainGetArtists;
-
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
+
+/**
+ * The {@code MainView} class represents the main view of the Iuvenis Artem application.
+ * It includes the layout for the main menu, search functionality, and featured images.
+ * Users can navigate to different sections of the application using hyperlinks and buttons.
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
+ */
 public class MainView extends BorderPane {
 
     private Label labelStatus;
@@ -28,6 +34,10 @@ public class MainView extends BorderPane {
     private RadioMenuItem darkThemeItem;
     protected String themeCurrent;
 
+    /**
+     * Constructs an instance of the {@code MainView} class.
+     * Initializes the layout, loads configuration settings, and sets up the initial theme.
+     */
     public MainView() {
 
         doLayout();
@@ -37,6 +47,9 @@ public class MainView extends BorderPane {
         this.themeCurrent = "appStyle" + themeName + ".css";
     }
 
+    /**
+     * Loads configuration settings from the configuration file.
+     */
     public void loadConfig(){
         this.config = new Properties();
         try {
@@ -48,6 +61,9 @@ public class MainView extends BorderPane {
         }
     }
 
+    /**
+     * Saves the current configuration settings to the configuration file.
+     */
     private void saveConfig(){
         try {
             this.config.store(new FileWriter("appView/src/main/resources/iuvennisApp.config"),"");
@@ -56,6 +72,9 @@ public class MainView extends BorderPane {
         }
     }
 
+    /**
+     * Configures the layout and visual elements for the main view.
+     */
     private void doLayout() {
         // Vamos criar aqui o layout deste painel
         setPadding(new Insets(20,0,20,0));
@@ -182,37 +201,12 @@ public class MainView extends BorderPane {
         setBottom(getFooterBox());
     }
 
-    private HBox getFooterBox (){
-
-        // GIT IMAGE
-        String imageGitHubPath = "Icons/Github.png";
-        ImageView imageViewGitHub = new ImageView(new Image(imageGitHubPath));
-        defaultSizeIcon(imageViewGitHub);
-
-        // LINKEDIN IMAGE
-        String imageLinkedin = "Icons/Linkedin.png";
-        ImageView imageViewLinkedin = new ImageView(new Image(imageLinkedin));
-        defaultSizeIcon(imageViewLinkedin);
-
-        // LABEL
-        Label labelBottomStatus = new Label("I~A © 2023 I~A  Todos os direitos reservados");
-
-        // DEFINE A HBOX THAT WILL CONTAIN THE IMAGES (ADD SIMULTANEOUSLY)
-        HBox hBoxBottomImages = new HBox(imageViewLinkedin,imageViewGitHub);
-        hBoxBottomImages.setSpacing(10);
-        HBox.setHgrow(hBoxBottomImages, javafx.scene.layout.Priority.ALWAYS);
-        hBoxBottomImages.setAlignment(Pos.CENTER_RIGHT);
-
-        // HBOX BOTTOM
-        HBox hBoxBottomStatus = new HBox(labelBottomStatus);
-        HBox.setHgrow(hBoxBottomStatus, javafx.scene.layout.Priority.ALWAYS);
-        hBoxBottomStatus.setAlignment(Pos.CENTER_LEFT);
-        HBox hBoxBottomLayout = new HBox(hBoxBottomStatus,hBoxBottomImages);
-        hBoxBottomLayout.setPadding(new Insets(10,20,30,20));
-
-        return hBoxBottomLayout;
-    }
-
+    /**
+     * Creates and returns the header box containing hyperlinks, search functionality,
+     * and the application logo.
+     *
+     * @return The VBox representing the header box.
+     */
     private VBox getHeaderBox (){
 
         // Hyperlinks
@@ -302,24 +296,48 @@ public class MainView extends BorderPane {
 
     }
 
-    private void handleSearchIconSelection(TextField textFieldSearch ){
-        ScrollPane finalScrollPane = new ScrollPane();
-        String searchText = textFieldSearch.getText().trim();
-        if (!searchText.isEmpty()) {
+    /**
+     * Creates and returns the footer box containing social media icons and status information.
+     *
+     * @return The HBox representing the footer box.
+     */
+    private HBox getFooterBox (){
 
-            List<Artist> artists = MainGetArtists.getArtistByName(searchText);
-            if(artists != null){
-                // finalScrollPane.setContent();
-                this.setCenter(finalScrollPane);
-            }
-            else{
-                getScene().setRoot(new ShowErrorArtist());
-            }
-            this.setCenter(finalScrollPane);
+        // GIT IMAGE
+        String imageGitHubPath = "Icons/Github.png";
+        ImageView imageViewGitHub = new ImageView(new Image(imageGitHubPath));
+        defaultSizeIcon(imageViewGitHub);
 
-        }
+        // LINKEDIN IMAGE
+        String imageLinkedin = "Icons/Linkedin.png";
+        ImageView imageViewLinkedin = new ImageView(new Image(imageLinkedin));
+        defaultSizeIcon(imageViewLinkedin);
+
+        // LABEL
+        Label labelBottomStatus = new Label("I~A © 2023 I~A  Todos os direitos reservados");
+
+        // DEFINE A HBOX THAT WILL CONTAIN THE IMAGES (ADD SIMULTANEOUSLY)
+        HBox hBoxBottomImages = new HBox(imageViewLinkedin,imageViewGitHub);
+        hBoxBottomImages.setSpacing(10);
+        HBox.setHgrow(hBoxBottomImages, javafx.scene.layout.Priority.ALWAYS);
+        hBoxBottomImages.setAlignment(Pos.CENTER_RIGHT);
+
+        // HBOX BOTTOM
+        HBox hBoxBottomStatus = new HBox(labelBottomStatus);
+        HBox.setHgrow(hBoxBottomStatus, javafx.scene.layout.Priority.ALWAYS);
+        hBoxBottomStatus.setAlignment(Pos.CENTER_LEFT);
+        HBox hBoxBottomLayout = new HBox(hBoxBottomStatus,hBoxBottomImages);
+        hBoxBottomLayout.setPadding(new Insets(10,20,30,20));
+
+        return hBoxBottomLayout;
     }
 
+    /**
+     * Sets the original description for a TextField and restores it when the focus is lost.
+     *
+     * @param textField     The TextField to set the original description for.
+     * @param originalText  The original description text.
+     */
     private void setOriginalDescription(TextField textField, String originalText){
 
         textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -331,48 +349,70 @@ public class MainView extends BorderPane {
         });
     }
 
+    /**
+     * Sets the default size for an icon ImageView.
+     *
+     * @param imageView The ImageView to set the default size for.
+     */
     public void defaultSizeIcon (ImageView imageView){
         imageView.setFitHeight(18); // Ajuste a altura conforme necessário
         imageView.setFitWidth(18);  // Ajuste a largura conforme necessário
         // imageView.setPreserveRatio(true);
     }
 
+    /**
+     * Sets the default size for a main image ImageView.
+     *
+     * @param imageView The ImageView to set the default size for.
+     */
     public void defaultSizeMainImage (ImageView imageView){
         imageView.setFitHeight(100); // Ajuste a altura conforme necessário
         imageView.setFitWidth(390);  // Ajuste a largura conforme necessário
         // imageView.setPreserveRatio(true);
     }
 
+    /**
+     * Sets the default layout for a button, applying a modern style.
+     *
+     * @param button The Button to set the default layout for.
+     */
     public void defaultButtonLayout (Button button){
         button.getStyleClass().add("button-modern");
         button.setPrefWidth(180);
         button.setPrefHeight(10);
     }
 
+    /**
+     * Styles a label with a specific style class.
+     *
+     * @param label The Label to style.
+     */
     public void styleLabelCenterArtwork (Label label){
         label.getStyleClass().add("my-label");
     }
 
+    /**
+     * Exits the application, showing a confirmation dialog.
+     */
     private void exitApplication(){
+
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Sair da App");
-        alert.setHeaderText("Está prestes a sair da Iuvennis Art");
+        alert.setHeaderText("Está prestes a sair da Iuvenis Artem");
         alert.setContentText("Deseja sair da aplicação?");
-        //Colocar tela de confirmação de saida centralizada a aplicação
-        //buscar Cena e Janela.
+
         alert.initOwner(this.getScene().getWindow());
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
             // ... user chose OK
             System.exit(0);
-        } else {
-            // ... user chose CANCEL or closed the dialog
-            // do nothing
         }
     }
 
-    //METODO PARA MOSTRAR PAINEL "ABOUT"
+    /**
+     * Displays the "About" window, providing information about the application.
+     */
     private void showAbout(){
         Stage aboutStage = new Stage();
         aboutStage.setTitle("Sobre nós");
@@ -384,11 +424,16 @@ public class MainView extends BorderPane {
         aboutStage.show();
     }
 
-    //METODO PARA MUDAR TEMA CSS
+    /**
+     * Changes the application theme and saves the configuration settings.
+     *
+     * @param themeName The name of the theme to apply.
+     * @return The CSS file path of the applied theme.
+     */
     protected String changeTheme(String themeName) {
-        //Assume que o ficheiro te a estrutura: "appStyle<themeName>.css"
+        // Assume que o ficheiro te a estrutura: "appStyle<themeName>.css"
         String cssFile = "appStyle" + themeName + ".css";
-        //Limpar estilo para o default e depois adiciona o estilo selecionado
+        // Limpar estilo para o default e depois adiciona o estilo selecionado
         getStylesheets().clear();
         getStylesheets().add(cssFile);
         //Salvar configuração
@@ -406,6 +451,11 @@ public class MainView extends BorderPane {
         return cssFile;
     }
 
+    /**
+     * Displays an error message in the status label.
+     *
+     * @param message The error message to display.
+     */
     public void showError(String message) {
         if(labelStatus != null){
             labelStatus.setText(message);

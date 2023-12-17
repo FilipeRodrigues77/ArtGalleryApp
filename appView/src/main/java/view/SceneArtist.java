@@ -13,8 +13,23 @@ import presenter.*;
 
 import java.util.List;
 
+/**
+ * The {@code SceneArtist} class extends {@code BorderPane} and represents the graphical user interface
+ * for displaying and interacting with information related to artists in an art application.
+ * It includes features such as filtering artists by nationality, birthdate, and deathdate, as well as
+ * providing details about a specific artist and their associated artworks.
+ * This class extends the JavaFX {@code BorderPane} for layout management.
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
+ */
 public class SceneArtist extends BorderPane {
 
+    /**
+     * Constructs a new {@code SceneArtist} object.
+     * It initialises the layout and sets up the current THeme.
+     */
     public SceneArtist() {
         doLayout();
         MainView mainView = new MainView();
@@ -22,6 +37,10 @@ public class SceneArtist extends BorderPane {
         getStylesheets().add(cssTheme);
     }
 
+    /**
+     * Initialises the layout of the scene, including header, center, and bottom sections.
+     * Handles various user interactions such as searching and filtering artists.
+     */
     private void doLayout() {
         // Vamos criar aqui o layout deste painel
         setPadding(new Insets(20));
@@ -94,6 +113,11 @@ public class SceneArtist extends BorderPane {
 
     }
 
+    /**
+     * Retrieves the footer HBox containing social media icons and copyright information.
+     *
+     * @return The HBox containing social media icons and copyright information.
+     */
     private HBox getFooterBox (){
 
         // GIT IMAGE
@@ -126,6 +150,11 @@ public class SceneArtist extends BorderPane {
         return hBoxBottomLayout;
     }
 
+    /**
+     * Retrieves the header VBox containing hyperlinks and search functionality.
+     *
+     * @return The VBox containing header elements.
+     */
     private VBox getHeaderBox (){
 
         // HYPERLINKS
@@ -189,93 +218,12 @@ public class SceneArtist extends BorderPane {
 
     }
 
-    private void setOriginalDescription(TextField textField, String originalText){
-
-        textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue) {
-                if (textField.getText().isEmpty()) {
-                    textField.setText(originalText);
-                }
-            }
-        });
-    }
-
-    private void handleNationalSelection(TextField textFieldSearch ){
-        ScrollPane finalScrollPane = new ScrollPane();
-        String searchText = textFieldSearch.getText().trim();
-        if (!searchText.isEmpty()) {
-
-            List<Artist> artists = MainGetArtists.getArtistByNationality(searchText);
-            if(artists != null){
-                finalScrollPane.setContent(filteredGrid(artists));
-                this.setCenter(finalScrollPane);
-            }
-            else{
-                getScene().setRoot(new ShowErrorArtist());
-            }
-            this.setCenter(finalScrollPane);
-
-        }
-    }
-
-    private void handleBirthdateSelection(TextField textFieldSearch ){
-
-        ScrollPane finalScrollPane = new ScrollPane();
-        String searchText = textFieldSearch.getText().trim();
-        if (!searchText.isEmpty()) {
-
-            List<Artist> artists = MainGetArtists.getArtistByBirthdate(searchText);
-            if(artists != null){
-                finalScrollPane.setContent(filteredGrid(artists));
-                this.setCenter(finalScrollPane);
-            }
-            else{
-                getScene().setRoot(new ShowErrorArtist());
-            }
-            this.setCenter(finalScrollPane);
-
-        }
-
-    }
-
-    private void handleDeathdateSelection(TextField textFieldSearch ){
-
-        ScrollPane finalScrollPane = new ScrollPane();
-        String searchText = textFieldSearch.getText().trim();
-        if (!searchText.isEmpty()) {
-
-            List<Artist> artists = MainGetArtists.getArtistByDeathdate(searchText);
-            if(artists != null){
-                finalScrollPane.setContent(filteredGrid(artists));
-                this.setCenter(finalScrollPane);
-            }
-            else{
-                getScene().setRoot(new ShowErrorArtist());
-            }
-            this.setCenter(finalScrollPane);
-
-        }
-
-    }
-
-    private void handleSearchIconSelection(TextField textFieldSearch ){
-        ScrollPane finalScrollPane = new ScrollPane();
-        String searchText = textFieldSearch.getText().trim();
-        if (!searchText.isEmpty()) {
-
-            List<Artist> artists = MainGetArtists.getArtistByName(searchText);
-            if(artists != null){
-                finalScrollPane.setContent(filteredGrid(artists));
-                this.setCenter(finalScrollPane);
-            }
-            else{
-                getScene().setRoot(new ShowErrorArtist());
-            }
-            this.setCenter(finalScrollPane);
-
-        }
-    }
-
+    /**
+     * Builds a GridPane to display artist information, including images and details.
+     *
+     * @param artistList The list of artists to be displayed in the grid.
+     * @return The constructed GridPane containing artist information.
+     */
     private GridPane buildMainGrid(List<Artist> artistList){
 
         GridPane grid = new GridPane();
@@ -340,6 +288,12 @@ public class SceneArtist extends BorderPane {
         return grid;
     }
 
+    /**
+     * Builds a GridPane to display filtered artist information based on search criteria.
+     *
+     * @param artistList The list of filtered artists to be displayed in the grid.
+     * @return The constructed GridPane containing filtered artist information.
+     */
     private GridPane filteredGrid(List<Artist> artistList){
 
         GridPane grid = new GridPane();
@@ -401,10 +355,12 @@ public class SceneArtist extends BorderPane {
         return grid;
     }
 
-    private void setArtistLabelsOnAction(Artist artist){
-        getScene().setRoot(doArtistDetailsLayout(artist));
-    }
-
+    /**
+     * Displays the details of a specific artist, including their biography and associated artworks.
+     *
+     * @param artist The artist for which details are to be displayed.
+     * @return The BorderPane containing the artist details layout.
+     */
     public BorderPane doArtistDetailsLayout(Artist artist) {
 
         setPadding(new Insets(20));
@@ -465,6 +421,12 @@ public class SceneArtist extends BorderPane {
         return this;
     }
 
+    /**
+     * Builds a GridPane to display the artworks associated with a specific artist.
+     *
+     * @param artworkList The list of artworks to be displayed in the grid.
+     * @return The constructed GridPane containing artwork information.
+     */
     private GridPane buildThisArtisArtworkGrid(List<Artwork> artworkList){
 
         GridPane grid = new GridPane();
@@ -523,19 +485,156 @@ public class SceneArtist extends BorderPane {
         return grid;
     }
 
-    // image treatment
+    /**
+     * Sets the scene to display details for a specific artist when a hyperlink is clicked.
+     *
+     * @param artist The artist for which details are to be displayed.
+     */
+    private void setArtistLabelsOnAction(Artist artist){
+        getScene().setRoot(doArtistDetailsLayout(artist));
+    }
+
+    /**
+     * Sets the original description in a TextField when it loses focus if the field is empty.
+     *
+     * @param textField      The TextField for which to set the original description.
+     * @param originalText   The original text to be displayed when the TextField is empty.
+     */
+    private void setOriginalDescription(TextField textField, String originalText){
+
+        textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                if (textField.getText().isEmpty()) {
+                    textField.setText(originalText);
+                }
+            }
+        });
+    }
+
+    /**
+     * Handles the action of filtering artists based on nationality.
+     *
+     * @param textFieldSearch The TextField containing the search criteria.
+     */
+    private void handleNationalSelection(TextField textFieldSearch ){
+        ScrollPane finalScrollPane = new ScrollPane();
+        String searchText = textFieldSearch.getText().trim();
+        if (!searchText.isEmpty()) {
+
+            List<Artist> artists = MainGetArtists.getArtistByNationality(searchText);
+            if(artists != null){
+                finalScrollPane.setContent(filteredGrid(artists));
+                this.setCenter(finalScrollPane);
+            }
+            else{
+                getScene().setRoot(new ShowErrorArtist());
+            }
+            this.setCenter(finalScrollPane);
+
+        }
+    }
+
+    /**
+     * Handles the action of filtering artists based on birthdate.
+     *
+     * @param textFieldSearch The TextField containing the search criteria.
+     */
+    private void handleBirthdateSelection(TextField textFieldSearch ){
+
+        ScrollPane finalScrollPane = new ScrollPane();
+        String searchText = textFieldSearch.getText().trim();
+        if (!searchText.isEmpty()) {
+
+            List<Artist> artists = MainGetArtists.getArtistByBirthdate(searchText);
+            if(artists != null){
+                finalScrollPane.setContent(filteredGrid(artists));
+                this.setCenter(finalScrollPane);
+            }
+            else{
+                getScene().setRoot(new ShowErrorArtist());
+            }
+            this.setCenter(finalScrollPane);
+
+        }
+
+    }
+
+    /**
+     * Handles the action of filtering artists based on deathdate.
+     *
+     * @param textFieldSearch The TextField containing the search criteria.
+     */
+    private void handleDeathdateSelection(TextField textFieldSearch ){
+
+        ScrollPane finalScrollPane = new ScrollPane();
+        String searchText = textFieldSearch.getText().trim();
+        if (!searchText.isEmpty()) {
+
+            List<Artist> artists = MainGetArtists.getArtistByDeathdate(searchText);
+            if(artists != null){
+                finalScrollPane.setContent(filteredGrid(artists));
+                this.setCenter(finalScrollPane);
+            }
+            else{
+                getScene().setRoot(new ShowErrorArtist());
+            }
+            this.setCenter(finalScrollPane);
+
+        }
+
+    }
+
+    /**
+     * Handles the action of searching for artists based on a general search criteria.
+     *
+     * @param textFieldSearch The TextField containing the search criteria.
+     */
+    private void handleSearchIconSelection(TextField textFieldSearch ){
+        ScrollPane finalScrollPane = new ScrollPane();
+        String searchText = textFieldSearch.getText().trim();
+        if (!searchText.isEmpty()) {
+
+            List<Artist> artists = MainGetArtists.getArtistByName(searchText);
+            if(artists != null){
+                finalScrollPane.setContent(filteredGrid(artists));
+                this.setCenter(finalScrollPane);
+            }
+            else{
+                getScene().setRoot(new ShowErrorArtist());
+            }
+            this.setCenter(finalScrollPane);
+
+        }
+    }
+
+    /**
+     * Sets the default size for social media icons.
+     *
+     * @param imageView The ImageView for the social media icon.
+     */
     public void defaultSizeIcon (ImageView imageView){
-        imageView.setFitHeight(18); // Ajuste a altura conforme necessário
-        imageView.setFitWidth(18);  // Ajuste a largura conforme necessário
-        // imageView.setPreserveRatio(true);
+        imageView.setFitHeight(18);
+        imageView.setFitWidth(18);
+
     }
 
+    /**
+     * Sets the default size for artist images.
+     *
+     * @param imageView The ImageView for the artist image.
+     */
     public void defaultSizeArtistImage(ImageView imageView){
-        imageView.setFitHeight(160); // Ajuste a altura conforme necessário
-        imageView.setFitWidth(160);  // Ajuste a largura conforme necessário
-        //imageView.setPreserveRatio(true);
+        imageView.setFitHeight(160);
+        imageView.setFitWidth(160);
+
     }
 
+
+    /**
+     * Sets default size and behavior for search-related TextField.
+     *
+     * @param textField The TextField for which to set default size and behavior.
+     */
     public void textFieldSearchDefault(TextField textField) {
         textField.setPrefSize(150, 15);
         textField.setOnMouseClicked(e -> textField.clear());

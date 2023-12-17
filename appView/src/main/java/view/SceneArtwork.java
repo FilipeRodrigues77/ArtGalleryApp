@@ -19,9 +19,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
+/**
+ * The {@code SceneArtwork} class represents the graphical user interface for displaying artworks,
+ * providing features such as filtering, searching, and detailed artwork information.
+ * This class extends the JavaFX {@code BorderPane} for layout management.
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
+ */
 public class SceneArtwork extends BorderPane {
 
+    /**
+     * Constructs a new {@code SceneArtwork} object.
+     * This constructor initialises the layout, creates filter menus,
+     * and sets the initial theme based on the current theme in the {@code MainView}.
+     */
     public SceneArtwork() {
         doLayout();
         MainView mainView = new MainView();
@@ -29,6 +42,11 @@ public class SceneArtwork extends BorderPane {
         getStylesheets().add(cssTheme);
     }
 
+    /**
+     * Sets up the layout for the SceneArtwork, including filter menus, header, center, and footer sections.
+     * Creates filter menus, handles user selections, and displays artworks accordingly.
+     * This method utilises JavaFX components such as ComboBox, ScrollPane, VBox, HBox, Label, and more.
+     */
     private void doLayout() {
         // Vamos criar aqui o layout deste painel
         setPadding(new Insets(20));
@@ -113,177 +131,13 @@ public class SceneArtwork extends BorderPane {
 
     }
 
-    private void setOriginalDescription(TextField textField, String originalText){
-
-        textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue) {
-                if (textField.getText().isEmpty()) {
-                    textField.setText(originalText);
-                }
-            }
-        });
-    }
-
-    private void handleSearchIconSelection (TextField textFieldSearch ){
-        ScrollPane finalScrollPane = new ScrollPane();
-        String searchText = textFieldSearch.getText().trim();
-        if (!searchText.isEmpty()) {
-
-            List<Artwork> artworks = MainGetArtworks.getArtworkByName(searchText);
-            if(artworks != null){
-                finalScrollPane.setContent(filteredGrid(artworks));
-                this.setCenter(finalScrollPane);
-            }
-            else{
-                getScene().setRoot(new ShowErrorArtwork());
-            }
-            this.setCenter(finalScrollPane);
-
-        }
-    }
-
-    private void handleMediumSelection (ComboBox<String> mediumMenu, List<Artwork> artworkList){
-
-        ScrollPane finalScrollPane = new ScrollPane();
-        // get the selected item*
-        String selected = mediumMenu.getSelectionModel().getSelectedItem();
-        if(selected != null){
-            if (selected.equalsIgnoreCase("Todos")){
-                finalScrollPane.setContent(buildMainGrid(artworkList));
-                // LAST STEP: CENTER THE SCROLL_PANE
-                this.setCenter(finalScrollPane);
-            }
-            else{
-                List<Artwork> artworks = MainGetArtworks.getArtworksByMedium(selected);
-                // ADD GRID_PANE INSIDE THE SCROLL_PANE OBJ
-                finalScrollPane.setContent(filteredGrid(artworks));
-                // LAST STEP: CENTER THE SCROLL_PANE
-                this.setCenter(finalScrollPane);
-            }
-        }
-    }
-
-    private void handlePriceSelection (ComboBox<String> priceMenu, List<Artwork> artworkList){
-        ScrollPane finalScrollPane = new ScrollPane();
-        // get the selected item*
-        String selected = priceMenu.getSelectionModel().getSelectedItem();
-        if(selected != null){
-            if (selected.equalsIgnoreCase("Todos")){
-                finalScrollPane.setContent(buildMainGrid(artworkList));
-                this.setCenter(finalScrollPane);
-            }
-            else{
-                String [] values  = selected.split("-");
-                double min = Double.parseDouble(values[0]);
-                double max = Double.parseDouble(values[1]);
-                List<Artwork> artworks = MainGetArtworks.getArtworksByPrice(min,max);
-                // ADD GRID_PANE INSIDE THE SCROLL_PANE OBJ
-                if(artworks != null){
-                    finalScrollPane.setContent(filteredGrid(artworks));
-                    // LAST STEP: CENTER THE SCROLL_PANE
-                    this.setCenter(finalScrollPane);
-                }
-                else{
-                    getScene().setRoot(new ShowErrorArtwork());
-                }
-
-                // LAST STEP: CENTER THE SCROLL_PANE
-                this.setCenter(finalScrollPane);
-            }
-        }
-
-    }
-
-    private void handleCategorySelection (ComboBox<String> categoryMenu, List<Artwork> artworkList) {
-        ScrollPane finalScrollPane = new ScrollPane();
-        // get the selected item*
-        String selected = categoryMenu.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            if (selected.equalsIgnoreCase("Todos")) {
-                finalScrollPane.setContent(buildMainGrid(artworkList));
-                // LAST STEP: CENTER THE SCROLL_PANE
-                this.setCenter(finalScrollPane);
-            } else {
-                List<Artwork> artworks = MainGetArtworks.getArtworksByCategory(selected);
-                // ADD GRID_PANE INSIDE THE SCROLL_PANE OBJ
-                finalScrollPane.setContent(filteredGrid(artworks));
-                // LAST STEP: CENTER THE SCROLL_PANE
-                this.setCenter(finalScrollPane);
-            }
-        }
-
-    }
-
-    private void handleDateSelection (ComboBox<String> dateMenu, List<Artwork> artworkList) {
-        ScrollPane finalScrollPane = new ScrollPane();
-        // get the selected item*
-        String selected = dateMenu.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            if (selected.equalsIgnoreCase("Todos")) {
-                finalScrollPane.setContent(buildMainGrid(artworkList));
-                this.setCenter(finalScrollPane);
-            } else {
-                String[] values = selected.split("-");
-                List<Artwork> artworks = MainGetArtworks.getArtworksByDate(values[0], values[1]);
-                // ADD GRID_PANE INSIDE THE SCROLL_PANE OBJ
-                if (artworks != null) {
-                    finalScrollPane.setContent(filteredGrid(artworks));
-                    // LAST STEP: CENTER THE SCROLL_PANE
-                    this.setCenter(finalScrollPane);
-                } else {
-                    getScene().setRoot(new ShowErrorArtwork());
-                }
-
-                // LAST STEP: CENTER THE SCROLL_PANE
-                this.setCenter(finalScrollPane);
-            }
-        }
-
-    }
-
-    private void setArtworkLabelsOnAction(Artwork artwork){
-        getScene().setRoot(doDetailsLayout(artwork));
-    }
-
-    private ObservableList<String> createOptionsMenu (List<Artwork>artworkList, String field){
-
-        List<String> testing = new ArrayList<>();
-        testing.add("Todos");
-        String menuField = field.toLowerCase();
-
-        switch (menuField){
-            case "medium": for(Artwork art : artworkList){
-                String option = art.getMedium();
-                if(!testing.contains(option)){
-                    testing.add(option);
-                }
-            }
-            break;
-            case "category": for(Artwork art : artworkList){
-                String option = art.getCategory();
-                if(!testing.contains(option)){
-                    testing.add(option);
-                }
-            }
-            break;
-
-        }
-
-        return FXCollections.observableArrayList(testing);
-    }
-
-    public void defaultSizeIcon (ImageView imageView){
-        imageView.setFitHeight(18); // Ajuste a altura conforme necessário
-        imageView.setFitWidth(18);  // Ajuste a largura conforme necessário
-        // imageView.setPreserveRatio(true);
-    }
-
-    public void defaultSizeArtworkImage(ImageView imageView){
-        imageView.setFitHeight(160); // Ajuste a altura conforme necessário
-        imageView.setFitWidth(160);  // Ajuste a largura conforme necessário
-        imageView.setPreserveRatio(true);
-    }
-
+    /**
+     * Creates a detailed layout for displaying artwork information, including image,
+     * labels, and a button to view artist details.
+     *
+     * @param artwork The artwork object for which details are displayed.
+     * @return The updated BorderPane with the detailed artwork layout.
+     */
     public BorderPane doDetailsLayout(Artwork artwork) {
 
         setPadding(new Insets(20));
@@ -360,6 +214,11 @@ public class SceneArtwork extends BorderPane {
         return this;
     }
 
+    /**
+     * Builds the footer box, containing social media icons and copyright information.
+     *
+     * @return The HBox representing the footer box.
+     */
     private HBox getFooterBox (){
 
         // GIT IMAGE
@@ -392,6 +251,11 @@ public class SceneArtwork extends BorderPane {
         return hBoxBottomLayout;
     }
 
+    /**
+     * Builds the header box, containing hyperlinks for navigation, a search bar, and logo.
+     *
+     * @return The VBox representing the header box.
+     */
     private VBox getHeaderBox (){
 
         // HYPERLINKS
@@ -461,6 +325,244 @@ public class SceneArtwork extends BorderPane {
 
     }
 
+    /**
+     * Sets the original description in a TextField when it loses focus if the field is empty.
+     *
+     * @param textField      The TextField for which to set the original description.
+     * @param originalText   The original text to be displayed when the TextField is empty.
+     */
+    private void setOriginalDescription(TextField textField, String originalText){
+
+        textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                if (textField.getText().isEmpty()) {
+                    textField.setText(originalText);
+                }
+            }
+        });
+    }
+
+    /**
+     * Handles the action of searching for artists based on a general search criteria.
+     *
+     * @param textFieldSearch The TextField containing the search criteria.
+     */
+    private void handleSearchIconSelection (TextField textFieldSearch ){
+        ScrollPane finalScrollPane = new ScrollPane();
+        String searchText = textFieldSearch.getText().trim();
+        if (!searchText.isEmpty()) {
+
+            List<Artwork> artworks = MainGetArtworks.getArtworkByName(searchText);
+            if(artworks != null){
+                finalScrollPane.setContent(filteredGrid(artworks));
+                this.setCenter(finalScrollPane);
+            }
+            else{
+                getScene().setRoot(new ShowErrorArtwork());
+            }
+            this.setCenter(finalScrollPane);
+
+        }
+    }
+
+    /**
+     * Handles the selection of the medium filter menu.
+     * It filters and displays artworks based on the selected medium.
+     *
+     * @param mediumMenu   The ComboBox containing medium filter options.
+     * @param artworkList  The list of all artworks.
+     */
+    private void handleMediumSelection (ComboBox<String> mediumMenu, List<Artwork> artworkList){
+
+        ScrollPane finalScrollPane = new ScrollPane();
+        // get the selected item*
+        String selected = mediumMenu.getSelectionModel().getSelectedItem();
+        if(selected != null){
+            if (selected.equalsIgnoreCase("Todos")){
+                finalScrollPane.setContent(buildMainGrid(artworkList));
+                // LAST STEP: CENTER THE SCROLL_PANE
+                this.setCenter(finalScrollPane);
+            }
+            else{
+                List<Artwork> artworks = MainGetArtworks.getArtworksByMedium(selected);
+                // ADD GRID_PANE INSIDE THE SCROLL_PANE OBJ
+                finalScrollPane.setContent(filteredGrid(artworks));
+                // LAST STEP: CENTER THE SCROLL_PANE
+                this.setCenter(finalScrollPane);
+            }
+        }
+    }
+
+    /**
+     * Handles the selection of the price filter menu.
+     * It filters and displays artworks based on the selected price range.
+     *
+     * @param priceMenu    The ComboBox containing price filter options.
+     * @param artworkList  The list of all artworks.
+     */
+    private void handlePriceSelection (ComboBox<String> priceMenu, List<Artwork> artworkList){
+        ScrollPane finalScrollPane = new ScrollPane();
+        // get the selected item*
+        String selected = priceMenu.getSelectionModel().getSelectedItem();
+        if(selected != null){
+            if (selected.equalsIgnoreCase("Todos")){
+                finalScrollPane.setContent(buildMainGrid(artworkList));
+                this.setCenter(finalScrollPane);
+            }
+            else{
+                String [] values  = selected.split("-");
+                double min = Double.parseDouble(values[0]);
+                double max = Double.parseDouble(values[1]);
+                List<Artwork> artworks = MainGetArtworks.getArtworksByPrice(min,max);
+                // ADD GRID_PANE INSIDE THE SCROLL_PANE OBJ
+                if(artworks != null){
+                    finalScrollPane.setContent(filteredGrid(artworks));
+                    // LAST STEP: CENTER THE SCROLL_PANE
+                    this.setCenter(finalScrollPane);
+                }
+                else{
+                    getScene().setRoot(new ShowErrorArtwork());
+                }
+
+                // LAST STEP: CENTER THE SCROLL_PANE
+                this.setCenter(finalScrollPane);
+            }
+        }
+
+    }
+
+    /**
+     * Handles the selection of the category filter menu.
+     * It filters and displays artworks based on the selected category.
+     *
+     * @param categoryMenu The ComboBox containing category filter options.
+     * @param artworkList  The list of all artworks.
+     */
+    private void handleCategorySelection (ComboBox<String> categoryMenu, List<Artwork> artworkList) {
+        ScrollPane finalScrollPane = new ScrollPane();
+        // get the selected item*
+        String selected = categoryMenu.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            if (selected.equalsIgnoreCase("Todos")) {
+                finalScrollPane.setContent(buildMainGrid(artworkList));
+                // LAST STEP: CENTER THE SCROLL_PANE
+                this.setCenter(finalScrollPane);
+            } else {
+                List<Artwork> artworks = MainGetArtworks.getArtworksByCategory(selected);
+                // ADD GRID_PANE INSIDE THE SCROLL_PANE OBJ
+                finalScrollPane.setContent(filteredGrid(artworks));
+                // LAST STEP: CENTER THE SCROLL_PANE
+                this.setCenter(finalScrollPane);
+            }
+        }
+
+    }
+
+    /**
+     * Handles the selection of the date filter menu.
+     * It filters and displays artworks based on the selected creation date range.
+     *
+     * @param dateMenu     The ComboBox containing date filter options.
+     * @param artworkList  The list of all artworks.
+     */
+    private void handleDateSelection (ComboBox<String> dateMenu, List<Artwork> artworkList) {
+        ScrollPane finalScrollPane = new ScrollPane();
+        // get the selected item*
+        String selected = dateMenu.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            if (selected.equalsIgnoreCase("Todos")) {
+                finalScrollPane.setContent(buildMainGrid(artworkList));
+                this.setCenter(finalScrollPane);
+            } else {
+                String[] values = selected.split("-");
+                List<Artwork> artworks = MainGetArtworks.getArtworksByDate(values[0], values[1]);
+                // ADD GRID_PANE INSIDE THE SCROLL_PANE OBJ
+                if (artworks != null) {
+                    finalScrollPane.setContent(filteredGrid(artworks));
+                    // LAST STEP: CENTER THE SCROLL_PANE
+                    this.setCenter(finalScrollPane);
+                } else {
+                    getScene().setRoot(new ShowErrorArtwork());
+                }
+
+                // LAST STEP: CENTER THE SCROLL_PANE
+                this.setCenter(finalScrollPane);
+            }
+        }
+
+    }
+
+    /**
+     * Sets the scene to display details for a specific artwork when a hyperlink is clicked.
+     *
+     * @param artwork The artist for which details are to be displayed.
+     */
+    private void setArtworkLabelsOnAction(Artwork artwork){
+        getScene().setRoot(doDetailsLayout(artwork));
+    }
+
+    /**
+     * Creates an ObservableList of options for a ComboBox based on the specified field
+     * (e.g. medium or category).
+     *
+     * @param artworkList The list of all artworks.
+     * @param field       The field for which options are created (e.g. "medium" or "category").
+     * @return An ObservableList containing options for the specified field.
+     */
+    private ObservableList<String> createOptionsMenu (List<Artwork>artworkList, String field){
+
+        List<String> testing = new ArrayList<>();
+        testing.add("Todos");
+        String menuField = field.toLowerCase();
+
+        switch (menuField){
+            case "medium": for(Artwork art : artworkList){
+                String option = art.getMedium();
+                if(!testing.contains(option)){
+                    testing.add(option);
+                }
+            }
+            break;
+            case "category": for(Artwork art : artworkList){
+                String option = art.getCategory();
+                if(!testing.contains(option)){
+                    testing.add(option);
+                }
+            }
+            break;
+
+        }
+
+        return FXCollections.observableArrayList(testing);
+    }
+
+    /**
+     * Sets the default size for social media icons.
+     *
+     * @param imageView The ImageView for the social media icon.
+     */
+    public void defaultSizeIcon (ImageView imageView){
+        imageView.setFitHeight(18);
+        imageView.setFitWidth(18);
+    }
+
+    /**
+     * Sets the default size for artwork images.
+     *
+     * @param imageView The ImageView for the artwork image.
+     */
+    public void defaultSizeArtworkImage(ImageView imageView){
+        imageView.setFitHeight(160); // Ajuste a altura conforme necessário
+        imageView.setFitWidth(160);  // Ajuste a largura conforme necessário
+        imageView.setPreserveRatio(true);
+    }
+
+    /**
+     * Builds the main grid for displaying artworks, including images and labels.
+     *
+     * @param artworkList The list of all artworks to be displayed.
+     * @return The GridPane representing the main grid layout.
+     */
     private GridPane buildMainGrid(List<Artwork> artworkList){
 
         GridPane grid = new GridPane();
@@ -539,6 +641,12 @@ public class SceneArtwork extends BorderPane {
         return grid;
     }
 
+    /**
+     * Creates a filtered grid based on the provided list of artworks.
+     *
+     * @param filteredArtwork The list of artworks to be displayed in the filtered grid.
+     * @return The GridPane representing the filtered grid layout.
+     */
     private GridPane filteredGrid (List<Artwork> filteredArtwork){
 
         GridPane grid = new GridPane();

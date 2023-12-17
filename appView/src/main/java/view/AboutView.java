@@ -7,8 +7,23 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+/**
+ * The {@code AboutView} class represents the view for the "About" section of the Iuvenis Art application.
+ * It provides information about the application's mission, project team, acknowledgements, and contact details.
+ * This class extends {@code BorderPane} to organise its layout.
+ *
+ * @author Nuely Furtado (github.com/nueLY)
+ * @author Filipe Alves (github.com/FilipeRodrigues77)
+ * @version v1.0
+ */
 public class AboutView extends BorderPane {
 
+
+    /**
+     * Constructs an instance of the {@code AboutView} class.
+     * Initializes the layout and sets up the visual elements for the "About" section.
+     * Applies the CSS styles defined in the current theme.
+     */
     public AboutView(){
         doLayout();
         MainView mainView = new MainView();
@@ -16,12 +31,15 @@ public class AboutView extends BorderPane {
         getStylesheets().add(cssTheme);
     }
 
+    /**
+     * Configures the layout and visual elements for the "About" section.
+     * Organizes information about the application's mission, project team, acknowledgements, and contact details.
+     */
     private void doLayout() {
         setPadding(new Insets(10));
 
 
         // ---------------------------------------------- TOP LAYOUT ----------------------------------------------
-
 
         Label titleLabel = new Label("Sobre Iuvenis Art");
         titleLabel.getStyleClass().add("my-center-label-3");
