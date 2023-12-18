@@ -621,6 +621,7 @@ public class SceneArtwork extends BorderPane {
             }
             hyperArtistName.getStyleClass().add("my-desc2-hyperlink");
 
+
             String galleryName = MainGetGalleries.getGalleryById(artwork.getIdGallery()).getNameGallery();
             Hyperlink hyperGalleryName;
             if (galleryName.length() < maxTextLength){
@@ -635,12 +636,16 @@ public class SceneArtwork extends BorderPane {
             Hyperlink hyperPrice = new Hyperlink(price);
             hyperPrice.getStyleClass().add("my-desc2-price-hyperlink");
 
+
             hyperArtworkName.setOnAction(e-> setArtworkLabelsOnAction(artwork));
 
-            //hyperArtistName.setOnAction(e-> setArtworkLabelsOnAction(artwork));
-            //hyperGalleryName.setOnAction(e-> setArtworkLabelsOnAction(artwork));
-
             imageViewArtwork.setOnMouseClicked(e-> setArtworkLabelsOnAction(artwork));
+
+            hyperArtistName.setOnAction(e-> getScene().setRoot(new SceneArtist()
+                    .doArtistDetailsLayout(MainGetArtists.getArtistById(artwork.getIdArtist()))));
+
+            hyperGalleryName.setOnAction(e-> getScene().setRoot(new SceneGallery()
+                    .doDetailsLayout(MainGetGalleries.getGalleryById(artwork.getIdGallery()))));
 
             VBox vBoxLabelArtwork = new VBox(hyperArtworkName, hyperArtistName, hyperGalleryName, hyperPrice);
 
