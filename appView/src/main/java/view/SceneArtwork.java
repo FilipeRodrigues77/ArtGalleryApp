@@ -661,12 +661,12 @@ public class SceneArtwork extends BorderPane {
             int maxTextLength = 23;
             Artwork artwork = filteredArtwork.get(i);
             String imageRef = artwork.getReferenceImage().replace("{imageVersion}","square");
-            Image image = new Image(imageRef);
-            ImageView imageViewArtwork = new ImageView(image);
+            Image image;
+            ImageView imageViewArtwork;
+            image = new Image(Objects.requireNonNullElse(imageRef.replace("{imageVersion}","square"),
+                    "Images/Artwork/AllArtworks/DefaultArtwork.jpg"));
+            imageViewArtwork = new ImageView(image);
             defaultSizeArtworkImage(imageViewArtwork);
-
-
-
             // Create a new VBox for each iteration
 
             String artworkName = artwork.getName();

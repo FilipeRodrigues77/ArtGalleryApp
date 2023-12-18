@@ -225,7 +225,6 @@ public class SceneGallery extends BorderPane {
             Image image;
             ImageView imageViewGallery;
             image = new Image(Objects.requireNonNullElse(imageRef, "Images/Gallery/DefaultGallery.jpg"));
-
             imageViewGallery = new ImageView(image);
             defaultSizeGalleryImage(imageViewGallery);
 

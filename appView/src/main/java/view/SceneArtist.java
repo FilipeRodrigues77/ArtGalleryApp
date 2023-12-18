@@ -312,8 +312,11 @@ public class SceneArtist extends BorderPane {
             int maxTextLength = 23;
             Artist artist = artistList.get(i);
             String imageRef = artist.getReferenceImage();
-            Image image = new Image(imageRef);
-            ImageView imageViewArtist = new ImageView(image);
+
+            Image image;
+            ImageView imageViewArtist;
+            image = new Image(Objects.requireNonNullElse(imageRef, "Images/Artist/ArtistSquare/DefaultArtist.jpg"));
+            imageViewArtist = new ImageView(image);
             defaultSizeArtistImage(imageViewArtist);
 
             String artistName = artist.getName();
