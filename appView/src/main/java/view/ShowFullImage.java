@@ -51,6 +51,7 @@ public class ShowFullImage extends BorderPane {
         this.setTop(arrowView);
         arrowView.setOnMouseClicked(e -> getScene().setRoot(new SceneArtwork().doDetailsLayout(artwork)));
 
+
         String imageArtwork = reference.replace("{imageVersion}", "large");
         Image imageToDisplay = new Image(imageArtwork);
 
