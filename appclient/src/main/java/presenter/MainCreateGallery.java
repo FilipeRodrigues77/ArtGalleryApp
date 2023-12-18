@@ -22,7 +22,7 @@ public class MainCreateGallery {
     /**
      * The default port used for communication with the server.
      */
-    static final String PORT = "8010";
+    static final String PORT = "8020";
 
     /**
      * Adds a new Gallery by sending a POST request to the server.

@@ -27,7 +27,7 @@ import java.util.Objects;
  */
 public class MainGetArtists {
 
-    static final String PORT = "8010";
+    static final String PORT = "8020";
 
     // public static void main(String[] args) {}
 

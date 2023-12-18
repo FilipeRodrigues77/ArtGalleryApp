@@ -8,7 +8,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 /**
- * The {@code AboutView} class represents the view for the "About" section of the Iuvenis Art application.
+ * The {@code AboutView} class represents the view for the "About" section of the Iuvenis Artem application.
  * It provides information about the application's mission, project team, acknowledgements, and contact details.
  * This class extends {@code BorderPane} to organise its layout.
  *

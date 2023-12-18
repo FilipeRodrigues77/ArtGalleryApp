@@ -17,7 +17,7 @@ import java.io.IOException;
  */
 public class MainRemoveArtists {
 
-    static final String PORT = "8010";
+    static final String PORT = "8020";
 
     // public static void main(String[] args) {}
 

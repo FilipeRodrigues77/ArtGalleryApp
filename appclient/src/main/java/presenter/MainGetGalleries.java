@@ -28,7 +28,7 @@ import java.util.Objects;
  */
 public class MainGetGalleries {
 
-    static final String PORT = "8010";
+    static final String PORT = "8020";
 
     /**
      * Retrieves a list of all galleries from the server.

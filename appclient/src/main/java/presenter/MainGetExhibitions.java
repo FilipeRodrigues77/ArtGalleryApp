@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class MainGetExhibitions {
 
-    static final String PORT = "8010";
+    static final String PORT = "8020";
 
     public static void main(String[] args) {
         System.out.println(getExhibitionsByIdGallery(2));

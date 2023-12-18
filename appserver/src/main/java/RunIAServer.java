@@ -15,10 +15,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import domain.Artist;
-import domain.Artwork;
-import domain.Exhibition;
-import domain.Gallery;
+import domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import persistence.MemoryStorage;
@@ -38,7 +35,7 @@ public class RunIAServer {
 
         // Default port is 4567, hence we're running at http://localhost:4567/<endpoint>
 
-        port(8010);
+        port(8020);
         logger.info("Starting Main server at {}", new Date().toString());
 
         /*  INSTANTIATE STORAGE */
@@ -928,6 +925,13 @@ public class RunIAServer {
             });
 
         });
+
+        get("/nationalities", (request, response) -> {
+            response.type("application/json");
+            List<Nationality> nationalities = storage.getNationalities();
+            return gson.toJson(nationalities);
+        });
+
 
         // global exception handler
         exception(Exception.class, (e, request, response) -> {

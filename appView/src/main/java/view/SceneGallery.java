@@ -64,7 +64,7 @@ public class SceneGallery extends BorderPane {
 
 
         // CREATE LABEL FOR FILTER AREA
-        Label filterLabel = new Label("Filtros = ");
+        Label filterLabel = new Label("Filtros     = ");
 
         // ADD ELEMENTS FOR THE MENU HBOX
         // SET HBOX FOR THE FILTER MENUS
@@ -150,7 +150,7 @@ public class SceneGallery extends BorderPane {
         hyperlinkGallery.getStyleClass().add("actual-page-hyperlink");
 
         // Text Fields
-        String searchOrigText = "Procurar por artista, galeria, exposição ou obra de arte";
+        String searchOrigText = "Procurar por galeria...";
         TextField textFieldSearch = new TextField(searchOrigText);
         setOriginalDescription(textFieldSearch,searchOrigText);
         textFieldSearch.setPrefSize(550, 30);
@@ -265,7 +265,7 @@ public class SceneGallery extends BorderPane {
      * @param gallery The gallery for which the details layout is constructed.
      * @return The BorderPane representing the details layout for the gallery.
      */
-    private BorderPane doDetailsLayout(Gallery gallery) {
+    public BorderPane doDetailsLayout(Gallery gallery) {
 
         setPadding(new Insets(20));
         //--------------------------------------------- HEADER ELEMENTS ---------------------------------------------
@@ -417,20 +417,19 @@ public class SceneGallery extends BorderPane {
             Image image = new Image(imageRef);
             ImageView imageViewArtwork = new ImageView(image);
             defaultSizeArtworkImage(imageViewArtwork);
-
             imageViewArtwork.setOnMouseClicked(e-> getScene().setRoot(new SceneArtwork().doDetailsLayout(artwork)));
-            // Create a new VBox for each iteration
+
             String artworkName = artwork.getName();
             Hyperlink hyperArtworkName;
-
             if (artworkName.length() < maxTextLength){
                 hyperArtworkName = new Hyperlink(artworkName);
             } else{
                 hyperArtworkName = new Hyperlink(artworkName.substring(0,maxTextLength)+"...");
             }
+            hyperArtworkName.setOnMouseClicked(e-> getScene().setRoot(new SceneArtwork().doDetailsLayout(artwork)));
 
             String currency = "€";
-            String price = String.valueOf(currency + artwork.getPrice());
+            String price = currency + artwork.getPrice();
             Hyperlink hyperPrice = new Hyperlink(price);
             hyperPrice.getStyleClass().add("my-desc2-price-hyperlink");
 
