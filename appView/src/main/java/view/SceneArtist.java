@@ -312,7 +312,6 @@ public class SceneArtist extends BorderPane {
             int maxTextLength = 23;
             Artist artist = artistList.get(i);
             String imageRef = artist.getReferenceImage();
-
             Image image;
             ImageView imageViewArtist;
             image = new Image(Objects.requireNonNullElse(imageRef, "Images/Artist/ArtistSquare/DefaultArtist.jpg"));
@@ -373,10 +372,12 @@ public class SceneArtist extends BorderPane {
         setPadding(new Insets(20));
 
         //--------------------------------------------- HEADER ELEMENTS ---------------------------------------------
-
-        // ARTWORK IMAGE
-        String imageArtwork = artist.getReferenceImage();
-        ImageView imageViewArtist = new ImageView(new Image(imageArtwork));
+        // Artist Image
+        String imageRef = artist.getReferenceImage();
+        Image image;
+        ImageView imageViewArtist;
+        image = new Image(Objects.requireNonNullElse(imageRef, "Images/Artist/ArtistSquare/DefaultArtist.jpg"));
+        imageViewArtist = new ImageView(image);
         defaultSizeArtistImage(imageViewArtist);
 
         // ---------------------------------------------- TOP LAYOUT ----------------------------------------------
