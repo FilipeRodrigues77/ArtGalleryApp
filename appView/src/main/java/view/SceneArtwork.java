@@ -17,6 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The {@code SceneArtwork} class represents the graphical user interface for displaying artworks,
@@ -574,10 +575,15 @@ public class SceneArtwork extends BorderPane {
 
             int maxTextLength = 23;
             Artwork artwork = artworkList.get(i);
-            String imageRef = artwork.getReferenceImage().replace("{imageVersion}","square");
-            Image image = new Image(imageRef);
-            ImageView imageViewArtwork = new ImageView(image);
+
+            String imageRef = artwork.getReferenceImage();
+            Image image;
+            ImageView imageViewArtwork;
+            image = new Image(Objects.requireNonNullElse(imageRef.replace("{imageVersion}","square"),
+                    "Images/Artwork/AllArtworks/DefaultArtwork.jpg"));
+            imageViewArtwork = new ImageView(image);
             defaultSizeArtworkImage(imageViewArtwork);
+
 
             String artworkName = artwork.getName();
             Hyperlink hyperArtworkName;
