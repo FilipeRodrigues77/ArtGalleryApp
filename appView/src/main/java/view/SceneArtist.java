@@ -372,7 +372,7 @@ public class SceneArtist extends BorderPane {
         setPadding(new Insets(20));
 
         //--------------------------------------------- HEADER ELEMENTS ---------------------------------------------
-
+        // Artist Image
         String imageRef = artist.getReferenceImage();
         Image image;
         ImageView imageViewArtist;
