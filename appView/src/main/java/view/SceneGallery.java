@@ -225,7 +225,6 @@ public class SceneGallery extends BorderPane {
             Image image;
             ImageView imageViewGallery;
             image = new Image(Objects.requireNonNullElse(imageRef, "Images/Gallery/DefaultGallery.jpg"));
-
             imageViewGallery = new ImageView(image);
             defaultSizeGalleryImage(imageViewGallery);
 
@@ -413,9 +412,16 @@ public class SceneGallery extends BorderPane {
             int maxTextLength = 23;
 
             Artwork artwork = artworkList.get(i);
-            String imageRef = artwork.getReferenceImage().replace("{imageVersion}","square");
-            Image image = new Image(imageRef);
-            ImageView imageViewArtwork = new ImageView(image);
+            String imageArtwork = artwork.getReferenceImage();
+            Image image;
+            ImageView imageViewArtwork;
+            if (imageArtwork != null){
+                image = new Image(imageArtwork.replace("{imageVersion}","square"));
+            }
+            else{
+                image = new Image("Images/Artwork/AllArtworks/DefaultArtwork.jpg");
+            }
+            imageViewArtwork = new ImageView(image);
             defaultSizeArtworkImage(imageViewArtwork);
             imageViewArtwork.setOnMouseClicked(e-> getScene().setRoot(new SceneArtwork().doDetailsLayout(artwork)));
 

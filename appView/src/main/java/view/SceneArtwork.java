@@ -149,8 +149,18 @@ public class SceneArtwork extends BorderPane {
         // ---------------------------------------------- CENTER LAYOUT ----------------------------------------------
 
         // ARTWORK IMAGE
-        String imageArtwork = artwork.getReferenceImage().replace("{imageVersion}", "large_rectangle");
-        ImageView imageViewArtwork = new ImageView(new Image(imageArtwork));
+        String imageArtwork = artwork.getReferenceImage();
+        Image image;
+        ImageView imageViewArtwork;
+        if (imageArtwork != null){
+            image = new Image(imageArtwork.replace("{imageVersion}","square"));
+        }
+        else{
+            image = new Image("Images/Artwork/AllArtworks/DefaultArtwork.jpg");
+        }
+        imageViewArtwork = new ImageView(image);
+        defaultSizeArtworkImage(imageViewArtwork);
+
         imageViewArtwork.setFitHeight(300);
         imageViewArtwork.setFitWidth(360);
         imageViewArtwork.setOnMouseClicked(e -> getScene().setRoot(new ShowFullImage(artwork.getReferenceImage(), artwork,getScene().getHeight())));
@@ -579,8 +589,12 @@ public class SceneArtwork extends BorderPane {
             String imageRef = artwork.getReferenceImage();
             Image image;
             ImageView imageViewArtwork;
-            image = new Image(Objects.requireNonNullElse(imageRef.replace("{imageVersion}","square"),
-                    "Images/Artwork/AllArtworks/DefaultArtwork.jpg"));
+            if (imageRef != null){
+                image = new Image(imageRef.replace("{imageVersion}","square"));
+            }
+            else{
+                image = new Image("Images/Artwork/AllArtworks/DefaultArtwork.jpg");
+            }
             imageViewArtwork = new ImageView(image);
             defaultSizeArtworkImage(imageViewArtwork);
 
@@ -660,13 +674,17 @@ public class SceneArtwork extends BorderPane {
 
             int maxTextLength = 23;
             Artwork artwork = filteredArtwork.get(i);
-            String imageRef = artwork.getReferenceImage().replace("{imageVersion}","square");
-            Image image = new Image(imageRef);
-            ImageView imageViewArtwork = new ImageView(image);
+            String imageRef = artwork.getReferenceImage();
+            Image image;
+            ImageView imageViewArtwork;
+            if (imageRef != null){
+                image = new Image(imageRef.replace("{imageVersion}","square"));
+            }
+            else{
+                image = new Image("Images/Artwork/AllArtworks/DefaultArtwork.jpg");
+            }
+            imageViewArtwork = new ImageView(image);
             defaultSizeArtworkImage(imageViewArtwork);
-
-
-
             // Create a new VBox for each iteration
 
             String artworkName = artwork.getName();

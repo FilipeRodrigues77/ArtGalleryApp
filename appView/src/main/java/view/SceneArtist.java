@@ -312,8 +312,11 @@ public class SceneArtist extends BorderPane {
             int maxTextLength = 23;
             Artist artist = artistList.get(i);
             String imageRef = artist.getReferenceImage();
-            Image image = new Image(imageRef);
-            ImageView imageViewArtist = new ImageView(image);
+
+            Image image;
+            ImageView imageViewArtist;
+            image = new Image(Objects.requireNonNullElse(imageRef, "Images/Artist/ArtistSquare/DefaultArtist.jpg"));
+            imageViewArtist = new ImageView(image);
             defaultSizeArtistImage(imageViewArtist);
 
             String artistName = artist.getName();
@@ -453,9 +456,17 @@ public class SceneArtist extends BorderPane {
 
             int maxTextLength = 23;
             Artwork artwork = artworkList.get(i);
-            String imageRef = artwork.getReferenceImage().replace("{imageVersion}","square");
-            Image image = new Image(imageRef);
-            ImageView imageViewArtwork = new ImageView(image);
+
+            String imageArtwork = artwork.getReferenceImage();
+            Image image;
+            ImageView imageViewArtwork;
+            if (imageArtwork != null){
+                image = new Image(imageArtwork.replace("{imageVersion}","square"));
+            }
+            else{
+                image = new Image("Images/Artwork/AllArtworks/DefaultArtwork.jpg");
+            }
+            imageViewArtwork = new ImageView(image);
             defaultSizeArtistImage(imageViewArtwork);
             imageViewArtwork.setOnMouseClicked(e-> getScene().setRoot(new SceneArtwork().doDetailsLayout(artwork)));
 
