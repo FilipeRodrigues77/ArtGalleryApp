@@ -154,16 +154,18 @@ public class SceneArtwork extends BorderPane {
         ImageView imageViewArtwork;
         if (imageArtwork != null){
             image = new Image(imageArtwork.replace("{imageVersion}","square"));
+            imageViewArtwork = new ImageView(image);
+            imageViewArtwork.setOnMouseClicked(e -> getScene().setRoot(new ShowFullImage(artwork.getReferenceImage(), artwork,getScene().getHeight())));
         }
         else{
             image = new Image("Images/Artwork/AllArtworks/DefaultArtwork.jpg");
+            imageViewArtwork = new ImageView(image);
         }
-        imageViewArtwork = new ImageView(image);
         defaultSizeArtworkImage(imageViewArtwork);
 
         imageViewArtwork.setFitHeight(300);
         imageViewArtwork.setFitWidth(360);
-        imageViewArtwork.setOnMouseClicked(e -> getScene().setRoot(new ShowFullImage(artwork.getReferenceImage(), artwork,getScene().getHeight())));
+
 
         // LABELS
         Label labelArtworkName = new Label(artwork.getName());
