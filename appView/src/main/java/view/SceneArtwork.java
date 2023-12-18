@@ -18,7 +18,6 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * The {@code SceneArtwork} class represents the graphical user interface for displaying artworks,
  * providing features such as filtering, searching, and detailed artwork information.
@@ -29,6 +28,7 @@ import java.util.List;
  * @version v1.0
  */
 public class SceneArtwork extends BorderPane {
+
 
     /**
      * Constructs a new {@code SceneArtwork} object.
@@ -48,13 +48,11 @@ public class SceneArtwork extends BorderPane {
      * This method utilises JavaFX components such as ComboBox, ScrollPane, VBox, HBox, Label, and more.
      */
     private void doLayout() {
-        // Vamos criar aqui o layout deste painel
+
         setPadding(new Insets(20));
         ScrollPane scrollPane = new ScrollPane();
 
         //--------------------------------------------- HEADER ELEMENTS ---------------------------------------------
-
-        ScrollPane finalScrollPane = scrollPane;
 
         VBox headerVbox = getHeaderBox();
 
@@ -100,7 +98,7 @@ public class SceneArtwork extends BorderPane {
         categoryMenu.setOnAction(e->handleCategorySelection(categoryMenu, artworkList));
 
         // CREATE LABEL FOR FILTER AREA
-        Label filterLabel = new Label("Filtros = ");
+        Label filterLabel = new Label("Filtros     = ");
 
         // ADD ELEMENTS FOR THE MENU HBOX
         hBoxMenu.getChildren().addAll(filterLabel, mediumMenu, priceMenu, dateMenu,categoryMenu);
@@ -268,7 +266,7 @@ public class SceneArtwork extends BorderPane {
         hyperLinkArtwork.getStyleClass().add("actual-page-hyperlink");
 
         // TEXT FIELDS
-        String searchOrigText = "Procurar por artista, galeria, exposição ou obra de arte";
+        String searchOrigText = "Procurar por obra de arte...";
         TextField textFieldSearch = new TextField(searchOrigText);
         setOriginalDescription(textFieldSearch,searchOrigText);
         textFieldSearch.setPrefSize(550, 30);
@@ -511,29 +509,29 @@ public class SceneArtwork extends BorderPane {
      */
     private ObservableList<String> createOptionsMenu (List<Artwork>artworkList, String field){
 
-        List<String> testing = new ArrayList<>();
-        testing.add("Todos");
+        List<String> menu = new ArrayList<>();
+        menu.add("Todos");
         String menuField = field.toLowerCase();
 
         switch (menuField){
             case "medium": for(Artwork art : artworkList){
                 String option = art.getMedium();
-                if(!testing.contains(option)){
-                    testing.add(option);
+                if(!menu.contains(option)){
+                    menu.add(option);
                 }
             }
-            break;
+                break;
             case "category": for(Artwork art : artworkList){
                 String option = art.getCategory();
-                if(!testing.contains(option)){
-                    testing.add(option);
+                if(!menu.contains(option)){
+                    menu.add(option);
                 }
             }
-            break;
+                break;
 
         }
 
-        return FXCollections.observableArrayList(testing);
+        return FXCollections.observableArrayList(menu);
     }
 
     /**
@@ -573,7 +571,6 @@ public class SceneArtwork extends BorderPane {
         grid.getStyleClass().add("grid-pane");
 
         for (int i = 0; i < 8; i++) {
-            // int imageNum = i+1;
 
             int maxTextLength = 23;
             Artwork artwork = artworkList.get(i);
@@ -581,10 +578,6 @@ public class SceneArtwork extends BorderPane {
             Image image = new Image(imageRef);
             ImageView imageViewArtwork = new ImageView(image);
             defaultSizeArtworkImage(imageViewArtwork);
-
-
-
-            // Create a new VBox for each iteration
 
             String artworkName = artwork.getName();
             Hyperlink hyperArtworkName;
@@ -657,68 +650,71 @@ public class SceneArtwork extends BorderPane {
         // leave 8 for now
 
         for (int i = 0; i < filteredArtwork.size(); i++) {
-                // int imageNum = i+1;
+            // int imageNum = i+1;
 
-                int maxTextLength = 23;
-                Artwork artwork = filteredArtwork.get(i);
-                String imageRef = artwork.getReferenceImage().replace("{imageVersion}","square");
-                Image image = new Image(imageRef);
-                ImageView imageViewArtwork = new ImageView(image);
-                defaultSizeArtworkImage(imageViewArtwork);
-
-
-
-                // Create a new VBox for each iteration
-
-                String artworkName = artwork.getName();
-                Hyperlink hyperArtworkName;
-
-                if (artworkName.length() < maxTextLength){
-                    hyperArtworkName = new Hyperlink(artworkName);
-                } else{
-                    hyperArtworkName = new Hyperlink(artworkName.substring(0,maxTextLength)+"...");
-                }
+            int maxTextLength = 23;
+            Artwork artwork = filteredArtwork.get(i);
+            String imageRef = artwork.getReferenceImage().replace("{imageVersion}","square");
+            Image image = new Image(imageRef);
+            ImageView imageViewArtwork = new ImageView(image);
+            defaultSizeArtworkImage(imageViewArtwork);
 
 
-                String artistName = MainGetArtists.getArtistById(artwork.getIdArtist()).getName();
-                Hyperlink hyperArtistName;
-                if (artistName.length() < maxTextLength){
-                    hyperArtistName = new Hyperlink(artistName);
-                } else{
-                    hyperArtistName = new Hyperlink(artistName.substring(0,maxTextLength)+"...");
-                }
 
+            // Create a new VBox for each iteration
 
-                String galleryName = MainGetGalleries.getGalleryById(artwork.getIdGallery()).getNameGallery();
-                Hyperlink hyperGalleryName;
-                if (galleryName.length() < maxTextLength){
-                    hyperGalleryName = new Hyperlink(galleryName);
-                } else{
-                    hyperGalleryName = new Hyperlink(galleryName.substring(0,maxTextLength)+"...");
-                }
+            String artworkName = artwork.getName();
+            Hyperlink hyperArtworkName;
 
-
-                String price = String.valueOf(artwork.getPrice());
-                Hyperlink hyperPrice = new Hyperlink(price);
-
-                hyperArtworkName.setOnAction(e-> setArtworkLabelsOnAction(artwork));
-
-                hyperArtistName.setOnAction(e-> setArtworkLabelsOnAction(artwork));
-
-                hyperGalleryName.setOnAction(e-> setArtworkLabelsOnAction(artwork));
-
-                imageViewArtwork.setOnMouseClicked(e-> setArtworkLabelsOnAction(artwork));
-
-                VBox vBoxLabelArtwork = new VBox(hyperArtworkName, hyperArtistName, hyperGalleryName, hyperPrice);
-
-                // CALCULATE THE COORDINATE FOR EACH CELL (4 COLUMNS)
-                int col = i % 4;
-                int row = i / 4 * 2; // MULTIPLY BY TWO TO JUMP LINE ON EACH ITERATION
-
-                // ADD IMAGES AND LABELS TO EACH CALCULATED SPOT
-                grid.add(imageViewArtwork, col * 2, row);
-                grid.add(vBoxLabelArtwork, col * 2, row + 1);
+            if (artworkName.length() < maxTextLength){
+                hyperArtworkName = new Hyperlink(artworkName);
+            } else{
+                hyperArtworkName = new Hyperlink(artworkName.substring(0,maxTextLength)+"...");
             }
+
+
+            String artistName = MainGetArtists.getArtistById(artwork.getIdArtist()).getName();
+            Hyperlink hyperArtistName;
+            if (artistName.length() < maxTextLength){
+                hyperArtistName = new Hyperlink(artistName);
+            } else{
+                hyperArtistName = new Hyperlink(artistName.substring(0,maxTextLength)+"...");
+            }
+
+
+            String galleryName = MainGetGalleries.getGalleryById(artwork.getIdGallery()).getNameGallery();
+            Hyperlink hyperGalleryName;
+            if (galleryName.length() < maxTextLength){
+                hyperGalleryName = new Hyperlink(galleryName);
+            } else{
+                hyperGalleryName = new Hyperlink(galleryName.substring(0,maxTextLength)+"...");
+            }
+
+
+            String price = String.valueOf(artwork.getPrice());
+            Hyperlink hyperPrice = new Hyperlink(price);
+
+            hyperArtworkName.setOnAction(e-> setArtworkLabelsOnAction(artwork));
+
+            imageViewArtwork.setOnMouseClicked(e-> setArtworkLabelsOnAction(artwork));
+
+            hyperArtistName.setOnAction(e-> getScene().setRoot(new SceneArtist()
+                    .doArtistDetailsLayout(MainGetArtists.getArtistById(artwork.getIdArtist()))));
+
+            hyperGalleryName.setOnAction(e-> getScene().setRoot(new SceneGallery()
+                    .doDetailsLayout(MainGetGalleries.getGalleryById(artwork.getIdGallery()))));
+
+
+            VBox vBoxLabelArtwork = new VBox(hyperArtworkName, hyperArtistName, hyperGalleryName, hyperPrice);
+
+            // CALCULATE THE COORDINATE FOR EACH CELL (4 COLUMNS)
+            int col = i % 4;
+            int row = i / 4 * 2; // MULTIPLY BY TWO TO JUMP LINE ON EACH ITERATION
+
+            // ADD IMAGES AND LABELS TO EACH CALCULATED SPOT
+            grid.add(imageViewArtwork, col * 2, row);
+            grid.add(vBoxLabelArtwork, col * 2, row + 1);
+        }
         return grid;
     }
 

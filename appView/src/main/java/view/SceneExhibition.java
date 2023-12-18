@@ -2,6 +2,7 @@ package view;
 
 import domain.Artwork;
 import domain.Exhibition;
+import domain.Gallery;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -74,7 +75,7 @@ public class SceneExhibition extends BorderPane {
         });
 
         // CREATE LABEL FOR FILTER AREA
-        Label filterLabel = new Label("Filtros = ");
+        Label filterLabel = new Label("Filtros     = ");
 
         // CREATE A MOMBOX AND ADD THE OBSERVABLELIST TO EACH MENU
         ObservableList<String> statusOptions = FXCollections.observableArrayList(
@@ -221,7 +222,11 @@ public class SceneExhibition extends BorderPane {
 
         // LABELS
         Label labelExhibitionName = new Label(exhibition.getNameExhibition());
-        Label labelGalleryName = new Label(MainGetGalleries.getGalleryById(exhibition.getIdGallery()).getNameGallery());
+
+        Gallery gallery = MainGetGalleries.getGalleryById(exhibition.getIdGallery());
+        Hyperlink hyperGalleryName = new Hyperlink(gallery.getNameGallery());
+        hyperGalleryName.setOnAction(e-> getScene().setRoot(new SceneGallery().doDetailsLayout(gallery)));
+
         Label labelStartDate = new Label(String.valueOf(exhibition.getStartDate()));
         Label labelEndDate = new Label(String.valueOf(exhibition.getEndDate()));
         Label labelAboutExhibition= new Label("Sobre a Exposição:");
@@ -235,7 +240,7 @@ public class SceneExhibition extends BorderPane {
         HBox hboxStartAndEndDate = new HBox(labelStartDate, labelEndDate);
         hboxStartAndEndDate.setSpacing(10);
 
-        VBox vBoxGalleryInfo = new VBox(labelExhibitionName, labelGalleryName, hboxStartAndEndDate);
+        VBox vBoxGalleryInfo = new VBox(labelExhibitionName, hyperGalleryName, hboxStartAndEndDate);
         vBoxGalleryInfo.setPadding(new Insets(0,0,10,0));
         VBox vBoxExhibitionDetails = new VBox(vBoxGalleryInfo ,labelAboutExhibition, labelExhibitionDetails);
 
@@ -313,6 +318,8 @@ public class SceneExhibition extends BorderPane {
                 hyperGalleryName = new Hyperlink(galleryName.substring(0,maxTextLength)+"...");
             }
             hyperGalleryName.getStyleClass().add("my-desc2-hyperlink");
+            hyperGalleryName.setOnAction(e-> getScene().setRoot(new SceneGallery()
+                    .doDetailsLayout(MainGetGalleries.getGalleryById(artwork.getIdGallery()))));
 
 
             String currency = "€";
@@ -390,7 +397,7 @@ public class SceneExhibition extends BorderPane {
         hyperlinkExhibition.getStyleClass().add("actual-page-hyperlink");
 
         // Text Fields
-        String searchOrigText = "Procurar por artista, galeria, exposição ou obra de arte";
+        String searchOrigText = "Procurar por exposição...";
         TextField textFieldSearch = new TextField(searchOrigText);
         setOriginalDescription(textFieldSearch,searchOrigText);
         textFieldSearch.setPrefSize(550, 30);

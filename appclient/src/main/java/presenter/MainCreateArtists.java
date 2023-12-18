@@ -21,7 +21,7 @@ public class MainCreateArtists {
     /**
      * The default port to be used in the server endpoint URL.
      */
-    static final String PORT = "8010";
+    static final String PORT = "8020";
 
     /**
      * Adds a new artist to the server by sending an HTTP POST request.

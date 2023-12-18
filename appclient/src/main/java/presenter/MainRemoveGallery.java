@@ -17,7 +17,7 @@ import java.io.IOException;
  */
 public class MainRemoveGallery {
 
-    static final String PORT = "8010";
+    static final String PORT = "8020";
     // public static void main(String[] args) {}
     /**
      * Removes the specified gallery by sending a DELETE request to the server.

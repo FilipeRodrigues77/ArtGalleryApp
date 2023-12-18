@@ -12,7 +12,7 @@ import view.*;
  * method sets up the primary stage, titles it, creates the main scene with the
  * {@code MainView} as its root, and displays the primary stage.
  * <p>
- * The application provides an interface for users to interact with the Iuvenis Art
+ * The application provides an interface for users to interact with the Iuvenis Artem
  * platform.
  *
  * @author Nuely Furtado
@@ -22,8 +22,8 @@ import view.*;
 public class Art extends Application {
 
     /**
-     * The main entry point for the Iuvenis Art application. Calls the launch method
-     * to start the JavaFX application.
+     * The main entry point for the Iuvenis Artem application.
+     * Calls the launch method to start the JavaFX application.
      *
      * @param args Command-line arguments (not used).
      */

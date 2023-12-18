@@ -431,12 +431,12 @@ public class MainView extends BorderPane {
      * @return The CSS file path of the applied theme.
      */
     protected String changeTheme(String themeName) {
-        // Assume que o ficheiro te a estrutura: "appStyle<themeName>.css"
+
         String cssFile = "appStyle" + themeName + ".css";
-        // Limpar estilo para o default e depois adiciona o estilo selecionado
+
         getStylesheets().clear();
         getStylesheets().add(cssFile);
-        //Salvar configuração
+
         this.config.setProperty("theme", themeName);
         saveConfig();
 

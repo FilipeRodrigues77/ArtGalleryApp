@@ -2,10 +2,7 @@ package persistence;
 
 
 
-import domain.Artist;
-import domain.Artwork;
-import domain.Exhibition;
-import domain.Gallery;
+import domain.*;
 import services.*;
 import util.ArtworkUtils;
 import util.ExhibitionUtils;
@@ -18,7 +15,7 @@ import java.util.List;
  * This is a DAO (Data Access Object) implementation for Services using in-memory data.
  * Other implementations can implement the services over e.g. a DBMS (Database Management Systems).
  */
-public class MemoryStorage implements ArtistService, ArtworkService, GalleryService, ExhibitionService {
+public class MemoryStorage implements ArtistService, ArtworkService, GalleryService, ExhibitionService,NationalityService {
 
     private final String DB_URL  = "jdbc:mysql://localhost:3306/IAProj";
     private final String DB_USER = "nuel", DB_PASSWORD = "testing12345";
@@ -583,7 +580,6 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement preparedStatement = conn.prepareStatement(commandSql)) {
 
-            Gallery gallery = null;
             preparedStatement.setString(1, name + "%");
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -604,7 +600,6 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement preparedStatement = conn.prepareStatement(commandSql)) {
 
-            Gallery gallery = null;
             preparedStatement.setString(1, region );
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -753,7 +748,6 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement preparedStatement = conn.prepareStatement(commandSql)) {
 
-            Exhibition exhibition = null;
             preparedStatement.setString(1, name + "%");
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 return buildExhibitions(resultSet);
@@ -772,7 +766,6 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement preparedStatement = conn.prepareStatement(commandSql)) {
 
-            Exhibition exhibition = null;
             preparedStatement.setString(1, status);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 return buildExhibitions(resultSet);
@@ -791,7 +784,6 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement preparedStatement = conn.prepareStatement(commandSql)) {
 
-            Exhibition exhibition = null;
             preparedStatement.setString(1, startDate);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 return buildExhibitions(resultSet);
@@ -809,7 +801,6 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement preparedStatement = conn.prepareStatement(commandSql)) {
 
-            Exhibition exhibition = null;
             preparedStatement.setString(1, endDate);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 return buildExhibitions(resultSet);
@@ -828,7 +819,6 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement preparedStatement = conn.prepareStatement(commandSql)) {
 
-            Exhibition exhibition = null;
             preparedStatement.setInt(1, galleryId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                return buildExhibitions(resultSet);
@@ -961,6 +951,30 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
         }
 
         return exhibitions;
+    }
+
+
+    @Override
+    public List<Nationality> getNationalities() throws ServiceException {
+
+        List<Nationality> nationalities = new ArrayList<>();
+        String commandSQL = "SELECT * FROM Nationality";
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(commandSQL)) {
+
+            while (resultSet.next()) {
+                Nationality nationality = new Nationality();
+                nationality.setNationality(resultSet.getString("nationalityName"));
+
+                nationalities.add(nationality);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return nationalities;
     }
 
 }
