@@ -933,6 +933,13 @@ public class RunIAServer {
         });
 
 
+        get("/regions", (request, response) -> {
+            response.type("application/json");
+            List<Region> regions = storage.getRegions();
+            return gson.toJson(regions);
+        });
+
+
         // global exception handler
         exception(Exception.class, (e, request, response) -> {
             logger.error("{} : Got an exception for request : {}  ", e.getLocalizedMessage(), request.url());

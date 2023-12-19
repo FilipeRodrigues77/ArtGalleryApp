@@ -27,8 +27,13 @@
     - Develop a mechanism to return to the exact filtered scene after viewing details.
     - Ensure that the back navigation logic is aware of the context and restores the appropriate state.
 
-5. Implementing a Unified Object Search Functionality
-   -When users utilise the search bar, the result list will dynamically adapt to the 
-    current scene, aligning with the specific data type associated with that scene. For instance, if users are navigating the Artist page and employ the search bar, the filtered results will exclusively comprise artist-related data.
 
-Addressing this challenge involves the implementation of a versatile method capable of handling searches across all tables within our database. This generic approach ensures seamless and consistent search functionality, irrespective of the specific data type or scene, offering a unified and efficient experience for users.
+5. Implementing a Unified Object Search Functionality
+   - When users utilise the search bar, the result list will dynamically adapt to the 
+    current scene, aligning with the specific data type associated with that scene. 
+    For instance, if users are navigating the Artist page and employ the search bar, 
+    the filtered results will exclusively comprise artist-related data.
+    Addressing this challenge involves the implementation of a versatile method capable 
+    of handling searches across all tables within our database. This generic approach 
+    ensures seamless and consistent search functionality, irrespective of the specific 
+    data type or scene, offering a unified and efficient experience for users.

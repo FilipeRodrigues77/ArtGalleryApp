@@ -15,7 +15,7 @@ import java.util.List;
  * This is a DAO (Data Access Object) implementation for Services using in-memory data.
  * Other implementations can implement the services over e.g. a DBMS (Database Management Systems).
  */
-public class MemoryStorage implements ArtistService, ArtworkService, GalleryService, ExhibitionService,NationalityService {
+public class MemoryStorage implements ArtistService, ArtworkService, GalleryService, ExhibitionService,NationalityService, RegionService {
 
     private final String DB_URL  = "jdbc:mysql://localhost:3306/IAProj";
     private final String DB_USER = "nuel", DB_PASSWORD = "testing12345";
@@ -423,7 +423,6 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
             String slugReferenceArtist = ArtworkUtils.mergeArtistAndArtwork(getArtistByID(artwork.getIdArtist()).getName(), artwork.getName());
             preparedStatement.setString(9, slugReferenceArtist);
             //---------------------------------------------------------------------------------------------------------------------------------
-
             preparedStatement.setString(10, artwork.getReferenceImage());
             preparedStatement.setInt(11, artwork.getIdArtist());
             preparedStatement.setInt(12, artwork.getIdGallery());
@@ -977,4 +976,26 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
         return nationalities;
     }
 
+    @Override
+    public List<Region> getRegions() throws ServiceException {
+
+        List<Region> regions = new ArrayList<>();
+
+        String commandSQL = "SELECT * FROM region";
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(commandSQL)) {
+
+            while (resultSet.next()) {
+                Region region = new Region();
+                region.setRegion(resultSet.getString("regionName"));
+                regions.add(region);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return regions;
+    }
 }

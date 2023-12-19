@@ -12,11 +12,14 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import presenter.MainGetExhibitions;
+import presenter.MainManageExhibition;
+
 
 import java.util.List;
 
 public class ManageExhibitionView extends BorderPane {
-
+    private ObservableList<Exhibition> observableListExhibition;
+    private ListView<Exhibition> listViewExhibition;
     public ManageExhibitionView() {
         doLayout();
         ManageMainView manageMainView = new ManageMainView();
@@ -25,42 +28,32 @@ public class ManageExhibitionView extends BorderPane {
     }
 
     private void doLayout() {
-        // Vamos criar aqui o layout deste painel
         setPadding(new Insets(20));
 
         //--------------------------------------------- HEADER ELEMENTS ---------------------------------------------
 
+        // CREATE A LIST VIEW
+        List<Exhibition> listExhibition = MainGetExhibitions.getAllExhibitions();
+        this.observableListExhibition = FXCollections.observableArrayList(listExhibition);
+        this.listViewExhibition = new ListView<>(observableListExhibition);
 
-        //Botão criar
+        // BUTTONS
+
         Button createButton = new Button("Criar");
-        //createButton.setOnAction(e -> list.getScene().setRoot(new PersonViewer(persons, null)));
-        //Botão editar
+        createButton.setOnAction(e -> getScene().setRoot(new CreateExhibitionView()));
+
         Button editButton = new Button("Editar");
-        /*editButton.setOnAction(e -> {
-            Person person = list.getSelectionModel().getSelectedItem();
-            if (person != null) {
-                list.getScene().setRoot(new PersonViewer(persons, person));
-            }
-        });
+        editButton.setOnAction(e -> editSelectedExhibition());
 
-         */
-        //Botão apagar
-        Button removeButton = new Button("Apagar");
-        /*removeButton.setOnAction(e -> {
-            Person person = list.getSelectionModel().getSelectedItem();
-            if (person != null) {
-                personsList.remove(person);
-//                persons.removePerson(person);
-                persons.remove(person);
-            }
+        Button deleteButton = new Button("Apagar");
+        deleteButton.setOnAction((e -> removeSelectedExhibition()));
 
-         */
         createButton.getStyleClass().add("button-modern");
         editButton.getStyleClass().add("button-modern");
-        removeButton.getStyleClass().add("button-modern");
+        deleteButton.getStyleClass().add("button-modern");
         // ADD ELEMENTS FOR THE MENU HBOX
         // SET HBOX FOR THE FILTER MENUS
-        HBox hBoxMenu = new HBox(createButton, editButton, removeButton);
+        HBox hBoxMenu = new HBox(createButton, editButton, deleteButton);
         hBoxMenu.setSpacing(50);
         hBoxMenu.setAlignment(Pos.CENTER);
 
@@ -71,11 +64,6 @@ public class ManageExhibitionView extends BorderPane {
 
 
         // ---------------------------------------------- CENTER LAYOUT ----------------------------------------------
-
-        // CREATE A LIST VIEW
-        List<Exhibition> listExhibition = MainGetExhibitions.getAllExhibitions();
-        ObservableList<Exhibition> observableListExhibition = FXCollections.observableArrayList(listExhibition);
-        ListView<Exhibition> listViewExhibition = new ListView<>(observableListExhibition);
 
         this.setCenter(listViewExhibition);
 
@@ -203,6 +191,41 @@ public class ManageExhibitionView extends BorderPane {
         imageView.setFitHeight(18); // Ajuste a altura conforme necessário
         imageView.setFitWidth(18);  // Ajuste a largura conforme necessário
         // imageView.setPreserveRatio(true);
+    }
+    private void editSelectedExhibition() {
+        Exhibition selectedExhibition = listViewExhibition.getSelectionModel().getSelectedItem();
+
+        if (selectedExhibition != null) {
+            getScene().setRoot(new EditExhibitionView(selectedExhibition));
+            listViewExhibition.refresh();
+        }
+    }
+    private void removeSelectedExhibition() {
+        Exhibition selectedExhibition = listViewExhibition.getSelectionModel().getSelectedItem();
+
+        if (selectedExhibition != null) {
+            // ALERT DELETE MESSAGE
+            Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmation.setTitle("Deletar Esposição");
+            confirmation.setHeaderText("Iuvennis Art - Base de Dados (Confirmar Exclusão)");
+            confirmation.setContentText("Tem certeza que deseja DELETAR a exposição? Essa alteração não tem retorno.");
+
+            ButtonType buttonYes = new ButtonType("Sim");
+            ButtonType buttonNo = new ButtonType("Não");
+            confirmation.getButtonTypes().setAll(buttonYes, buttonNo);
+
+            confirmation.showAndWait().ifPresent(response -> {
+                if (response == buttonYes) {
+                    // EXCLUDE OBJECT
+                    MainManageExhibition.removeExhibition(selectedExhibition);
+                    listViewExhibition.getItems().remove(selectedExhibition);
+                }
+            });
+
+            // ATUALIZE LISTVIEW
+            listViewExhibition.refresh();
+        }
+
     }
 
 

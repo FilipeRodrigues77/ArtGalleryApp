@@ -225,7 +225,7 @@ public class ManageArtistView extends BorderPane {
             confirmation.showAndWait().ifPresent(response -> {
                 if (response == buttonYes) {
                     // EXCLUDE OBJECT
-                    MainRemoveArtists.removeArtist(selectedArtist);
+                    MainManageArtists.removeArtist(selectedArtist);
                     listViewArtist.getItems().remove(selectedArtist);
                 }
             });
