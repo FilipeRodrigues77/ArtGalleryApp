@@ -509,6 +509,7 @@ public class SceneArtwork extends BorderPane {
      * @param artwork The artist for which details are to be displayed.
      */
     private void setArtworkLabelsOnAction(Artwork artwork){
+
         getScene().setRoot(doDetailsLayout(artwork));
     }
 
@@ -574,7 +575,7 @@ public class SceneArtwork extends BorderPane {
      * @param artworkList The list of all artworks to be displayed.
      * @return The GridPane representing the main grid layout.
      */
-    private GridPane buildMainGrid(List<Artwork> artworkList){
+    protected GridPane buildMainGrid(List<Artwork> artworkList){
 
         GridPane grid = new GridPane();
         grid.setHgap(15.4);
@@ -667,7 +668,7 @@ public class SceneArtwork extends BorderPane {
      * @param filteredArtwork The list of artworks to be displayed in the filtered grid.
      * @return The GridPane representing the filtered grid layout.
      */
-    private GridPane filteredGrid (List<Artwork> filteredArtwork){
+    protected GridPane filteredGrid (List<Artwork> filteredArtwork){
 
         GridPane grid = new GridPane();
         grid.setHgap(15.4);

@@ -407,51 +407,51 @@ public class SceneGallery extends BorderPane {
         grid.setPadding(new Insets(0, 10, 0, 0));
         grid.setGridLinesVisible(false);
 
-        for (int i = 0; i < artworkList.size(); i++) {
+        if ( artworkList != null) {
+            for (int i = 0; i < artworkList.size(); i++) {
 
-            int maxTextLength = 23;
+                int maxTextLength = 23;
 
-            Artwork artwork = artworkList.get(i);
-            String imageArtwork = artwork.getReferenceImage();
-            Image image;
-            ImageView imageViewArtwork;
-            if (imageArtwork != null){
-                image = new Image(imageArtwork.replace("{imageVersion}","square"));
+                Artwork artwork = artworkList.get(i);
+                String imageArtwork = artwork.getReferenceImage();
+                Image image;
+                ImageView imageViewArtwork;
+                if (imageArtwork != null) {
+                    image = new Image(imageArtwork.replace("{imageVersion}", "square"));
+                } else {
+                    image = new Image("Images/Artwork/AllArtworks/DefaultArtwork.jpg");
+                }
+                imageViewArtwork = new ImageView(image);
+                defaultSizeArtworkImage(imageViewArtwork);
+                imageViewArtwork.setOnMouseClicked(e -> getScene().setRoot(new SceneArtwork().doDetailsLayout(artwork)));
+
+                String artworkName = artwork.getName();
+                Hyperlink hyperArtworkName;
+                if (artworkName.length() < maxTextLength) {
+                    hyperArtworkName = new Hyperlink(artworkName);
+                } else {
+                    hyperArtworkName = new Hyperlink(artworkName.substring(0, maxTextLength) + "...");
+                }
+                hyperArtworkName.setOnMouseClicked(e -> getScene().setRoot(new SceneArtwork().doDetailsLayout(artwork)));
+
+                String currency = "€";
+                String price = currency + artwork.getPrice();
+                Hyperlink hyperPrice = new Hyperlink(price);
+                hyperPrice.getStyleClass().add("my-desc2-price-hyperlink");
+
+                VBox vBoxLabelArtwork = new VBox(hyperArtworkName, hyperPrice);
+
+                // CALCULATE THE COORDINATE FOR EACH CELL (4 COLUMNS)
+                int col = i % 4;
+                int row = i / 4 * 2; // MULTIPLY BY TWO TO JUMP LINE ON EACH ITERATION
+
+                // ADD IMAGES AND LABELS TO EACH CALCULATED SPOT
+                grid.add(imageViewArtwork, col * 2, row);
+                grid.add(vBoxLabelArtwork, col * 2, row + 1);
+
+
             }
-            else{
-                image = new Image("Images/Artwork/AllArtworks/DefaultArtwork.jpg");
-            }
-            imageViewArtwork = new ImageView(image);
-            defaultSizeArtworkImage(imageViewArtwork);
-            imageViewArtwork.setOnMouseClicked(e-> getScene().setRoot(new SceneArtwork().doDetailsLayout(artwork)));
-
-            String artworkName = artwork.getName();
-            Hyperlink hyperArtworkName;
-            if (artworkName.length() < maxTextLength){
-                hyperArtworkName = new Hyperlink(artworkName);
-            } else{
-                hyperArtworkName = new Hyperlink(artworkName.substring(0,maxTextLength)+"...");
-            }
-            hyperArtworkName.setOnMouseClicked(e-> getScene().setRoot(new SceneArtwork().doDetailsLayout(artwork)));
-
-            String currency = "€";
-            String price = currency + artwork.getPrice();
-            Hyperlink hyperPrice = new Hyperlink(price);
-            hyperPrice.getStyleClass().add("my-desc2-price-hyperlink");
-
-            VBox vBoxLabelArtwork = new VBox(hyperArtworkName, hyperPrice);
-
-            // CALCULATE THE COORDINATE FOR EACH CELL (4 COLUMNS)
-            int col = i % 4;
-            int row = i / 4 * 2; // MULTIPLY BY TWO TO JUMP LINE ON EACH ITERATION
-
-            // ADD IMAGES AND LABELS TO EACH CALCULATED SPOT
-            grid.add(imageViewArtwork, col * 2, row);
-            grid.add(vBoxLabelArtwork, col * 2, row + 1);
-
-
         }
-
         return grid;
     }
 

@@ -19,7 +19,7 @@ public class LoginManagerApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Iuvennis ManagerApp");
+        primaryStage.setTitle("Iuvenis ManagerApp");
         Stage loginStage = new Stage(StageStyle.UNDECORATED);
 
         // VERIRY LOGIN BEFORE SHOW MAIN SCENE
@@ -53,7 +53,7 @@ public class LoginManagerApp extends Application {
         buttonLogin.getStyleClass().add("button-modern");
         buttonLogin.setOnAction(e -> {
             // LOGIN AND PASSWORD LOGIC
-            if ("IuvennisArt".equals(usernameField.getText()) && "Admin123".equals(passwordField.getText())) {
+            if ("IuvenisArtem".equals(usernameField.getText()) && "Admin123".equals(passwordField.getText())) {
                 loginSuccess = true;
                 closeLoginStage(loginStage);
             } else {

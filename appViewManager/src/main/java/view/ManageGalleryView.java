@@ -12,7 +12,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import presenter.MainGetGalleries;
-import presenter.MainRemoveGallery;
+import presenter.MainManageGallery;
 
 import java.util.List;
 
@@ -29,8 +29,6 @@ public class ManageGalleryView extends BorderPane {
     }
 
     private void doLayout() {
-
-        // Vamos criar aqui o layout deste painel
         setPadding(new Insets(20));
 
         //--------------------------------------------- HEADER ELEMENTS ---------------------------------------------
@@ -222,7 +220,7 @@ public class ManageGalleryView extends BorderPane {
             confirmation.showAndWait().ifPresent(response -> {
                 if (response == buttonYes) {
                     // EXCLUDE OBJECT
-                    MainRemoveGallery.removeGallery(selectedGallery);
+                    MainManageGallery.removeGallery(selectedGallery);
                     listViewGallery.getItems().remove(selectedGallery);
                 }
             });

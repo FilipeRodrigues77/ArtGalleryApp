@@ -11,10 +11,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import locality.NationalityList;
 import locality.RegionList;
-import presenter.MainUpdateGalleries;
+import presenter.MainGetRegions;
+import presenter.MainManageGallery;
 
+import java.util.List;
 import java.util.Objects;
 
 public class EditGalleryView extends BorderPane {
@@ -44,10 +45,11 @@ public class EditGalleryView extends BorderPane {
 
         // ---------------------------------------------- CENTER LAYOUT ----------------------------------------------
         // COMBO BOX
-        ObservableList<String> statusOptions = FXCollections.observableArrayList(
-                RegionList.getAllRegion()
+        List<String> regionList;
+        ObservableList<String> regionOptions = FXCollections.observableArrayList(
+                regionList = MainGetRegions.getAllRegions()
         );
-        this.statusMenu = new ComboBox<>(statusOptions);
+        this.statusMenu = new ComboBox<>(regionOptions);
         statusMenu.setMaxWidth(120);
         statusMenu.setValue("Região");
         statusMenu.getStyleClass().add("combo-box");
@@ -203,7 +205,7 @@ public class EditGalleryView extends BorderPane {
             System.out.println("Campo vazio. Não é possível atualizar.");
             labelSucessMensage.setText("Não foi possível atualizar!");
         } else {
-            MainUpdateGalleries.updateGallery(gallery);
+            MainManageGallery.updateGallery(gallery);
             labelSucessMensage.setText("Alterações efetuadas com sucesso!");
             System.out.println("atualizado com sucesso");
         }

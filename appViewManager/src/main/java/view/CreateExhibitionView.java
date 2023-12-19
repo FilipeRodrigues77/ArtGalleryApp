@@ -1,46 +1,51 @@
 package view;
 
-import javafx.scene.Scene;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import domain.Artist;
+import domain.Exhibition;
+import domain.Gallery;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import presenter.MainGetNationalities;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import presenter.MainGetGalleries;
 import presenter.MainManageArtists;
+import presenter.MainManageExhibition;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 
-public class CreateArtistView extends BorderPane {
+public class CreateExhibitionView extends BorderPane {
 
-    private TextField textFieldArtistName;
-    private TextField textFieldBirthday;
-    private TextField textFieldDeathday;
-    private TextField textFieldBiography;
-    private TextField textFieldSlug;
-    private ComboBox<String> statusMenu;
-    private Spinner<Integer> yearBirthdaySpinner;
-    private Spinner<Integer> yearDeathdaySpinner;
+    private TextField textFieldnameExhibition;
+    private DatePicker datePickerstartDate;
+    private DatePicker datePickerEndDate;
+    private TextField textFieldExdescription;
+
+    private int idGallery;
+    private Gallery selectedGallery;
+    private ComboBox<Gallery> comboBoxGalleryRef;
     private Label labelSucessMensage;
     private TextField textFieldRefenceImage;
     private String refenceImage;
     private File selectedFile;
     private ImageView imageView;
 
-    public CreateArtistView() {
+    public CreateExhibitionView() {
         doLayout();
         ManageMainView manageMainView = new ManageMainView();
         String cssTheme = manageMainView.themeCurrent;
@@ -48,6 +53,7 @@ public class CreateArtistView extends BorderPane {
     }
 
     private void doLayout() {
+        // Vamos criar aqui o layout deste painel
         setPadding(new Insets(20));
 
         //--------------------------------------------- HEADER ELEMENTS ---------------------------------------------
@@ -72,67 +78,62 @@ public class CreateArtistView extends BorderPane {
         viewimageButton.setOnAction(event -> viewImage());
         viewimageButton.getStyleClass().add("button-modern");
 
-        Button removeImageButton = new Button("Remover imagem");
-        removeImageButton.getStyleClass().add("button-modern");
-        removeImageButton.setOnAction(event -> removeImage());
+        Button defaultImageButton = new Button("Imagem Padrão");
+        defaultImageButton.getStyleClass().add("button-modern");
+        defaultImageButton.setOnAction(event ->setDefaultImage());
 
         // COMBO BOX
-        List<String> nationalityList;
-        ObservableList<String> nationalityOptions = FXCollections.observableArrayList(
-                nationalityList = MainGetNationalities.getAllNationalities()
+        List<Gallery> galleries = MainGetGalleries.getAllGalleries();
+        this.comboBoxGalleryRef = new ComboBox<>();
+        comboBoxGalleryRef.getItems().addAll(galleries);
+        comboBoxGalleryRef.setOnAction(e -> {
+                    this.selectedGallery = comboBoxGalleryRef.getSelectionModel().getSelectedItem();
+                    if (selectedGallery != null) {
+                        this.idGallery = selectedGallery.getId();
+                    }
+                });
+        comboBoxGalleryRef.setVisibleRowCount(3);
 
-        );
-        this.statusMenu = new ComboBox<>(nationalityOptions);
-        statusMenu.setMaxWidth(120);
-        statusMenu.setValue("Nacionalidade");
-        statusMenu.getStyleClass().add("combo-box");
 
-        // SPINNER
-        this.yearBirthdaySpinner = new Spinner<>(0, 2999, 1990);
-        yearBirthdaySpinner.setEditable(true);
-
-        this.yearDeathdaySpinner = new Spinner<>(0, 2999,0);
-        yearDeathdaySpinner.setEditable(true);
 
         // LABELS
-        Label labelArtistName = new Label("Nome do Artista (max. 100 caracteres):");
-        Label labelBirthday = new Label("Ano Nascimento (ex: 1990):");
-        Label labelDeathday = new Label("Ano da Morte (4 dígitos):");
-        Label labelBiography = new Label("Biografia (max.10000 caracteres):");
-        Label labelSlug = new Label("Slug (nome-separado-por-hifén-em-minúsculo):");
+        Label labelExhibitionName = new Label("Nome da Exposição (max. 100 caracteres):");
+        Label labelStartDate = new Label("Data Inicio (ex: 2016-02-23):");
+        Label labelEndDate = new Label("Data Fecho (ex: 2025-02-23):");
+        Label labelDescription = new Label("Descrição (max.10000 caracteres):");
+        Label labelRefGallery = new Label("Galeria Referente");
         Label labelReferenceImage = new Label("Caminho referencia da imagem");
 
-        this.textFieldArtistName = new TextField();
-        this.textFieldBirthday = new TextField();
-        this.textFieldDeathday = new TextField();
-        this.textFieldBiography = new TextField();
-        this.textFieldSlug = new TextField();
+        this.datePickerstartDate = new DatePicker();
+        this.datePickerEndDate = new DatePicker();
+        this.textFieldnameExhibition = new TextField();
+        this.textFieldExdescription = new TextField();
         this.textFieldRefenceImage = new TextField(refenceImage);
+
         textFieldRefenceImage.setDisable(true);
+        textFieldExdescription.setPrefSize(520,200);
 
-        textFieldBiography.setPrefSize(520,200);
-
-        HBox hBoxButtonImage = new HBox(attachImageButton, viewimageButton, removeImageButton);
+        HBox hBoxButtonImage = new HBox(attachImageButton, viewimageButton, defaultImageButton);
         VBox vBoxRefImageLabelAndText = new VBox(labelReferenceImage,textFieldRefenceImage);
         VBox vBoxReferenceImage = new VBox(vBoxRefImageLabelAndText, hBoxButtonImage);
-        VBox vBoxArtistName = new VBox(labelArtistName,textFieldArtistName);
-        VBox vBoxBirthday = new VBox(labelBirthday,yearBirthdaySpinner);
-        VBox vBoxDeathday = new VBox(labelDeathday,yearDeathdaySpinner);
-        VBox vBoxBiography = new VBox(labelBiography,textFieldBiography);
-        VBox vBoxSlug = new VBox(labelSlug,textFieldSlug);
-        HBox hBoxBirthdayDeathday = new HBox(vBoxBirthday, vBoxDeathday);
-        VBox vBoxArtistInfo = new VBox(vBoxArtistName, hBoxBirthdayDeathday, vBoxSlug, vBoxBiography, vBoxReferenceImage);
-        VBox vBoxStatusNation = new VBox(statusMenu);
-        HBox hBoxCenterLayout = new HBox(vBoxArtistInfo,vBoxStatusNation);
+        VBox vBoxGallery = new VBox(labelRefGallery, comboBoxGalleryRef);
+        VBox vBoxExhibitionName = new VBox(labelExhibitionName,textFieldnameExhibition);
+        VBox vBoxStartDate = new VBox(labelStartDate,datePickerstartDate);
+        VBox vBoxEndDate = new VBox(labelEndDate,datePickerEndDate);
+        VBox vBoxDescription = new VBox(labelDescription,textFieldExdescription);
+
+        HBox hBoxDate = new HBox(vBoxStartDate, vBoxEndDate);
+        VBox vBoxExhibitionInfo = new VBox(vBoxExhibitionName, hBoxDate, vBoxDescription, vBoxReferenceImage);
+        VBox vBoxStatusGallery = new VBox(vBoxGallery);
+        HBox hBoxCenterLayout = new HBox(vBoxExhibitionInfo,vBoxStatusGallery);
 
         hBoxButtonImage.setSpacing(10);
         vBoxReferenceImage.setSpacing(10);
-        vBoxStatusNation.setSpacing(50);
-        hBoxBirthdayDeathday.setSpacing(50);
+        hBoxDate.setSpacing(50);
         hBoxCenterLayout.setSpacing(50);
-        vBoxArtistInfo.setSpacing(10);
-        vBoxArtistInfo.setPrefWidth(520);
-        vBoxStatusNation.setPadding(new Insets(15));
+        vBoxExhibitionInfo.setSpacing(10);
+        vBoxExhibitionInfo.setPrefWidth(520);
+        vBoxStatusGallery.setPadding(new Insets(15));
 
         this.setCenter(hBoxCenterLayout);
 
@@ -140,20 +141,20 @@ public class CreateArtistView extends BorderPane {
 
         // ADD THE BOTTOM ELEMENTS INSIDE THE DESIGNATED HBOX
         this.setBottom(getFooterBox());
-
     }
 
     private VBox getFooterBox (){
         // Buttons
-        Button createArtistButton = new Button("Criar Artista");
+        Button createExhibitionButton = new Button("Criar Exposição");
         Button cancelButton = new Button("Cancelar");
 
-        createArtistButton.getStyleClass().add("button-modern");
+        createExhibitionButton.getStyleClass().add("button-modern");
         cancelButton.getStyleClass().add("button-modern");
 
-        createArtistButton.setOnAction(event -> {
-                saveImage();
-                createArtist();
+        createExhibitionButton.setOnAction(event -> {
+
+            saveImage();
+            createExhibition();
 
         });
 
@@ -173,7 +174,7 @@ public class CreateArtistView extends BorderPane {
         Label labelButtonStatus = new Label("I~A © 2023 I~A  Todos os direitos reservados");
 
         // DEFINE A HBOX
-        HBox hBoxButtons = new HBox(createArtistButton, cancelButton);
+        HBox hBoxButtons = new HBox(createExhibitionButton, cancelButton);
         hBoxButtons.setSpacing(30);
         hBoxButtons.setAlignment(Pos.CENTER_RIGHT);
         this.labelSucessMensage = new Label("");
@@ -202,7 +203,6 @@ public class CreateArtistView extends BorderPane {
         Hyperlink hyperlinkExhibition = new Hyperlink("Exposições");
         Hyperlink hyperLinkArtwork = new Hyperlink("Obras de Arte");
 
-        // Text Fields
         Label labelManagerInfo = new Label("Sistema de Gestão Iuvennis Art");
         labelManagerInfo.setPrefSize(550, 30);
         labelManagerInfo.getStyleClass().add("my-center-label-6 ");
@@ -231,7 +231,7 @@ public class CreateArtistView extends BorderPane {
         hyperlinkGallery.setOnAction(e -> getScene().setRoot(new ManageGalleryView()));
         hyperlinkExhibition.setOnAction(e -> getScene().setRoot(new ManageExhibitionView()));
         hyperLinkArtwork.setOnAction(e -> getScene().setRoot(new ManageArtworkView()));
-        hyperlinkArtist.getStyleClass().add("actual-page-hyperlink");
+        hyperlinkExhibition.getStyleClass().add("actual-page-hyperlink");
 
         VBox vBoxTop = new VBox(hBoxHeader,hBoxHyperlink);
         setMargin(vBoxTop, new Insets(0, 0, 20, 0));
@@ -256,12 +256,6 @@ public class CreateArtistView extends BorderPane {
         imageView.setFitHeight(18); // Ajuste a altura conforme necessário
         imageView.setFitWidth(18);  // Ajuste a largura conforme necessário
         // imageView.setPreserveRatio(true);
-    }
-
-    public void defaultSizeArtistImage(ImageView imageView){
-        imageView.setFitHeight(160); // Ajuste a altura conforme necessário
-        imageView.setFitWidth(160);  // Ajuste a largura conforme necessário
-        //imageView.setPreserveRatio(true);
     }
 
     private void openFileChooser() {
@@ -309,21 +303,16 @@ public class CreateArtistView extends BorderPane {
 
     private void saveImage() {
         if (selectedFile != null) {
-            String artistName = textFieldArtistName.getText().trim();
+            String artistName = textFieldnameExhibition.getText().trim();
 
             if (artistName.isEmpty()) {
-                showAlert("Nome do artista Vazio", "Por favor, insira um nome para o artista antes de salvar a imagem.");
+                showAlert("Nome da exposição Vazio", "Por favor, insira um nome para a exposição antes de salvar a imagem.");
                 return;
             }
 
-            // Verificar se uma região foi selecionada
-            if (Objects.equals(statusMenu.getValue(), "Nacionalidade") || statusMenu.getValue().trim().isEmpty()) {
-                showAlert("Nacionalidade Não Selecionada", "Por favor, selecione uma nacionalidade antes de salvar a imagem.");
-                return;
-            }
 
             // Pasta predefinida (pode ser ajustada conforme necessário)
-            File destinationFolder = new File("images/analise/artistas");
+            File destinationFolder = new File("images/analise/exposicoes");
 
             try {
                 // Verificar se a pasta de destino existe; se não, crie-a
@@ -355,10 +344,10 @@ public class CreateArtistView extends BorderPane {
         }
     }
 
-    private void removeImage() {
+    private void setDefaultImage() {
         imageView.setImage(null);
         selectedFile = null;
-        refenceImage = null;
+        refenceImage = "Images/Exhibition/Default.jpg";
         textFieldRefenceImage.setText(refenceImage);
     }
 
@@ -388,50 +377,44 @@ public class CreateArtistView extends BorderPane {
         return image.getWidth() >= 400 && image.getHeight() >= 400 && image.getWidth() <= 2000 && image.getHeight() <= 2000;
     }
 
-    private void createArtist() {
+    private void createExhibition() {
+
         //STRINGS ATTRIBUTES FOR OBJECT
-        String name = textFieldArtistName.getText();
-        String biography = textFieldBiography.getText();
-        String birthdate = yearBirthdaySpinner.getValue().toString();
-        String deathdate = yearDeathdaySpinner.getValue().toString();
-        String slug = textFieldSlug.getText();
-        String nationality = statusMenu.getValue();
-        String refenceImage = null;
+        String name = textFieldnameExhibition.getText();
+        String description = textFieldExdescription.getText();
+        LocalDate startDate = datePickerstartDate.getValue();
+        LocalDate endDate = datePickerEndDate.getValue();
+        refenceImage = null;
 
         //CREATE NEW OBJECT
-        Artist newArtist = new Artist();
-        newArtist.setName(name);
-        newArtist.setBiography(biography);
-        newArtist.setBirthdate(birthdate);
-        newArtist.setDeathdate(deathdate);
-        newArtist.setSlug(slug);
-        newArtist.setNationality(nationality);
-        newArtist.setReferenceImage(refenceImage);
+        Exhibition newExhibition = new Exhibition();
+        newExhibition.setNameExhibition(name);
+        newExhibition.setExdescription(description);
 
-        //ADD TO DATABASE
-        if (newArtist.getName() == null || newArtist.getName().trim().isEmpty()
-            || newArtist.getName().isBlank() || Objects.equals(statusMenu.getValue(), "Nacionalidade") ||
-                statusMenu.getValue().trim().isEmpty() || statusMenu.getValue().isBlank()) {
+        newExhibition.setStartDate(startDate);
+        newExhibition.setEndDate(endDate);
+
+
+        newExhibition.setIdGallery(idGallery);
+        newExhibition.setReferenceImage(refenceImage);
+
+        //ADD TO DATABASE (FAZER OS TESTES PARA TRATAMENTO DA INFORMAÇÃO)
+        if (newExhibition.getNameExhibition() == null || newExhibition.getNameExhibition().trim().isEmpty()
+            || newExhibition.getNameExhibition().isBlank() || idGallery == 0 || startDate == null || endDate == null || isEndDateBeforeStartDate(startDate, endDate)) {
             System.out.println("Campo vazio. Não é possível atualizar.");
             labelSucessMensage.setText("Não foi possível atualizar!");
+
         } else {
-            MainManageArtists.addArtist(newArtist);
+            MainManageExhibition.addExhibition(newExhibition);
             labelSucessMensage.setText("Alterações efetuadas com sucesso!");
             System.out.println("atualizado com sucesso");
         }
+
+
     }
 
-
-        private boolean isValidNumber(String newValue) {
-            if (newValue.isEmpty()) {
-                return true; // Aceitar campo vazio
-            }
-            try {
-                int value = Integer.parseInt(newValue);
-                return value >= 0 && value <= 2023;
-            } catch (NumberFormatException e) {
-                return false; // Não é um número válido
-            }
-        }
+    public static boolean isEndDateBeforeStartDate(LocalDate startDate, LocalDate endDate) {
+        return endDate.isBefore(startDate);
+    }
 
 }

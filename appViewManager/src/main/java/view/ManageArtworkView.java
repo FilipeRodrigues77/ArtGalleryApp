@@ -1,6 +1,7 @@
 package view;
 
 import domain.Artwork;
+import domain.Exhibition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -12,10 +13,15 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import presenter.MainGetArtworks;
+import presenter.MainGetExhibitions;
+import presenter.MainManageArtwork;
+import presenter.MainManageExhibition;
 
 import java.util.List;
 
 public class ManageArtworkView extends BorderPane {
+    private ObservableList<Artwork> observableListArtwork;
+    private ListView<Artwork> listViewArtwork;
 
     public ManageArtworkView() {
         doLayout();
@@ -25,42 +31,31 @@ public class ManageArtworkView extends BorderPane {
     }
 
     private void doLayout() {
-        // Vamos criar aqui o layout deste painel
         setPadding(new Insets(20));
 
         //--------------------------------------------- HEADER ELEMENTS ---------------------------------------------
 
+        // CREATE A LIST VIEW
+        List<Artwork> listArtwork = MainGetArtworks.getAllArtworks();
+        this.observableListArtwork = FXCollections.observableArrayList(listArtwork);
+        this.listViewArtwork = new ListView<>(observableListArtwork);
 
-        //Botão criar
+        //BUTTONS
         Button createButton = new Button("Criar");
-        //createButton.setOnAction(e -> list.getScene().setRoot(new PersonViewer(persons, null)));
-        //Botão editar
+        createButton.setOnAction(e -> getScene().setRoot(new CreateArtworkView()));
+
         Button editButton = new Button("Editar");
-        /*editButton.setOnAction(e -> {
-            Person person = list.getSelectionModel().getSelectedItem();
-            if (person != null) {
-                list.getScene().setRoot(new PersonViewer(persons, person));
-            }
-        });
+        editButton.setOnAction(e -> editSelectedArtwork());
 
-         */
-        //Botão apagar
-        Button removeButton = new Button("Apagar");
-        /*removeButton.setOnAction(e -> {
-            Person person = list.getSelectionModel().getSelectedItem();
-            if (person != null) {
-                personsList.remove(person);
-//                persons.removePerson(person);
-                persons.remove(person);
-            }
+        Button deleteButton = new Button("Apagar");
+        deleteButton.setOnAction((e -> removeSelectedArtwork()));
 
-         */
         createButton.getStyleClass().add("button-modern");
         editButton.getStyleClass().add("button-modern");
-        removeButton.getStyleClass().add("button-modern");
+        deleteButton.getStyleClass().add("button-modern");
         // ADD ELEMENTS FOR THE MENU HBOX
         // SET HBOX FOR THE FILTER MENUS
-        HBox hBoxMenu = new HBox(createButton, editButton, removeButton);
+        HBox hBoxMenu = new HBox(createButton, editButton, deleteButton);
         hBoxMenu.setSpacing(50);
         hBoxMenu.setAlignment(Pos.CENTER);
 
@@ -69,13 +64,7 @@ public class ManageArtworkView extends BorderPane {
         setMargin(vBoxTop, new Insets(0, 0, 20, 0));
         setTop(vBoxTop);
 
-
         // ---------------------------------------------- CENTER LAYOUT ----------------------------------------------
-
-        // CREATE A LIST VIEW
-        List<Artwork> listArtwork = MainGetArtworks.getAllArtworks();
-        ObservableList<Artwork> observableListArtwork = FXCollections.observableArrayList(listArtwork);
-        ListView<Artwork> listViewArtwork = new ListView<>(observableListArtwork);
 
         this.setCenter(listViewArtwork);
 
@@ -167,7 +156,6 @@ public class ManageArtworkView extends BorderPane {
         setMargin(vBoxTop, new Insets(0, 0, 20, 0));
 
         return  vBoxTop;
-
     }
 
     private void setOriginalDescription(TextField textField, String originalText){
@@ -194,7 +182,6 @@ public class ManageArtworkView extends BorderPane {
             else{
                 getScene().setRoot(new ShowErrorView());
             }
-
         }
     }
 
@@ -203,6 +190,41 @@ public class ManageArtworkView extends BorderPane {
         imageView.setFitHeight(18); // Ajuste a altura conforme necessário
         imageView.setFitWidth(18);  // Ajuste a largura conforme necessário
         // imageView.setPreserveRatio(true);
+    }
+
+    private void editSelectedArtwork() {
+        Artwork selectedArtwork = listViewArtwork.getSelectionModel().getSelectedItem();
+
+        if (selectedArtwork != null) {
+            getScene().setRoot(new EditArtworkView(selectedArtwork));
+            listViewArtwork.refresh();
+        }
+    }
+
+    private void removeSelectedArtwork() {
+        Artwork selectedArtwork = listViewArtwork.getSelectionModel().getSelectedItem();
+
+        if (selectedArtwork != null) {
+            // ALERT DELETE MESSAGE
+            Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmation.setTitle("Deletar Obra de Arte");
+            confirmation.setHeaderText("Iuvennis Art - Base de Dados (Confirmar Exclusão)");
+            confirmation.setContentText("Tem certeza que deseja DELETAR a obra de arte? Essa alteração não tem retorno.");
+
+            ButtonType buttonYes = new ButtonType("Sim");
+            ButtonType buttonNo = new ButtonType("Não");
+            confirmation.getButtonTypes().setAll(buttonYes, buttonNo);
+
+            confirmation.showAndWait().ifPresent(response -> {
+                if (response == buttonYes) {
+                    // EXCLUDE OBJECT
+                    MainManageArtwork.removeArtwork(selectedArtwork);
+                    listViewArtwork.getItems().remove(selectedArtwork);
+                }
+            });
+            // ATUALIZE LISTVIEW
+            listViewArtwork.refresh();
+        }
     }
 
 
