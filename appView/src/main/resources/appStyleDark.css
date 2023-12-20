@@ -1,19 +1,19 @@
 .root {
-    -fx-background-color: #333333; /* Cor de fundo escura */
-    -fx-text-fill: #ffffff; /* Cor do texto */
+    -fx-background-color: #333333;
+    -fx-text-fill: #ffffff;
     -fx-base: #333333;
 }
 
 .button {
-    -fx-background-color: #f4f4f4; /* Cor de fundo */
-    -fx-text-fill: #4CAF50; /* Cor do texto */
-    -fx-font-size: 14px; /* Tamanho da fonte */
-    -fx-padding: 10px 20px; /* Preenchimento interno */
+    -fx-background-color: #f4f4f4;
+    -fx-text-fill: #4CAF50;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 20px;
 }
 
 .label {
     -fx-font-style: italic;
-    -fx-text-fill: lightgray; /* Cor do texto normal */
+    -fx-text-fill: lightgray;
 }
 
 .my-desc-hyperlink {
@@ -36,62 +36,62 @@
 }
 
 .my-blue-label {
-    -fx-text-fill: #6495ed; /* Cor do texto normal */
+    -fx-text-fill: #6495ed;
 }
 
 .my-label {
     -fx-font-style: italic;
-    -fx-font-size: 14px; /* Tamanho da fonte */
+    -fx-font-size: 14px;
 }
 
 .text-field {
-    -fx-background-color: transparent; /* Cor de fundo */
-    -fx-border-color: #a0a0a0; /* Cor da borda */
-    -fx-border-width: 1; /* Largura da borda */
-    -fx-border-radius: 5; /* Raio da borda (bordas arredondadas) */
-    -fx-padding: 5; /* Preenchimento interno */
-    -fx-prompt-text-fill: #808080; /* Cor do texto padrão */
+    -fx-background-color: transparent;
+    -fx-border-color: #a0a0a0;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-padding: 5;
+    -fx-prompt-text-fill: #808080;
     -fx-text-fill: gray;
 }
 
 .text-field:hover {
-    -fx-background-color:  #444444;; /* Cor de fundo ao passar o mouse */
+    -fx-background-color:  #444444;
 }
 
 .hyperlink {
-    -fx-text-fill: gray; /* Cor do texto normal */
-    -fx-underline: false; /* Remover sublinhado padrão */
+    -fx-text-fill: gray;
+    -fx-underline: false;
     -fx-font-style: italic;
 }
 
 .hyperlink:hover {
-    -fx-text-fill: lightgray; /* Cor do texto ao passar o mouse */
-    -fx-underline: true; /* Adicionar sublinhado ao passar o mouse */
+    -fx-text-fill: lightgray;
+    -fx-underline: true;
 }
 
 .hyperlink:focused {
-    -fx-focus-color: transparent; /* Remover contorno azul ao focar */
+    -fx-focus-color: transparent;
 }
 
 .actual-page-hyperlink {
-    -fx-text-fill: lightgray; /* Cor do texto normal */
-    -fx-underline: false; /* Remover sublinhado padrão */
+    -fx-text-fill: lightgray;
+    -fx-underline: false;
     -fx-font-style: italic;
 }
 
 .actual-page-label {
-    -fx-text-fill: lightgray; /* Cor do texto normal */
-    -fx-underline: false; /* Remover sublinhado padrão */
+    -fx-text-fill: lightgray;
+    -fx-underline: false;
     -fx-font-style: italic;
 }
 
 .actual-page-hyperlink:hover {
-    -fx-text-fill: lightgray; /* Cor do texto ao passar o mouse */
-    -fx-underline: false; /* Adicionar sublinhado ao passar o mouse */
+    -fx-text-fill: lightgray;
+    -fx-underline: false;
 }
 
 .actual-page-hyperlink:focused {
-    -fx-focus-color: transparent; /* Remover contorno azul ao focar */
+    -fx-focus-color: transparent;
 }
 
 .SlideShowView {
@@ -103,7 +103,7 @@
 .my-center-label-1 {
     -fx-font-weight: bold;
     -fx-font-size: 24;
-    -fx-background-color: transparent; /* Cor de fundo */
+    -fx-background-color: transparent;
 }
 
 .my-center-label-2 {
@@ -120,7 +120,7 @@
 .my-center-label-4 {
     -fx-font-weight: bold;
     -fx-font-size: 24;
-    -fx-background-color: transparent; /* Cor de fundo */
+    -fx-background-color: transparent;
 }
 
 .my-center-label-5 {
@@ -144,50 +144,50 @@
 }
 
 .cell-clear-background {
-    -fx-background-color: #222222; /* Cor de fundo */
+    -fx-background-color: #222222;
     -fx-background-radius: 7 7 7 7;
 }
 
 .scroll-pane {
-    -fx-background-color: #333333; /* Cor de fundo escura para a ScrollPane */
+    -fx-background-color: #333333;
 }
 
 .scroll-pane .scroll-bar:vertical {
-    -fx-background-color: #333333; /* Cor de fundo escura para a barra vertical */
+    -fx-background-color: #333333;
 }
 
 .scroll-pane .scroll-bar:horizontal {
-    -fx-background-color: #555555; /* Cor de fundo da barra horizontal */
+    -fx-background-color: #555555;
 }
 
 .scroll-pane .scroll-bar:increment-button,
 .scroll-pane .scroll-bar:decrement-button {
-    -fx-background-color: #777777; /* Cor de fundo das setas */
+    -fx-background-color: #777777;
 }
 
 .scroll-pane .scroll-bar:increment-button:hover,
 .scroll-pane .scroll-bar:decrement-button:hover {
-    -fx-background-color: #999999; /* Cor de fundo das setas quando hover */
+    -fx-background-color: #999999;
 }
 
 .grid-pane {
-    -fx-background-color: #333333; /* Cor de fundo escura para a GridPane */
+    -fx-background-color: #333333;
 }
 
 .button-modern {
-   -fx-background-color: transparent; /* Fundo transparente */
-   -fx-text-fill: #808080; /* Cor do texto (cinza) */
-   -fx-font-size: 10px; /* Tamanho da fonte */
-   -fx-padding: 10 20 10 20; /* Preenchimento interno do botão (topo direita baixo esquerda) */
-   -fx-border-radius: 50; /* Raio da borda do botão */
-   -fx-background-radius: 50; /* Raio do fundo do botão */
-   -fx-border-color: #808080; /* Cor da borda */
-   -fx-border-width: 1; /* Largura da borda */
-   -fx-cursor: hand; /* Cursor ao passar o mouse sobre o botão */
+   -fx-background-color: transparent;
+   -fx-text-fill: #808080;
+   -fx-font-size: 10px;
+   -fx-padding: 10 20 10 20;
+   -fx-border-radius: 50;
+   -fx-background-radius: 50;
+   -fx-border-color: #808080;
+   -fx-border-width: 1;
+   -fx-cursor: hand;
 }
 
 .button-modern:hover {
-    -fx-background-color:  #444444; /* Cor de fundo ao passar o mouse sobre o botão */
+    -fx-background-color:  #444444;
 }
 
 .combo-box {
