@@ -95,7 +95,7 @@ public class LoginManagerApp extends Application {
         grid.add(buttonClose, 0, 4);
 
         Scene loginScene = new Scene(grid, 400, 300);
-        loginScene.getStylesheets().add(getClass().getResource("appStyleDark.css").toExternalForm());
+        loginScene.getStylesheets().add(getClass().getResource("appStyleLight.css").toExternalForm());
         loginStage.setScene(loginScene);
         loginStage.showAndWait();
         return loginSuccess;

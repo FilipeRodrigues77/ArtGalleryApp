@@ -218,6 +218,15 @@ public class MainGetArtists {
         return listArtists;
     }
 
+    public static void main(String[] args) {
+
+        String urlString = "http://localhost:" + PORT + "/artists/searchBirthdate";
+        System.out.println("URL: " + urlString);
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(urlString)).newBuilder();
+
+
+    }
+
     /**
      * Searches for artists by birthdate on the server.
      *
@@ -232,7 +241,7 @@ public class MainGetArtists {
         Gson gson = new GsonBuilder().create();
 
         // Build the URL and add query parameter
-        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://localhost:" + PORT +"artists/searchBirthdate")).newBuilder();
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("http://localhost:"+ PORT +"/artists/searchBirthdate")).newBuilder();
         urlBuilder.addQueryParameter("birthdate", birthdate);
         String url = urlBuilder.build().toString();
 
