@@ -41,7 +41,7 @@ public class Art extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        primaryStage.setTitle("Iuvenis Art");
+        primaryStage.setTitle("Iuvenis Artem");
         Scene mainScene = new Scene(new MainView(), 800, 600);
         primaryStage.setScene(mainScene);
         primaryStage.show();
