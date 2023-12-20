@@ -24,6 +24,16 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The CreateArtistView class represents the graphical user interface for creating and managing artist information.
+ * It extends the BorderPane class and includes various UI elements for inputting and displaying details about an artist.
+ * This class provides functionality to create, view, and manage artist information, including their image, biography,
+ * and other attributes.
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
+ */
 public class CreateArtistView extends BorderPane {
 
     private TextField textFieldArtistName;
@@ -34,12 +44,17 @@ public class CreateArtistView extends BorderPane {
     private ComboBox<String> statusMenu;
     private Spinner<Integer> yearBirthdaySpinner;
     private Spinner<Integer> yearDeathdaySpinner;
-    private Label labelSucessMensage;
-    private TextField textFieldRefenceImage;
-    private String refenceImage;
+    private Label labelSuccessMessage;
+    private TextField textFieldReferenceImage;
+    private String referenceImage;
     private File selectedFile;
     private ImageView imageView;
 
+
+    /**
+     * CreateArtistView constructs a new CreateArtistView instance.
+     * Initializes the layout and sets the stylesheet based on the current theme.
+     */
     public CreateArtistView() {
         doLayout();
         ManageMainView manageMainView = new ManageMainView();
@@ -47,6 +62,10 @@ public class CreateArtistView extends BorderPane {
         getStylesheets().add(cssTheme);
     }
 
+    /**
+     * This method configures the layout of the CreateArtistView, including header, center, and bottom sections.
+     * Sets up various UI elements such as text fields, buttons, and spinners for creating artist information.
+     */
     private void doLayout() {
         setPadding(new Insets(20));
 
@@ -107,13 +126,13 @@ public class CreateArtistView extends BorderPane {
         this.textFieldDeathday = new TextField();
         this.textFieldBiography = new TextField();
         this.textFieldSlug = new TextField();
-        this.textFieldRefenceImage = new TextField(refenceImage);
-        textFieldRefenceImage.setDisable(true);
+        this.textFieldReferenceImage = new TextField(referenceImage);
+        textFieldReferenceImage.setDisable(true);
 
         textFieldBiography.setPrefSize(520,200);
 
         HBox hBoxButtonImage = new HBox(attachImageButton, viewimageButton, removeImageButton);
-        VBox vBoxRefImageLabelAndText = new VBox(labelReferenceImage,textFieldRefenceImage);
+        VBox vBoxRefImageLabelAndText = new VBox(labelReferenceImage, textFieldReferenceImage);
         VBox vBoxReferenceImage = new VBox(vBoxRefImageLabelAndText, hBoxButtonImage);
         VBox vBoxArtistName = new VBox(labelArtistName,textFieldArtistName);
         VBox vBoxBirthday = new VBox(labelBirthday,yearBirthdaySpinner);
@@ -143,6 +162,12 @@ public class CreateArtistView extends BorderPane {
 
     }
 
+    /**
+     * Retrieves the layout for the bottom section, including buttons for creating and canceling artist creation,
+     * social media icons, and a status label.
+     *
+     * @return The VBox containing the bottom section layout.
+     */
     private VBox getFooterBox (){
         // Buttons
         Button createArtistButton = new Button("Criar Artista");
@@ -176,8 +201,8 @@ public class CreateArtistView extends BorderPane {
         HBox hBoxButtons = new HBox(createArtistButton, cancelButton);
         hBoxButtons.setSpacing(30);
         hBoxButtons.setAlignment(Pos.CENTER_RIGHT);
-        this.labelSucessMensage = new Label("");
-        VBox vBoxButtons = new VBox(hBoxButtons, labelSucessMensage);
+        this.labelSuccessMessage = new Label("");
+        VBox vBoxButtons = new VBox(hBoxButtons, labelSuccessMessage);
         vBoxButtons.setSpacing(10);
 
         HBox hBoxBottomImages = new HBox(imageViewLinkedin,imageViewGitHub);
@@ -193,6 +218,12 @@ public class CreateArtistView extends BorderPane {
         return vBoxBottomLayout;
     }
 
+    /**
+     * Retrieves the layout for the header section, including hyperlinks for navigating to different sections
+     * and the logo.
+     *
+     * @return The VBox containing the header section layout.
+     */
     private VBox getHeaderBox (){
 
         // HYPERLINKS
@@ -203,7 +234,7 @@ public class CreateArtistView extends BorderPane {
         Hyperlink hyperLinkArtwork = new Hyperlink("Obras de Arte");
 
         // Text Fields
-        Label labelManagerInfo = new Label("Sistema de Gestão Iuvennis Art");
+        Label labelManagerInfo = new Label("Sistema de Gestão Iuvenis Artem");
         labelManagerInfo.setPrefSize(550, 30);
         labelManagerInfo.getStyleClass().add("my-center-label-6 ");
 
@@ -240,6 +271,12 @@ public class CreateArtistView extends BorderPane {
 
     }
 
+    /**
+     * Sets the original description for a TextField when it loses focus, resetting it to the original text if empty.
+     * Method not yet in use.*
+     * @param textField     The TextField to monitor for changes.
+     * @param originalText  The original text to set when the TextField loses focus.
+     */
     private void setOriginalDescription(TextField textField, String originalText){
 
         textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -251,19 +288,31 @@ public class CreateArtistView extends BorderPane {
         });
     }
 
-    // image treatment
+    /**
+     * Sets the default size for an ImageView representing an icon.
+     *
+     * @param imageView  The ImageView to set the default size for.
+     */
     public void defaultSizeIcon (ImageView imageView){
         imageView.setFitHeight(18); // Ajuste a altura conforme necessário
         imageView.setFitWidth(18);  // Ajuste a largura conforme necessário
         // imageView.setPreserveRatio(true);
     }
 
+    /**
+     * Sets the default size for an ImageView representing an artist's image.
+     * Method not yet in use.*
+     * @param imageView  The ImageView to set the default size for.
+     */
     public void defaultSizeArtistImage(ImageView imageView){
         imageView.setFitHeight(160); // Ajuste a altura conforme necessário
         imageView.setFitWidth(160);  // Ajuste a largura conforme necessário
         //imageView.setPreserveRatio(true);
     }
 
+    /**
+     * Opens a file chooser dialogue for selecting an image file and updates the UI accordingly.
+     */
     private void openFileChooser() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Selecionar Imagem");
@@ -279,14 +328,17 @@ public class CreateArtistView extends BorderPane {
                 Image image = new Image(selectedFile.toURI().toString());
                 imageView.setImage(image);
 
-                refenceImage = selectedFile.toURI().toString();
-                textFieldRefenceImage.setText(refenceImage);
+                referenceImage = selectedFile.toURI().toString();
+                textFieldReferenceImage.setText(referenceImage);
             } else {
                 showAlert("Imagem Inválida", "A imagem selecionada não atende aos requisitos.");
             }
         }
     }
 
+    /**
+     * Displays a separate window for viewing the selected artist image.
+     */
     private void viewImage() {
         if (selectedFile != null) {
             ImageView viewImageView = new ImageView(new Image(selectedFile.toURI().toString()));
@@ -307,6 +359,10 @@ public class CreateArtistView extends BorderPane {
         }
     }
 
+    /**
+     * Saves the selected artist image to a specified destination folder and updates
+     * the UI with a success message.
+     */
     private void saveImage() {
         if (selectedFile != null) {
             String artistName = textFieldArtistName.getText().trim();
@@ -349,19 +405,28 @@ public class CreateArtistView extends BorderPane {
             }
         } else {
             // Se nenhum arquivo foi selecionado, use a imagem padrão
-            refenceImage = null;
-            textFieldRefenceImage.setText(refenceImage);
+            referenceImage = null;
+            textFieldReferenceImage.setText(referenceImage);
             showAlert("Sem Imagem", "Nenhuma imagem selecionada. Será usada a imagem padrão.");
         }
     }
 
+    /**
+     * Removes the currently selected artist image from the UI.
+     */
     private void removeImage() {
         imageView.setImage(null);
         selectedFile = null;
-        refenceImage = null;
-        textFieldRefenceImage.setText(refenceImage);
+        referenceImage = null;
+        textFieldReferenceImage.setText(referenceImage);
     }
 
+    /**
+     * Retrieves the file extension of a given file name.
+     *
+     * @param fileName  The name of the file.
+     * @return The file extension as a String.
+     */
     private String getFileExtension(String fileName) {
         int lastDotIndex = fileName.lastIndexOf('.');
         if (lastDotIndex > 0 && lastDotIndex < fileName.length() - 1) {
@@ -370,6 +435,12 @@ public class CreateArtistView extends BorderPane {
         return "";
     }
 
+    /**
+     * Displays an alert dialog with the specified title and content.
+     *
+     * @param title    The title of the alert dialog.
+     * @param content  The content or message of the alert dialog.
+     */
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -378,6 +449,12 @@ public class CreateArtistView extends BorderPane {
         alert.showAndWait();
     }
 
+    /**
+     * Checks if the selected image file is valid based on size and dimensions.
+     *
+     * @param file  The image file to validate.
+     * @return True if the image is valid, false otherwise.
+     */
     private boolean isValidImage(File file) {
         long fileSize = file.length();
         if (fileSize < 100 * 1024 || fileSize > 5 * 1024 * 1024) {
@@ -388,6 +465,9 @@ public class CreateArtistView extends BorderPane {
         return image.getWidth() >= 400 && image.getHeight() >= 400 && image.getWidth() <= 2000 && image.getHeight() <= 2000;
     }
 
+    /**
+     * Creates a new Artist object with the provided information and adds it to the database.
+     */
     private void createArtist() {
         //STRINGS ATTRIBUTES FOR OBJECT
         String name = textFieldArtistName.getText();
@@ -413,25 +493,30 @@ public class CreateArtistView extends BorderPane {
             || newArtist.getName().isBlank() || Objects.equals(statusMenu.getValue(), "Nacionalidade") ||
                 statusMenu.getValue().trim().isEmpty() || statusMenu.getValue().isBlank()) {
             System.out.println("Campo vazio. Não é possível atualizar.");
-            labelSucessMensage.setText("Não foi possível atualizar!");
+            labelSuccessMessage.setText("Não foi possível atualizar!");
         } else {
             MainManageArtists.addArtist(newArtist);
-            labelSucessMensage.setText("Alterações efetuadas com sucesso!");
+            labelSuccessMessage.setText("Alterações efetuadas com sucesso!");
             System.out.println("atualizado com sucesso");
         }
     }
 
-
-        private boolean isValidNumber(String newValue) {
-            if (newValue.isEmpty()) {
+    /**
+     * Checks if the provided string represents a valid integer within a specific range.
+     *
+     * @param newValue  The string to be checked for validity.
+     * @return True if the string is a valid integer within the specified range, false otherwise.
+     */
+    private boolean isValidNumber(String newValue) {
+        if (newValue.isEmpty()) {
                 return true; // Aceitar campo vazio
-            }
-            try {
+        }
+        try {
                 int value = Integer.parseInt(newValue);
                 return value >= 0 && value <= 2023;
-            } catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
                 return false; // Não é um número válido
-            }
         }
+    }
 
 }

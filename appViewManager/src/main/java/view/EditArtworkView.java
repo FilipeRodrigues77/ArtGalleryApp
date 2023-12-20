@@ -20,12 +20,23 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * The {@code EditArtworkView} class represents the view for editing artwork information.
+ * It extends {@link BorderPane} and provides a user interface for updating details such as artwork name, dimensions, price,
+ * creation date, medium, category, and references to the artist and gallery. Users can make changes and save them to the database.
+ * This class is part of the graphical user interface for managing artworks in the application.
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
+ */
+
 public class EditArtworkView extends BorderPane {
 
     private Spinner<Double> priceSpinner;
     private TextField textFieldDimensionCm;
     private TextField textFieldDimensionIN;
-    private TextField textFieldArtworkname;
+    private TextField textFieldArtworkName;
     private TextField textFieldNewMedium;
     private TextField textFieldNewCategory;
     private Spinner<Integer> spinnerCreationDate;
@@ -35,15 +46,29 @@ public class EditArtworkView extends BorderPane {
     private Gallery referenceGallery;
     private int idGallery;
     private int idArtist;
-    private Label labelSucessMensage;
+    private Label labelSuccessMessage;
 
-    public EditArtworkView(Artwork SelectedArtwork) {
-        initialize(SelectedArtwork);
+    /**
+     * Constructs a new {@code EditArtworkView} instance for a specific artwork.
+     * Initialises the layout and applies the current theme.
+     *
+     * @param selectedArtwork The {@link Artwork} object for which the details will be edited.
+     * @see ManageMainView
+     */
+    public EditArtworkView(Artwork selectedArtwork) {
+        initialize(selectedArtwork);
         ManageMainView manageMainView = new ManageMainView();
         String cssTheme = manageMainView.themeCurrent;
         getStylesheets().add(cssTheme);
     }
 
+    /**
+     * Initialises the layout of the {@code EditArtworkView} class, including header, center, and bottom sections.
+     * The layout includes elements for updating artwork information such as name, dimensions, price, creation date, medium,
+     * category, and references to the artist and gallery. Users can make changes and save them to the database.
+     *
+     * @param selectedArtwork The {@link Artwork} object for which the details will be edited.
+     */
     private void initialize(Artwork selectedArtwork) {
         setPadding(new Insets(20));
 
@@ -85,7 +110,7 @@ public class EditArtworkView extends BorderPane {
         comboBoxCategory.setOnAction(e-> handleCategorySelection(comboBoxCategory, artworkList));
         comboBoxCategory.setValue(selectedArtwork.getCategory());
 
-        ComboBox<String> comboBoxArtist = new ComboBox<>(createArtistMenu(artistsList,"artist"));
+        ComboBox<String> comboBoxArtist = new ComboBox<>(createArtistMenu(artistsList));
         comboBoxArtist.setMaxWidth(200);
         comboBoxArtist.setOnAction(e-> handleArtistSelection(comboBoxArtist, artistsList));
         comboBoxArtist.setVisibleRowCount(9);
@@ -111,7 +136,7 @@ public class EditArtworkView extends BorderPane {
         Label labelpriceArtwork = new Label("Preço da obra (ex. 500,00):");
         Label labelCreationDate = new Label("Ano de Criação (ex. 2023):");
 
-        this.textFieldArtworkname = new TextField(selectedArtwork.getName());
+        this.textFieldArtworkName = new TextField(selectedArtwork.getName());
         this.textFieldDimensionCm = new TextField(selectedArtwork.getDimensionCm());
         this.textFieldDimensionIN = new TextField(selectedArtwork.getDimensionIN());
         this.textFieldNewMedium = new TextField();
@@ -122,7 +147,7 @@ public class EditArtworkView extends BorderPane {
         textFieldNewCategory.setPrefWidth(520);
         textFieldNewCategory.setDisable(true);
 
-        VBox vBoxArtworkName = new VBox(labelArtworkName,textFieldArtworkname);
+        VBox vBoxArtworkName = new VBox(labelArtworkName, textFieldArtworkName);
         VBox vBoxDimensionCm = new VBox(labelDimensionCm,textFieldDimensionCm);
         VBox vBoxDimensionIn = new VBox(labelDimensionIn,textFieldDimensionIN);
         VBox vBoxPriceArtwork = new VBox(labelpriceArtwork, priceSpinner);
@@ -189,8 +214,8 @@ public class EditArtworkView extends BorderPane {
         HBox hBoxButtons = new HBox(saveChangesButton, cancelButton);
         hBoxButtons.setSpacing(30);
         hBoxButtons.setAlignment(Pos.CENTER_RIGHT);
-        this.labelSucessMensage = new Label("");
-        VBox vBoxButtons = new VBox(hBoxButtons, labelSucessMensage);
+        this.labelSuccessMessage = new Label("");
+        VBox vBoxButtons = new VBox(hBoxButtons, labelSuccessMessage);
         vBoxButtons.setSpacing(10);
 
         HBox hBoxBottomImages = new HBox(imageViewLinkedin,imageViewGitHub);
@@ -205,6 +230,12 @@ public class EditArtworkView extends BorderPane {
         this.setBottom(vBoxBottomLayout);
     }
 
+    /**
+     * Returns a {@link VBox} containing the header elements, including hyperlinks to various sections of the application
+     * such as Artists, Home, Galleries, Exhibitions, and Artworks. Also includes the logo and the system label.
+     *
+     * @return The {@code VBox} containing the header elements.
+     */
     private VBox getHeaderBox (){
 
         // HYPERLINKS
@@ -215,7 +246,7 @@ public class EditArtworkView extends BorderPane {
         Hyperlink hyperLinkArtwork = new Hyperlink("Obras de Arte");
 
         // Text Fields
-        Label labelManagerInfo = new Label("Sistema de Gestão Iuvennis Art");
+        Label labelManagerInfo = new Label("Sistema de Gestão Iuvenis Artem");
         labelManagerInfo.setPrefSize(550, 30);
         labelManagerInfo.getStyleClass().add("my-center-label-6 ");
 
@@ -261,13 +292,25 @@ public class EditArtworkView extends BorderPane {
         });
     }
 
-    // image treatment
+    /**
+     * Sets the default size for an {@link ImageView}, adjusting the fit width and fit height.
+     *
+     * @param imageView The {@code ImageView} to set the default size for.
+     */
     public void defaultSizeIcon (ImageView imageView){
         imageView.setFitHeight(18); // Ajuste a altura conforme necessário
         imageView.setFitWidth(18);  // Ajuste a largura conforme necessário
         // imageView.setPreserveRatio(true);
     }
 
+    /**
+     * Creates an {@link ObservableList} of options for a ComboBox based on a specified field
+     * (medium or category) from a list of artworks.
+     *
+     * @param artworkList The list of artworks to extract options from.
+     * @param field The field (medium or category) for which the options should be extracted.
+     * @return The {@code ObservableList} of options for the specified field.
+     */
     private ObservableList<String> createOptionsMenu (List<Artwork>artworkList, String field){
 
         List<String> testing = new ArrayList<>();
@@ -292,6 +335,13 @@ public class EditArtworkView extends BorderPane {
         }
         return FXCollections.observableArrayList(testing);
     }
+
+    /**
+     * Handles the selection of a medium in the ComboBox, enabling or disabling the new medium text field accordingly.
+     *
+     * @param mediumMenu The ComboBox for selecting the medium.
+     * @param artworkMediumList The list of artworks for extracting medium options.
+     */
     private void handleMediumSelection (ComboBox<String> mediumMenu, List<Artwork> artworkMediumList){
         String selectedMedium = mediumMenu.getSelectionModel().getSelectedItem();
         if(selectedMedium != null) {
@@ -306,6 +356,12 @@ public class EditArtworkView extends BorderPane {
         }
     }
 
+    /**
+     * Handles the selection of a category in the ComboBox, enabling or disabling the new category text field accordingly.
+     *
+     * @param categoryMenu The ComboBox for selecting the category.
+     * @param artworkCategoryList The list of artworks for extracting category options.
+     */
     private void handleCategorySelection (ComboBox<String> categoryMenu, List<Artwork> artworkCategoryList) {
         String selectedCategory = categoryMenu.getSelectionModel().getSelectedItem();
         if (selectedCategory != null) {
@@ -319,30 +375,51 @@ public class EditArtworkView extends BorderPane {
             }
         }
     }
+
+    /**
+     * Handles the selection of an artist in the ComboBox, extracting the artist's ID for reference.
+     *
+     * @param comboBoxArtistRef The ComboBox for selecting the artist.
+     * @param artistsList The list of artists for extracting artist options.
+     */
     private void handleArtistSelection (ComboBox<String> comboBoxArtistRef, List<Artist> artistsList) {
         String selectedArtist = comboBoxArtistRef.getSelectionModel().getSelectedItem();
         if (selectedArtist != null) {
             this.idArtist = extractNumber(selectedArtist);
         }
     }
-    private ObservableList<String> createArtistMenu (List<Artist>artistsList, String artistField){
 
-        List<String> testing = new ArrayList<>();
-        String menuArtistField = artistField.toLowerCase();
+    /**
+     * Creates an {@link ObservableList} of options for a ComboBox based on the list of artists.
+     *
+     * @param artistsList The list of artists to extract options from.
+     * @return The {@code ObservableList} of options for the artist ComboBox.
+     */
+    private ObservableList<String> createArtistMenu (List<Artist>artistsList){
 
-        switch (menuArtistField){
-            case "artist": for(Artist artist : artistsList){
+        List<String> artists = new ArrayList<>();
+        String menuArtistField = "artist".toLowerCase();
+
+        if (menuArtistField.equals("artist")) {
+            for (Artist artist : artistsList) {
                 String option = artist.getName();
                 int optionId = artist.getId();
                 String fullOption = optionId + " - " + option;
-                if(!testing.contains(fullOption)){
-                    testing.add(fullOption);
+                if (!artists.contains(fullOption)) {
+                    artists.add(fullOption);
                 }
             }
-                break;
         }
-        return FXCollections.observableArrayList(testing);
+        return FXCollections.observableArrayList(artists);
     }
+
+    /**
+     * Extracts the numeric part from a string, used to get the ID from the artist representation in the ComboBox.
+     *
+     * @param input The input string containing the numeric part.
+     * @return The extracted numeric part as an integer.
+     * @throws IllegalArgumentException If no numeric part is found in the string.
+     */
     public static int extractNumber(String input) {
         Pattern pattern = Pattern.compile("^\\d+");
         // OBJECT INPUT
@@ -357,9 +434,14 @@ public class EditArtworkView extends BorderPane {
         }
     }
 
+    /**
+     * Saves changes made to the artwork details and updates the database. Displays success or error messages accordingly.
+     *
+     * @param selectedArtwork The {@link Artwork} object representing the artwork whose details are being edited.
+     */
     private void saveChangesArtwork(Artwork selectedArtwork) {
         //STRINGS ATTRIBUTES FOR OBJECT
-        selectedArtwork.setName(textFieldArtworkname.getText());
+        selectedArtwork.setName(textFieldArtworkName.getText());
         selectedArtwork.setPrice(priceSpinner.getValue());
         selectedArtwork.setDimensionCm(textFieldDimensionCm.getText());
         selectedArtwork.setDimensionIN(textFieldDimensionIN.getText());
@@ -373,11 +455,11 @@ public class EditArtworkView extends BorderPane {
         if (selectedArtwork.getName() == null || selectedArtwork.getName().trim().isEmpty() || selectedArtwork.getName().isBlank()
                 || idGallery == 0 || idArtist == 0) {
             System.out.println("Campo vazio. Não é possível atualizar.");
-            labelSucessMensage.setText("Não foi possível atualizar!");
+            labelSuccessMessage.setText("Não foi possível atualizar!");
         } else {
             System.out.println(selectedArtwork);
             MainManageArtwork.updateArtwork(selectedArtwork);
-            labelSucessMensage.setText("Alterações efetuadas com sucesso!");
+            labelSuccessMessage.setText("Alterações efetuadas com sucesso!");
             System.out.println("atualizado com sucesso");
         }
 

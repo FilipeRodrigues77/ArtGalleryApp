@@ -17,6 +17,17 @@ import presenter.MainManageArtists;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The {@code EditArtistView} class represents the view for editing artist information.
+ * It extends {@link BorderPane} and provides a user interface for updating details such as artist name, biography, birthdate,
+ * death date, nationality, and slug.
+ * Users can make changes and save them to the database.
+ * This class is part of the graphical user interface for managing artists in the application.
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
+ */
 public class EditArtistView extends BorderPane {
 
     private TextField textFieldArtistName;
@@ -27,8 +38,14 @@ public class EditArtistView extends BorderPane {
     private ComboBox<String> statusMenu;
     private Spinner<Integer> yearBirthdaySpinner;
     private Spinner<Integer> yearDeathdaySpinner;
-    private Label labelSucessMensage;
+    private Label labelSuccessMessage;
 
+    /**
+     * Constructs a new {@code EditArtistView} instance for a specific artist. Initializes the layout and applies the current theme.
+     *
+     * @param artist The {@link Artist} object for which the details will be edited.
+     * @see ManageMainView
+     */
     public EditArtistView(Artist artist) {
         initialize(artist);
         ManageMainView manageMainView = new ManageMainView();
@@ -36,8 +53,15 @@ public class EditArtistView extends BorderPane {
         getStylesheets().add(cssTheme);
     }
 
+    /**
+     * Initializes the layout of the {@code EditArtistView} class, including header, center, and bottom sections.
+     * The layout includes elements for updating artist information such as name, biography, birthdate, death date,
+     * nationality, and slug. Users can make changes and save them to the database.
+     *
+     * @param artist The {@link Artist} object for which the details will be edited.
+     */
     private void initialize(Artist artist) {
-        // Vamos criar aqui o layout deste painel
+
         setPadding(new Insets(20));
 
         //--------------------------------------------- HEADER ELEMENTS ---------------------------------------------
@@ -148,8 +172,8 @@ public class EditArtistView extends BorderPane {
         HBox hBoxButtons = new HBox(saveChangesButton, cancelButton);
         hBoxButtons.setSpacing(30);
         hBoxButtons.setAlignment(Pos.CENTER_RIGHT);
-        this.labelSucessMensage = new Label("");
-        VBox vBoxButtons = new VBox(hBoxButtons, labelSucessMensage);
+        this.labelSuccessMessage = new Label("");
+        VBox vBoxButtons = new VBox(hBoxButtons, labelSuccessMessage);
         vBoxButtons.setSpacing(10);
 
         HBox hBoxBottomImages = new HBox(imageViewLinkedin,imageViewGitHub);
@@ -166,7 +190,12 @@ public class EditArtistView extends BorderPane {
 
     }
 
-
+    /**
+     * Returns a {@link VBox} containing the header elements, including hyperlinks to various sections of the application
+     * such as Artists, Home, Galleries, Exhibitions, and Artworks. Also includes the logo and the system label.
+     *
+     * @return The {@code VBox} containing the header elements.
+     */
     private VBox getHeaderBox (){
 
         // HYPERLINKS
@@ -177,7 +206,7 @@ public class EditArtistView extends BorderPane {
         Hyperlink hyperLinkArtwork = new Hyperlink("Obras de Arte");
 
         // Text Fields
-        Label labelManagerInfo = new Label("Sistema de Gestão Iuvennis Art");
+        Label labelManagerInfo = new Label("Sistema de Gestão Iuvenis Artem");
         labelManagerInfo.setPrefSize(550, 30);
         labelManagerInfo.getStyleClass().add("my-center-label-6 ");
 
@@ -214,30 +243,22 @@ public class EditArtistView extends BorderPane {
 
     }
 
-    private void setOriginalDescription(TextField textField, String originalText){
-
-        textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue) {
-                if (textField.getText().isEmpty()) {
-                    textField.setText(originalText);
-                }
-            }
-        });
-    }
-
-    // image treatment
+    /**
+     * Sets the default size for an {@link ImageView}, adjusting the fit width and fit height.
+     *
+     * @param imageView The {@code ImageView} to set the default size for.
+     */
     public void defaultSizeIcon (ImageView imageView){
-        imageView.setFitHeight(18); // Ajuste a altura conforme necessário
-        imageView.setFitWidth(18);  // Ajuste a largura conforme necessário
-        // imageView.setPreserveRatio(true);
+        imageView.setFitHeight(18);
+        imageView.setFitWidth(18);
     }
 
-    public void defaultSizeArtistImage(ImageView imageView){
-        imageView.setFitHeight(160); // Ajuste a altura conforme necessário
-        imageView.setFitWidth(160);  // Ajuste a largura conforme necessário
-        //imageView.setPreserveRatio(true);
-    }
-
+    /**
+     * Saves changes made to the artist details and updates the database.
+     * Displays success or error messages accordingly.
+     *
+     * @param artist The {@link Artist} object representing the artist whose details are being edited.
+     */
     private void saveChangesArtist(Artist artist) {
         //STRINGS ATTRIBUTES FOR OBJECT
         artist.setName(textFieldArtistName.getText());
@@ -253,26 +274,31 @@ public class EditArtistView extends BorderPane {
                 || artist.getName().isBlank() || Objects.equals(statusMenu.getValue(), "Nacionalidade") ||
                 statusMenu.getValue().trim().isEmpty() || statusMenu.getValue().isBlank()) {
             System.out.println("Campo vazio. Não é possível atualizar.");
-            labelSucessMensage.setText("Não foi possível atualizar!");
+            labelSuccessMessage.setText("Não foi possível atualizar!");
         } else {
             MainManageArtists.updateArtist(artist);
-            labelSucessMensage.setText("Alterações efetuadas com sucesso!");
+            labelSuccessMessage.setText("Alterações efetuadas com sucesso!");
             System.out.println("atualizado com sucesso");
 
         }
 
     }
 
-        // Verifica se a string é um número válido entre 0 e 2023
-        private boolean isValidNumber(String newValue) {
+    /**
+     * Checks if a given string represents a valid number within a specific range (0 to 2023).
+     *
+     * @param newValue The string to be checked for validity as a number.
+     * @return {@code true} if the string is a valid number within the specified range, {@code false} otherwise.
+     */
+    private boolean isValidNumber(String newValue) {
             if (newValue.isEmpty()) {
-                return true; // Aceitar campo vazio
+                return true;
             }
             try {
                 int value = Integer.parseInt(newValue);
                 return value >= 0 && value <= 2023;
             } catch (NumberFormatException e) {
-                return false; // Não é um número válido
+                return false;
             }
         }
 
