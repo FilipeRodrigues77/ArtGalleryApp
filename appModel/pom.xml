@@ -9,27 +9,12 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>appclient</artifactId>
+    <artifactId>appModel</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-    <dependencies>
-        <!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>4.11.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.brunomnsilva</groupId>
-            <artifactId>appmodel</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
 
 </project>
