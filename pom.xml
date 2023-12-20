@@ -9,9 +9,9 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>appserver</module>
-        <module>appmodel</module>
-        <module>appclient</module>
+        <module>appServer</module>
+        <module>appModel</module>
+        <module>appClient</module>
         <module>appView</module>
         <module>appViewManager</module>
 
