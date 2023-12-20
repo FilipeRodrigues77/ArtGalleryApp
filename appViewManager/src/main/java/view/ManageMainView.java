@@ -16,7 +16,18 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.Properties;
 
+/**
+ * The {@code ManageMainView} class represents the main view of the Iuvenis Artem Management System.
+ * It serves as the entry point for managing different aspects of the art collection, such as artwork, artists, galleries, and exhibitions.
+ * The class extends {@link BorderPane} and provides a user interface with hyperlinks, buttons, and themes to navigate through the application.
+ * It also allows users to change the application theme between light and dark modes.
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
+ */
 public class ManageMainView extends BorderPane {
+
     private Label labelStatus;
     private TextField textExpression;
     private Properties config;
@@ -24,6 +35,15 @@ public class ManageMainView extends BorderPane {
     private RadioMenuItem darkThemeItem;
     protected String themeCurrent;
 
+    /**
+     * Constructs a new {@code ManageMainView} instance.
+     * Initialises the layout, loads the application configuration,
+     * sets the current theme, and adds stylesheets. It also sets a style to the view.
+     *
+     * @see ManageMainView#doLayout()
+     * @see ManageMainView#loadConfig()
+     * @see ManageMainView#changeTheme(String)
+     */
     public ManageMainView() {
         doLayout();
         loadConfig();
@@ -34,6 +54,11 @@ public class ManageMainView extends BorderPane {
         getStyleClass().add("wallpaper");
     }
 
+    /**
+     * Loads the application configuration from the configuration file. If the file is not found, an error is shown.
+     *
+     * @see ManageMainView#showError(String)
+     */
     public void loadConfig(){
         this.config = new Properties();
         try {
@@ -44,6 +69,12 @@ public class ManageMainView extends BorderPane {
             showError("Configuration file not found.");
         }
     }
+
+    /**
+     * Saves the current application configuration to the configuration file. If an error occurs, an error message is shown.
+     *
+     * @see ManageMainView#showError(String)
+     */
     private void saveConfig(){
         try {
             this.config.store(new FileWriter("appViewManager/src/main/resources/iuvennisApp.config"),"");
@@ -52,8 +83,12 @@ public class ManageMainView extends BorderPane {
         }
     }
 
+    /**
+     * Initialises the layout of the {@code ManageMainView} class, including the top, center, and bottom sections.
+     * Sets up hyperlinks, buttons, labels, and themes to navigate through the application and manage the art collection.
+     */
     private void doLayout() {
-        // Vamos criar aqui o layout deste painel
+
         setPadding(new Insets(20));
 
         // Controls
@@ -69,7 +104,7 @@ public class ManageMainView extends BorderPane {
         Label labelCenterArtist = new Label("Gestão de Artistas");
         Label labelCenterGallery = new Label("Gestão de Galerias");
         Label labelCenterExhibition = new Label("Gestão de Exposições");
-        Label labelBottonStatus = new Label("I~A © 2023 I~A  Todos os direitos reservados");
+        Label labelButtonStatus = new Label("I~A © 2023 I~A  Todos os direitos reservados");
 
         styleLabelCenterArtwork(labelCenterArtwork);
         styleLabelCenterArtwork(labelCenterArtist);
@@ -108,28 +143,10 @@ public class ManageMainView extends BorderPane {
         ImageView imageViewLinkedin = new ImageView(new Image(imageLinkedin));
         defaultSizeIcon(imageViewLinkedin);
 
-        /*String imageMainArtwork = "Images/Main/wallpaperIuvennisArt.png";
-        ImageView imageViewMainArtwork = new ImageView(new Image(imageMainArtwork));
-        defaultSizeMainImage(imageViewMainArtwork);
-
-        String imageMainArtist = "Images/Main/WallpaperIA01.png";
-        ImageView imageViewMainArtist = new ImageView(new Image(imageMainArtist));
-        defaultSizeMainImage(imageViewMainArtist);
-
-        String imageMainGallery = "Images/Main/WallpaperIA03.png";
-        ImageView imageViewMainGallery = new ImageView(new Image(imageMainGallery));
-        defaultSizeMainImage(imageViewMainGallery);
-
-        String imageMainExhibition = "Images/Main/Back02.png";
-        ImageView imageViewMainExhibition = new ImageView(new Image(imageMainExhibition));
-        defaultSizeMainImage(imageViewMainExhibition);
-
-         */
-
         // Layout Top
         // Create Menu
         Menu menuTheme = new Menu("Tema App");
-        ToggleGroup themeGroup = new ToggleGroup(); //Alternador de grupos
+        ToggleGroup themeGroup = new ToggleGroup();
         this.lightThemeItem = new RadioMenuItem("Dia");
         this.darkThemeItem = new RadioMenuItem("Noite");
         menuTheme.getItems().addAll(lightThemeItem,darkThemeItem);
@@ -168,7 +185,7 @@ public class ManageMainView extends BorderPane {
         setTop(vBoxTop);
 
         // Layout Bottom
-        HBox hBoxBottomStatus = new HBox(labelBottonStatus);
+        HBox hBoxBottomStatus = new HBox(labelButtonStatus);
         HBox.setHgrow(hBoxBottomStatus, javafx.scene.layout.Priority.ALWAYS);
         hBoxBottomStatus.setAlignment(Pos.CENTER_LEFT);
         HBox hBoxBottomImages = new HBox(imageViewLinkedin,imageViewGitHub);
@@ -185,10 +202,6 @@ public class ManageMainView extends BorderPane {
         grid.setGridLinesVisible(false);
         grid.setPadding(new Insets(0,0,10,0));
 
-        //grid.add(imageViewMainArtist,1,0);
-        //grid.add(imageViewMainArtwork,1,0,2,2);
-        //grid.add(imageViewMainExhibition,1,3);
-        //grid.add(imageViewMainGallery,1,2);
 
         VBox vBoxArtwork = new VBox(labelCenterArtwork,buttonArtwork);
         vBoxArtwork.setSpacing(10);
@@ -223,7 +236,7 @@ public class ManageMainView extends BorderPane {
         grid.getColumnConstraints().addAll(cc, cc);
 
         RowConstraints rc = new RowConstraints();
-        rc.setVgrow(Priority.ALWAYS) ; // allow row to grow
+        rc.setVgrow(Priority.ALWAYS) ; // allow the row to grow
         rc.setFillHeight(true); // ask nodes to fill height for row
         grid.getRowConstraints().addAll(rc, rc, rc, rc);
 
@@ -247,47 +260,61 @@ public class ManageMainView extends BorderPane {
 
     }
 
+    /**
+     * Sets the default size for an {@link ImageView}, adjusting the fit height and fit width.
+     *
+     * @param imageView The {@code ImageView} to set the default size for.
+     */
     public void defaultSizeIcon (ImageView imageView){
         imageView.setFitHeight(18);
         imageView.setFitWidth(18);
-        // imageView.setPreserveRatio(true);
+
     }
 
-    public void defaultSizeMainImage (ImageView imageView){
-        imageView.setFitHeight(100);
-        imageView.setFitWidth(365);
-        imageView.setPreserveRatio(true);
-    }
-
+    /**
+     * Sets the default layout for a {@link Button}, including style class, preferred width, and preferred height.
+     *
+     * @param button The {@code Button} to set the default layout for.
+     */
     public void defaultButtonLayout (Button button){
         button.getStyleClass().add("button-modern");
         button.setPrefWidth(180);
         button.setPrefHeight(10);
     }
 
+    /**
+     * Applies a specific style to a {@link Label} to enhance its appearance in the view.
+     *
+     * @param label The {@code Label} to apply the style to.
+     */
     public void styleLabelCenterArtwork (Label label){
         label.getStyleClass().add("my-label");
     }
 
+    /**
+     * Exits the application, displaying a confirmation dialogue to ensure the user's intention.
+     * If the user confirms, the application is terminated; otherwise, nothing happens.
+     */
     private void exitApplication(){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Sair da App");
         alert.setHeaderText("Está prestes a sair da Iuvennis ManagerApp");
         alert.setContentText("Deseja sair da aplicação?");
-        //Colocar tela de confirmação de saida centralizada a aplicação
-        //buscar Cena e Janela.
+        // put the confirmation pane in the center of the application
+
+        //Search scene and window
         alert.initOwner(this.getScene().getWindow());
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
             // ... user chose OK
             System.exit(0);
-        } else {
-            // ... user chose CANCEL or closed the dialog
-            // do nothing
         }
     }
 
+    /**
+     * Shows the "About Us" information in a new stage. The information is displayed using the {@code AboutView} class.
+     */
     private void showAbout(){
         Stage aboutStage = new Stage();
         aboutStage.setTitle("Sobre nós");
@@ -299,13 +326,21 @@ public class ManageMainView extends BorderPane {
         aboutStage.show();
     }
 
+    /**
+     * Changes the current theme of the application based on the given theme name. It loads the corresponding
+     * stylesheet and updates the configuration. The selected theme is saved, and radio menu items are adjusted accordingly.
+     *
+     * @param themeName The name of the theme to switch to (e.g., "Light" or "Dark").
+     * @return The file name of the applied stylesheet.
+     */
     protected String changeTheme(String themeName) {
-        //Assume que o ficheiro te a estrutura: "appStyle<themeName>.css"
+        // Assumes that the file has the "appStyle<themeName>.css" structure
         String cssFile = "appStyle" + themeName + ".css";
-        //Limpar estilo para o default e depois adiciona o estilo selecionado
+
+        // remove the style to the default and then add the chosen style
         getStylesheets().clear();
         getStylesheets().add(cssFile);
-        //Salvar configuração
+        // Save configuration
         this.config.setProperty("theme", themeName);
         saveConfig();
 
@@ -320,6 +355,11 @@ public class ManageMainView extends BorderPane {
         return cssFile;
     }
 
+    /**
+     * Displays an error message in the status label and applies an "Error" style to the text expression field.
+     *
+     * @param message The error message to display.
+     */
     public void showError(String message) {
         labelStatus.setText(message);
         textExpression.getStyleClass().add("Error");

@@ -1,20 +1,12 @@
 
-
-import java.sql.*;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
-
 import static spark.Spark.*;
-
 import adapters.LocalDateAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
 import domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,16 +23,14 @@ import util.MessageResponse;
 public class RunIAServer {
 
     private static final Logger logger = LoggerFactory.getLogger(RunIAServer.class);
-    public static void main(String[] args) {
 
-        // Default port is 4567, hence we're running at http://localhost:4567/<endpoint>
+    public static void main(String[] args) {
 
         port(8020);
         logger.info("Starting Main server at {}", new Date().toString());
 
         /*  INSTANTIATE STORAGE */
         MemoryStorage storage = new MemoryStorage();
-        // DBStorage storage = new DBStorage();
 
         /* INSTANTIATE GSON CONVERTER */
         Gson gson = new GsonBuilder()
@@ -481,7 +471,6 @@ public class RunIAServer {
                 }
             });
 
-
             get("/:id", (request, response) -> {
                 try {
                     int idArtwork = Integer.parseInt(request.params(":id"));
@@ -620,7 +609,6 @@ public class RunIAServer {
                     return jsonObject.toString();
                 }
             });
-
 
             get("/:id", (request, response) -> {
                 try {
@@ -926,13 +914,14 @@ public class RunIAServer {
 
         });
 
+        // NATIONALITY
         get("/nationalities", (request, response) -> {
             response.type("application/json");
             List<Nationality> nationalities = storage.getNationalities();
             return gson.toJson(nationalities);
         });
 
-
+        // REGION
         get("/regions", (request, response) -> {
             response.type("application/json");
             List<Region> regions = storage.getRegions();

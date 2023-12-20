@@ -17,13 +17,30 @@ import presenter.MainManageGallery;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The {@code EditGalleryView} class represents the view for editing gallery information.
+ * It extends {@link BorderPane} and provides a user interface for updating details such as gallery name, email, and region.
+ * Users can make changes and save them to the database. This class is part of the graphical user interface for managing galleries
+ * in the application.
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
+ */
 public class EditGalleryView extends BorderPane {
 
     private TextField textFieldGalleryName;
     private TextField textFieldEmail;
     private ComboBox<String> statusMenu;
-    private Label labelSucessMensage;
+    private Label labelSuccessMessage;
 
+    /**
+     * Constructs a new {@code EditGalleryView} instance for a specific gallery.
+     * Initialises the layout and applies the current theme.
+     *
+     * @param gallery The {@link Gallery} object for which the details will be edited.
+     * @see ManageMainView
+     */
     public EditGalleryView(Gallery gallery) {
         initialize(gallery);
         ManageMainView manageMainView = new ManageMainView();
@@ -31,8 +48,15 @@ public class EditGalleryView extends BorderPane {
         getStylesheets().add(cssTheme);
     }
 
+    /**
+     * Initializes the layout of the {@code EditGalleryView} class, including header, center, and bottom sections.
+     * The layout includes elements for updating gallery information such as name, email, and region.
+     * Users can make changes and save them to the database.
+     *
+     * @param gallery The {@link Gallery} object for which the details will be edited.
+     */
     private void initialize(Gallery gallery) {
-        // Vamos criar aqui o layout deste painel
+
         setPadding(new Insets(20));
 
         //--------------------------------------------- HEADER ELEMENTS ---------------------------------------------
@@ -108,8 +132,8 @@ public class EditGalleryView extends BorderPane {
         HBox hBoxButtons = new HBox(saveChangesButton, cancelButton);
         hBoxButtons.setSpacing(30);
         hBoxButtons.setAlignment(Pos.CENTER_RIGHT);
-        this.labelSucessMensage = new Label("");
-        VBox vBoxButtons = new VBox(hBoxButtons, labelSucessMensage);
+        this.labelSuccessMessage = new Label("");
+        VBox vBoxButtons = new VBox(hBoxButtons, labelSuccessMessage);
         vBoxButtons.setSpacing(10);
 
         HBox hBoxBottomImages = new HBox(imageViewLinkedin,imageViewGitHub);
@@ -125,6 +149,12 @@ public class EditGalleryView extends BorderPane {
         this.setBottom(vBoxBottomLayout);
     }
 
+    /**
+     * Returns a {@link VBox} containing the header elements, including hyperlinks to various sections of the application
+     * such as Artists, Home, Galleries, Exhibitions, and Artworks and others.
+     *
+     * @return The {@code VBox} containing the header elements.
+     */
     private VBox getHeaderBox (){
 
         // HYPERLINKS
@@ -135,7 +165,7 @@ public class EditGalleryView extends BorderPane {
         Hyperlink hyperLinkArtwork = new Hyperlink("Obras de Arte");
 
         // Text Fields
-        Label labelManagerInfo = new Label("Sistema de Gestão Iuvennis Art");
+        Label labelManagerInfo = new Label("Sistema de Gestão Iuvenis Artem");
         labelManagerInfo.setPrefSize(550, 30);
         labelManagerInfo.getStyleClass().add("my-center-label-6 ");
 
@@ -172,24 +202,23 @@ public class EditGalleryView extends BorderPane {
 
     }
 
-    private void setOriginalDescription(TextField textField, String originalText){
-
-        textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue) {
-                if (textField.getText().isEmpty()) {
-                    textField.setText(originalText);
-                }
-            }
-        });
-    }
-
-    // image treatment
+    /**
+     * Sets the default size for an {@link ImageView}, adjusting the fit width and fit height.
+     *
+     * @param imageView The {@code ImageView} to set the default size for.
+     */
     public void defaultSizeIcon (ImageView imageView){
         imageView.setFitHeight(18); // Ajuste a altura conforme necessário
         imageView.setFitWidth(18);  // Ajuste a largura conforme necessário
         // imageView.setPreserveRatio(true);
     }
 
+    /**
+     * Handles the action to save changes made to the gallery details and updates the database.
+     * Displays success or error messages accordingly.
+     *
+     * @param gallery The {@link Gallery} object representing the gallery whose details are being edited.
+     */
     private void saveChangesGallery(Gallery gallery) {
         //STRINGS ATTRIBUTES FOR OBJECT
 
@@ -202,10 +231,10 @@ public class EditGalleryView extends BorderPane {
                 || gallery.getNameGallery().isBlank() || Objects.equals(statusMenu.getValue(), "Região") ||
                 statusMenu.getValue().trim().isEmpty() || statusMenu.getValue().isBlank()) {
             System.out.println("Campo vazio. Não é possível atualizar.");
-            labelSucessMensage.setText("Não foi possível atualizar!");
+            labelSuccessMessage.setText("Não foi possível atualizar!");
         } else {
             MainManageGallery.updateGallery(gallery);
-            labelSucessMensage.setText("Alterações efetuadas com sucesso!");
+            labelSuccessMessage.setText("Alterações efetuadas com sucesso!");
             System.out.println("atualizado com sucesso");
         }
 

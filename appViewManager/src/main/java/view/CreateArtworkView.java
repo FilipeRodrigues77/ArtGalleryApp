@@ -24,16 +24,24 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This class represents the view for creating new artworks in the art management system.
+ * It extends the BorderPane class and includes various UI elements for input and interaction.
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
+ *
+ */
 public class CreateArtworkView extends BorderPane {
 
     private Spinner<Double> priceSpinner;
     private TextField textFieldDimensionCm;
     private TextField textFieldDimensionIN;
-    private TextField textFieldArtworkname;
+    private TextField textFieldArtworkName;
     private TextField textFieldNewMedium;
     private TextField textFieldNewCategory;
     private Spinner<Integer> spinnerCreationDate;
@@ -43,12 +51,16 @@ public class CreateArtworkView extends BorderPane {
     private Gallery selectedGallery;
     private int idGallery;
     private int idArtist;
-    private Label labelSucessMensage;
-    private TextField textFieldRefenceImage;
-    private String refenceImage;
+    private Label labelSuccessMessage;
+    private TextField textFieldReferenceImage;
+    private String referenceImage;
     private File selectedFile;
     private ImageView imageView;
 
+    /**
+     * CreateArtworkView constructor for the CreateArtworkView class.
+     * Initialises the layout and sets the theme.
+     */
     public CreateArtworkView() {
         doLayout();
         ManageMainView manageMainView = new ManageMainView();
@@ -56,6 +68,9 @@ public class CreateArtworkView extends BorderPane {
         getStylesheets().add(cssTheme);
     }
 
+    /**
+     * Sets up the layout of the CreateArtworkView, including header, center, and bottom elements.
+     */
     private void doLayout() {
         setPadding(new Insets(20));
 
@@ -72,6 +87,7 @@ public class CreateArtworkView extends BorderPane {
         Button viewimageButton = new Button("Visualizar Imagem");
         viewimageButton.setOnAction(event -> viewImage());
         viewimageButton.getStyleClass().add("button-modern");
+
 
         Button defaultImageButton = new Button("Imagem Padrão");
         defaultImageButton.getStyleClass().add("button-modern");
@@ -105,11 +121,12 @@ public class CreateArtworkView extends BorderPane {
         comboBoxCategory.setMaxWidth(300);
         comboBoxCategory.setOnAction(e-> handleCategorySelection(comboBoxCategory, artworkList));
 
-        ComboBox<String> comboBoxArtist = new ComboBox<>(createArtistMenu(artistsList,"artist"));
+        ComboBox<String> comboBoxArtist = new ComboBox<>(createArtistMenu(artistsList));
         comboBoxArtist.setMaxWidth(200);
         comboBoxArtist.setOnAction(e-> handleArtistSelection(comboBoxArtist, artistsList));
         comboBoxArtist.setVisibleRowCount(9);
 
+        // Line of code to be reviewed
         ComboBox<Gallery> comboBoxGalleryRef = new ComboBox<>();
         comboBoxGalleryRef.getItems().addAll(galleriesList);
         comboBoxGalleryRef.setOnAction(e -> {
@@ -132,23 +149,23 @@ public class CreateArtworkView extends BorderPane {
         Label labelCreationDate = new Label("Ano de Criação (ex. 2023):");
         Label labelReferenceImage = new Label("Caminho referencia da imagem");
 
-        this.textFieldArtworkname = new TextField();
+        this.textFieldArtworkName = new TextField();
         this.textFieldDimensionCm = new TextField();
         this.textFieldDimensionIN = new TextField();
         this.textFieldNewMedium = new TextField();
         this.textFieldNewCategory = new TextField();
-        this.textFieldRefenceImage = new TextField(refenceImage);
+        this.textFieldReferenceImage = new TextField(referenceImage);
 
-        textFieldRefenceImage.setDisable(true);
+        textFieldReferenceImage.setDisable(true);
         textFieldNewMedium.setPrefWidth(520);
         textFieldNewMedium.setDisable(true);
         textFieldNewCategory.setPrefWidth(520);
         textFieldNewCategory.setDisable(true);
 
         HBox hBoxButtonImage = new HBox(attachImageButton, viewimageButton, defaultImageButton);
-        VBox vBoxRefImageLabelAndText = new VBox(labelReferenceImage,textFieldRefenceImage);
+        VBox vBoxRefImageLabelAndText = new VBox(labelReferenceImage, textFieldReferenceImage);
         VBox vBoxReferenceImage = new VBox(vBoxRefImageLabelAndText, hBoxButtonImage);
-        VBox vBoxArtworkName = new VBox(labelArtworkName,textFieldArtworkname);
+        VBox vBoxArtworkName = new VBox(labelArtworkName, textFieldArtworkName);
         VBox vBoxDimensionCm = new VBox(labelDimensionCm,textFieldDimensionCm);
         VBox vBoxDimensionIn = new VBox(labelDimensionIn,textFieldDimensionIN);
         VBox vBoxPriceArtwork = new VBox(labelpriceArtwork, priceSpinner);
@@ -190,6 +207,11 @@ public class CreateArtworkView extends BorderPane {
         this.setBottom(getFooterBox());
     }
 
+    /**
+     * Generates the footer box, including buttons for creating artwork and canceling the operation.
+     *
+     * @return The VBox containing the footer elements.
+     */
     private VBox getFooterBox (){
         // Buttons
         Button createArtworkButton = new Button("Criar Obra de Arte");
@@ -222,8 +244,8 @@ public class CreateArtworkView extends BorderPane {
         HBox hBoxButtons = new HBox(createArtworkButton, cancelButton);
         hBoxButtons.setSpacing(30);
         hBoxButtons.setAlignment(Pos.CENTER_RIGHT);
-        this.labelSucessMensage = new Label("");
-        VBox vBoxButtons = new VBox(hBoxButtons, labelSucessMensage);
+        this.labelSuccessMessage = new Label("");
+        VBox vBoxButtons = new VBox(hBoxButtons, labelSuccessMessage);
         vBoxButtons.setSpacing(10);
 
         HBox hBoxBottomImages = new HBox(imageViewLinkedin,imageViewGitHub);
@@ -239,6 +261,11 @@ public class CreateArtworkView extends BorderPane {
         return vBoxBottomLayout;
     }
 
+    /**
+     * Generates the header box, including hyperlinks for navigation and system information.
+     *
+     * @return The VBox containing the header elements.
+     */
     private VBox getHeaderBox (){
 
         // HYPERLINKS
@@ -249,7 +276,7 @@ public class CreateArtworkView extends BorderPane {
         Hyperlink hyperLinkArtwork = new Hyperlink("Obras de Arte");
 
         // Text Fields
-        Label labelManagerInfo = new Label("Sistema de Gestão Iuvennis Art");
+        Label labelManagerInfo = new Label("Sistema de Gestão Iuvenis Artem");
         labelManagerInfo.setPrefSize(550, 30);
         labelManagerInfo.getStyleClass().add("my-center-label-6 ");
 
@@ -286,6 +313,12 @@ public class CreateArtworkView extends BorderPane {
 
     }
 
+    /**
+     * Sets the original description for a TextField when it loses focus, resetting it to the original text if empty.
+     *
+     * @param textField     The TextField to monitor for changes.
+     * @param originalText  The original text to set when the TextField loses focus.
+     */
     private void setOriginalDescription(TextField textField, String originalText){
 
         textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -297,13 +330,20 @@ public class CreateArtworkView extends BorderPane {
         });
     }
 
-    // image treatment
+    /**
+     * Sets the default size for an ImageView representing an icon.
+     *
+     * @param imageView  The ImageView to set the default size for.
+     */
     public void defaultSizeIcon (ImageView imageView){
         imageView.setFitHeight(18); // Ajuste a altura conforme necessário
         imageView.setFitWidth(18);  // Ajuste a largura conforme necessário
         // imageView.setPreserveRatio(true);
     }
 
+    /**
+     * Opens a file chooser dialogue for selecting an image file and updates the UI accordingly.
+     */
     private void openFileChooser() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Selecionar Imagem");
@@ -319,14 +359,17 @@ public class CreateArtworkView extends BorderPane {
                 Image image = new Image(selectedFile.toURI().toString());
                 imageView.setImage(image);
 
-                refenceImage = selectedFile.toURI().toString();
-                textFieldRefenceImage.setText(refenceImage);
+                referenceImage = selectedFile.toURI().toString();
+                textFieldReferenceImage.setText(referenceImage);
             } else {
                 showAlert("Imagem Inválida", "A imagem selecionada não atende aos requisitos.");
             }
         }
     }
 
+    /**
+     * Displays a separate window for viewing the selected artist image.
+     */
     private void viewImage() {
         if (selectedFile != null) {
             ImageView viewImageView = new ImageView(new Image(selectedFile.toURI().toString()));
@@ -347,9 +390,12 @@ public class CreateArtworkView extends BorderPane {
         }
     }
 
+    /**
+     * Saves the selected image to a specified folder and updates the reference image path.
+     */
     private void saveImage() {
         if (selectedFile != null) {
-            String artworkName = textFieldArtworkname.getText().trim();
+            String artworkName = textFieldArtworkName.getText().trim();
 
             if (artworkName.isEmpty()) {
                 showAlert("Nome da obra de arte Vazio", "Por favor, insira um nome para a obra antes de salvar a imagem.");
@@ -383,19 +429,28 @@ public class CreateArtworkView extends BorderPane {
             }
         } else {
             // Se nenhum arquivo foi selecionado, use a imagem padrão
-            refenceImage = null;
-            textFieldRefenceImage.setText(refenceImage);
+            referenceImage = null;
+            textFieldReferenceImage.setText(referenceImage);
             showAlert("Sem Imagem", "Nenhuma imagem selecionada. Será usada a imagem padrão.");
         }
     }
 
+    /**
+     * Sets the default image for the artwork.
+     */
     private void setDefaultImage() {
         imageView.setImage(null);
         selectedFile = null;
-        refenceImage = "Images/Exhibition/Default.jpg";
-        textFieldRefenceImage.setText(refenceImage);
+        referenceImage = null;
+        textFieldReferenceImage.setText(referenceImage);
     }
 
+    /**
+     * Retrieves the file extension from a given file name.
+     *
+     * @param fileName The name of the file.
+     * @return The file extension.
+     */
     private String getFileExtension(String fileName) {
         int lastDotIndex = fileName.lastIndexOf('.');
         if (lastDotIndex > 0 && lastDotIndex < fileName.length() - 1) {
@@ -404,6 +459,12 @@ public class CreateArtworkView extends BorderPane {
         return "";
     }
 
+    /**
+     * Displays an alert dialogue with the given title and content.
+     *
+     * @param title   The title of the alert.
+     * @param content The content of the alert.
+     */
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -412,6 +473,12 @@ public class CreateArtworkView extends BorderPane {
         alert.showAndWait();
     }
 
+    /**
+     * Checks if the selected file is a valid image based on size and dimensions.
+     *
+     * @param file The selected image file.
+     * @return True if the image is valid, false otherwise.
+     */
     private boolean isValidImage(File file) {
         long fileSize = file.length();
         if (fileSize < 100 * 1024 || fileSize > 5 * 1024 * 1024) {
@@ -422,9 +489,12 @@ public class CreateArtworkView extends BorderPane {
         return image.getWidth() >= 400 && image.getHeight() >= 400 && image.getWidth() <= 2000 && image.getHeight() <= 2000;
     }
 
+    /**
+     * Creates a new artwork based on user input and adds it to the database.
+     */
     private void createArtwork() {
         //STRINGS ATTRIBUTES FOR OBJECT
-        String name = textFieldArtworkname.getText();
+        String name = textFieldArtworkName.getText();
         double price = priceSpinner.getValue();
         String dimensionCm = textFieldDimensionCm.getText();
         String dimensionIN = textFieldDimensionIN.getText();
@@ -450,17 +520,24 @@ public class CreateArtworkView extends BorderPane {
         if (newArtwork.getName() == null || newArtwork.getName().trim().isEmpty() || newArtwork.getName().isBlank()
                 || idGallery == 0 || idArtist == 0) {
             System.out.println("Campo vazio. Não é possível atualizar.");
-            labelSucessMensage.setText("Não foi possível atualizar!");
+            labelSuccessMessage.setText("Não foi possível atualizar!");
         } else {
             System.out.println(newArtwork);
             MainManageArtwork.addArtwork(newArtwork);
-            labelSucessMensage.setText("Alterações efetuadas com sucesso!");
+            labelSuccessMessage.setText("Alterações efetuadas com sucesso!");
             System.out.println("atualizado com sucesso");
         }
 
 
     }
 
+    /**
+     * Creates the option menu for ComboBox based on a given field from the artwork list.
+     *
+     * @param artworkList The list of artworks.
+     * @param field       The field to create options for (e.g., "medium" or "category").
+     * @return ObservableList containing options for the ComboBox.
+     */
     private ObservableList<String> createOptionsMenu (List<Artwork>artworkList, String field){
 
         List<String> testing = new ArrayList<>();
@@ -485,6 +562,13 @@ public class CreateArtworkView extends BorderPane {
         }
         return FXCollections.observableArrayList(testing);
     }
+
+    /**
+     * Handles the selection of a medium in the ComboBox, enabling/disabling the corresponding TextField.
+     *
+     * @param mediumMenu      The ComboBox for selecting the medium.
+     * @param artworkMediumList The list of artworks with mediums.
+     */
     private void handleMediumSelection (ComboBox<String> mediumMenu, List<Artwork> artworkMediumList){
         String selectedMedium = mediumMenu.getSelectionModel().getSelectedItem();
         if(selectedMedium != null) {
@@ -499,6 +583,12 @@ public class CreateArtworkView extends BorderPane {
         }
     }
 
+    /**
+     * Handles the selection of a category in the ComboBox, enabling/disabling the corresponding TextField.
+     *
+     * @param categoryMenu         The ComboBox for selecting the category.
+     * @param artworkCategoryList The list of artworks with categories.
+     */
     private void handleCategorySelection (ComboBox<String> categoryMenu, List<Artwork> artworkCategoryList) {
         String selectedCategory = categoryMenu.getSelectionModel().getSelectedItem();
         if (selectedCategory != null) {
@@ -512,31 +602,52 @@ public class CreateArtworkView extends BorderPane {
             }
         }
     }
+
+    /**
+     * Handles the selection of an artist in the ComboBox, extracting and setting the artist ID.
+     *
+     * @param comboBoxArtistRef The ComboBox for selecting the artist.
+     * @param artistsList        The list of artists.
+     */
     private void handleArtistSelection (ComboBox<String> comboBoxArtistRef, List<Artist> artistsList) {
         String selectedArtist = comboBoxArtistRef.getSelectionModel().getSelectedItem();
         if (selectedArtist != null) {
             this.idArtist = extractNumber(selectedArtist);
         }
     }
-    private ObservableList<String> createArtistMenu (List<Artist>artistsList, String artistField){
 
-        List<String> testing = new ArrayList<>();
-        String menuArtistField = artistField.toLowerCase();
+    /**
+     * Creates an artist menu for ComboBox based on the list of artists.
+     * Note: This method needs to be reviewed
+     *
+     * @param artistsList The list of artists.
+     * @return ObservableList containing options for the ComboBox.
+     */
+    private ObservableList<String> createArtistMenu (List<Artist>artistsList){
 
-        switch (menuArtistField){
-            case "artist": for(Artist artist : artistsList){
-                String option = artist.getName();
-                int optionId = artist.getId();
-                String fullOption = optionId + " - " + option;
-                if(!testing.contains(fullOption)){
-                    testing.add(fullOption);
-                }
+        List<String> artists = new ArrayList<>();
+        String menuArtistField = "artist".toLowerCase();
+
+
+        for (Artist artist : artistsList) {
+            String option = artist.getName();
+            int optionId = artist.getId();
+            String fullOption = optionId + " - " + option;
+            if (!artists.contains(fullOption)) {
+                artists.add(fullOption);
             }
-                break;
         }
-        return FXCollections.observableArrayList(testing);
+
+        return FXCollections.observableArrayList(artists);
     }
 
+    /**
+     * Extracts the numerical part from a string and returns it as an integer.
+     *
+     * @param input The input string containing a numerical part.
+     * @return The extracted integer.
+     * @throws IllegalArgumentException If no number is found in the string.
+     */
     public static int extractNumber(String input) {
         Pattern pattern = Pattern.compile("^\\d+");
         // OBJECT INPUT

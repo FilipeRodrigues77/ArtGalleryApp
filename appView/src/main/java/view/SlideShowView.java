@@ -27,8 +27,10 @@ import java.util.List;
  * The class includes methods for showing the next image and generating a random order for
  * image indices.
  *
- * @author [Your Name]
- * @version [Version Number]
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version V1.0
+ *
  */
 public class SlideShowView extends BorderPane {
 
@@ -38,11 +40,10 @@ public class SlideShowView extends BorderPane {
 
 
     /**
-     * Constructs a new {@code SlideShowView} object. Initializes the layout, loads the
-     * images from the specified folder, and starts the slideshow.
+     * Constructs a new {@code SlideShowView} object.
+     * Initialises the layout, loads the images from the specified folder, and starts the slideshow.
      */
     public SlideShowView() {
-        // Configuração do layout
 
         this.setPadding(new Insets(0,10,20,10));
         MainView mainView = new MainView();
@@ -64,7 +65,7 @@ public class SlideShowView extends BorderPane {
             );
 
             if (imageFiles != null && imageFiles.length > 0) {
-                // Gera uma ordem aleatória para os índices das imagens
+                // generates a random indexes order for the images
                 randomOrder = generateRandomOrder(imageFiles.length);
 
                 ImageView imageView = new ImageView();
@@ -73,7 +74,7 @@ public class SlideShowView extends BorderPane {
 
                 imageView.setLayoutY(100);
 
-                // Adiciona o botão "Fechar"
+                // Add the "Retornar" button
                 Button buttonMain = new Button("Retornar");
                 buttonMain.setOnAction(e -> getScene().setRoot(new MainView()));
                 buttonMain.getStyleClass().add("button-modern");
@@ -83,7 +84,7 @@ public class SlideShowView extends BorderPane {
                 centerPane.getChildren().addAll(imageView,frame);
 
 
-                // Configuração do Timeline para mudar de imagem a cada 3 segundos
+                // configure the timeline to change the image
                 Timeline timeline = new Timeline(
                         new KeyFrame(Duration.seconds(3), event -> showNextImage(imageView))
                 );

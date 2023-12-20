@@ -6,7 +6,7 @@ import view.*;
 /**
  * The {@code Art} class serves as the main entry point for the Iuvenis Artem application.
  * It extends {@code Application} and defines the main method ({@code main}) and the
- * start method for initializing and launching the application window.
+ * start method for initialising and launching the application window.
  * <p>
  * The main method calls the launch method to start the JavaFX application. The start
  * method sets up the primary stage, titles it, creates the main scene with the

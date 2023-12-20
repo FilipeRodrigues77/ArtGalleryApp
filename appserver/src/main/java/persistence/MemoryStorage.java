@@ -40,7 +40,7 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
 
     @Override
     public Artist getArtistByID(int id) throws ServiceException {
-        Artist artist = null;
+        Artist artist;
         String commandSQL = "SELECT * FROM Artist WHERE idArtist = " + id;
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              Statement statement = connection.createStatement();
@@ -229,7 +229,7 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
 
     @Override
     public Artwork getArtworkByID(int id) throws ServiceException {
-        Artwork artwork = null;
+        Artwork artwork;
         String commandSQL = "SELECT * FROM Artwork WHERE idArtwork = " + id;
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              Statement statement = connection.createStatement();
@@ -550,7 +550,7 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
 
     @Override
     public Gallery getGalleryByID(int id) throws ServiceException {
-        Gallery gallery = null;
+        Gallery gallery;
         String commandSQL = "SELECT * FROM Gallery WHERE idGallery = " + id;
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
@@ -719,7 +719,7 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
 
     @Override
     public Exhibition getExhibitionByID(int id) throws ServiceException {
-        Exhibition exhibition = null;
+        Exhibition exhibition;
         String commandSQL = "SELECT * FROM Exhibition WHERE idExhibition = " + id;
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
@@ -952,7 +952,6 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
         return exhibitions;
     }
 
-
     @Override
     public List<Nationality> getNationalities() throws ServiceException {
 
@@ -998,4 +997,5 @@ public class MemoryStorage implements ArtistService, ArtworkService, GalleryServ
 
         return regions;
     }
+
 }

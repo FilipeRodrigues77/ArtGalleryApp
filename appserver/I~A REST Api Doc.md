@@ -12,7 +12,7 @@ integrate art-related functionalities into their applications, providing a
 backend for managing diverse aspects of the art industry.
 
 ### Base URL
-- The base URL for accessing the API is http://localhost:8010, and all 
+- The base URL for accessing the API is http://localhost:8020, and all 
 endpoints are appended to this base URL.
 
 ### Technologies Used
@@ -118,35 +118,18 @@ The error details are logged, and a meaningful error response is sent.
 
 ````
 
-### Artist Search by Name
-#### Endpoint: /artists/search
-Method: GET
-Description: Retrieve a list of artists matching the provided name.
-Parameters: name (string): The name of the artist to search for.
-Response: JSON array containing artist information.
+### Artist Search with query parameters 
 
-###  Response Sample
+- Method: GET (Query Parameters)
+- Description: Retrieve a list of artists matching the provided parameter.
+- Response: JSON array containing artist/s information.
+
+1. Parameter **name**: Endpoint -> **/artists/searchName**
+2. Parameter **nationality**: Endpoint -> **/artists/searchNationality**
+3. Parameter **birthdate**: Endpoint -> **/artists/searchBirthdate**
+4. Parameter **deathdate**: Endpoint -> **/artists/searchDeathdate**
 
 ````
-[
-  {
-    "id": 4,
-    "name": "Alexandre Cabanel",
-    "nationality": "French",
-    "birthdate": "1823",
-    "deathdate": "1889",
-    "slug": "alexandre-cabanel"
-  },
-  {
-    "id": 10,
-    "name": "Auguste Rodin",
-    "nationality": "French",
-    "biography": "",
-    "birthdate": "1840",
-    "deathdate": "1917",
-    "slug": "auguste-rodin"
-  }
-]
 ````
 
 ### Create New Artist
@@ -195,10 +178,10 @@ Response: JSON array containing artist information.
 - Request Body: JSON object representing the updated artist.
 - Response: JSON object containing details of the updated artist or an error message.
 
--> To update an artist, there will be required the following request body :
-   ** Please note that you do not have to fill all the keys for your request body.
-      You can choose to send only the required keys for the update.
-   ** !id field cannot be updated!
+-> To update an artist, there will be required the following request body:
+   **Please note that you do not have to fill all the keys for your request body.
+      You can choose to send only the required keys for the update.** 
+   !id field cannot be updated!
 
 ###  Sample for Request Body 
 ````
@@ -241,7 +224,6 @@ the request body has only two keys, for example, the response body will have tho
 {
   "id": 1
 }
-
 -> The response will be a simple JSON containng only the id for the deleted object.
 ````
 
@@ -320,6 +302,30 @@ the request body has only two keys, for example, the response body will have tho
 
 ````
 
+### Artwork Search with query parameters
+
+- Method: GET (Query Parameters)
+- Description: Retrieve a list of artworks matching the provided parameter.
+- Response: JSON array containing artwork/s information.
+
+1. Parameter **name**: Endpoint -> **/artworks/searchName**
+2. Parameter **medium**: Endpoint -> **/artworks/searchMedium**
+3. Parameters **min & max**: Endpoint -> **/artworks/searchPriceRange**
+4. Parameter **idArtist**: Endpoint -> **/artworks/searchByArtist** 
+   - <span style="color: pink;">_(returns all the artworks with the provided artist id)_</span>
+5. Parameter **idExhibition**: Endpoint -> **/artworks/searchByExhibition**
+   - <span style="color: pink;">_(returns all the artworks with the provided exhibition id)_</span>
+6. Parameter **idGallery**: Endpoint -> **/artworks/searchByGallery**
+   - <span style="color: pink;">_(returns all the artworks with the provided gallery id)_</span>
+7. Parameter **date**: Endpoint -> **/artworks/searchByDate**
+   - <span style="color: pink;">_(returns all the artworks with the provided creation date)_</span>
+8. Parameters **startDate & endDate**: Endpoint -> **/artworks/searchByDateRange**
+   - <span style="color: pink;">_(returns all the artworks that the creation date is between the provided dates)_</span>
+9. Parameter **category**: Endpoint -> **/artworks/searchByCategory**
+
+````
+````
+
 ### Create New Artwork
 #### Endpoint: /artworks
 - Method: POST
@@ -368,6 +374,7 @@ the request body has only two keys, for example, the response body will have tho
   "idGallery": 1,
   "idArtist": 1
 }
+
 ```
 
 ### Update Artwork
@@ -497,6 +504,18 @@ two keys plus the artwork's id.
     "email": "",
     "regionName": "Europe"
 }
+````
+
+### Gallery Search with query parameters
+
+- Method: GET (Query Parameters)
+- Description: Retrieve a list of galleries matching the provided parameter.
+- Response: JSON array containing gallery/ies information.
+
+1. Parameter **name**: Endpoint -> **/galleries/search**
+2. Parameter **region**: Endpoint -> **/galleries/searchByRegion**
+
+````
 ````
 
 ### Create New Gallery
@@ -655,6 +674,23 @@ two keys plus the artwork's id.
     "Exstatus": "closed",
     "idGallery": "1"
 }
+
+````
+
+### Exhibition Search with query parameters
+
+- Method: GET (Query Parameters)
+- Description: Retrieve a list of exhibitions matching the provided parameter.
+- Response: JSON array containing exhibition/s information.
+
+1. Parameter **name**: Endpoint -> **/exhibitions/search**
+2. Parameter **status**: Endpoint -> **/exhibition/searchByStatus**
+3. Parameter **startDate**: Endpoint -> **/exhibition/searchByStartDate**
+4. Parameter **endDate**: Endpoint -> **/exhibition/searchByEndDate**
+5. Parameter **idGallery**: Endpoint -> **/exhibition/searchByGallery**
+   - <span style="color: pink;">_(returns all the exhibitions with the provided gallery id)_</span>
+
+````
 ````
 
 ### Create New Exhibition
@@ -771,6 +807,68 @@ two keys plus the artwork's id.
 
 -> The response will be a simple JSON containng only the id for the deleted object.
 ````
+
+---------------------------------------------------------------------------------------------------------------
+
+# Exhibitions
+
+### Get All Nationalities 
+#### Endpoint: /nationalities
+
+- Method: GET
+- Description: Retrieve a list of all nationalities.
+- Parameters:  no parameters.
+- Response: JSON array containing nationality information.
+
+###  Response Sample
+
+````
+[
+  {
+    "nationality": "Algerian"
+  },
+  {
+    "nationality": "American"
+  },
+  {
+    "nationality": "Angolan"
+  },
+  {
+    "nationality": "Argentinian"
+  },
+  ...
+]
+````
+
+---------------------------------------------------------------------------------------------------------------
+
+# Regions
+
+### Get All Regions
+#### Endpoint: /regions
+
+- Method: GET
+- Description: Retrieve a list of all regions.
+- Parameters:  no parameters.
+- Response: JSON array containing region information.
+
+###  Response Sample
+
+````
+[
+  {
+    "region": "Africa"
+  },
+  {
+    "region": "Asia"
+  },
+  {
+    "region": "Central America"
+  },
+  ...
+]
+````
+
 
 
 

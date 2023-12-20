@@ -12,25 +12,39 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import presenter.MainGetGalleries;
 import presenter.MainManageExhibition;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
 
+/**
+ * The {@code EditExhibitionView} class represents the view for editing exhibition information.
+ * It extends {@link BorderPane} and provides a user interface for updating details such as exhibition name, start and end dates,
+ * description, status, and reference to the associated gallery. Users can make changes and save them to the database.
+ * This class is part of the graphical user interface for managing exhibitions in the application.
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
+ */
 public class EditExhibitionView extends BorderPane {
 
-    private TextField textFieldnameExhibition;
-    private DatePicker datePickerstartDate;
+    private TextField textFieldNameExhibition;
+    private DatePicker datePickerStartDate;
     private DatePicker datePickerEndDate;
-    private TextField textFieldExdescription;
+    private TextField textFieldExDescription;
     private ComboBox<String> statusMenu;
     private int idGallery;
     private Gallery selectedGallery;
     private ComboBox<Gallery> comboBoxGalleryRef;
-    private Label labelSucessMensage;
+    private Label labelSuccessMessage;
 
+    /**
+     * Constructs a new {@code EditExhibitionView} instance for a specific exhibition.
+     * Initialises the layout and applies the current theme.
+     *
+     * @param exhibition The {@link Exhibition} object for which the details will be edited.
+     * @see ManageMainView
+     */
     public EditExhibitionView(Exhibition exhibition) {
         initialize(exhibition);
         ManageMainView manageMainView = new ManageMainView();
@@ -38,6 +52,14 @@ public class EditExhibitionView extends BorderPane {
         getStylesheets().add(cssTheme);
     }
 
+    /**
+     * Initialises the layout of the {@code EditExhibitionView} class, including header, center, and bottom sections.
+     * The layout includes elements for updating exhibition information such as name, start and end dates, description,
+     * status, and the associated gallery.
+     * Users can make changes and save them to the database.
+     *
+     * @param exhibition The {@link Exhibition} object for which the details will be edited.
+     */
     private void initialize(Exhibition exhibition) {
         setPadding(new Insets(20));
 
@@ -70,18 +92,18 @@ public class EditExhibitionView extends BorderPane {
         Label labelGalleryId = new Label(String.valueOf(exhibition.getIdGallery()));
 
 
-        this.datePickerstartDate = new DatePicker(exhibition.getStartDate());
+        this.datePickerStartDate = new DatePicker(exhibition.getStartDate());
         this.datePickerEndDate = new DatePicker(exhibition.getEndDate());
-        this.textFieldnameExhibition = new TextField(exhibition.getNameExhibition());
-        this.textFieldExdescription = new TextField(exhibition.getExdescription());
+        this.textFieldNameExhibition = new TextField(exhibition.getNameExhibition());
+        this.textFieldExDescription = new TextField(exhibition.getExdescription());
 
-        textFieldExdescription.setPrefSize(520,200);
+        textFieldExDescription.setPrefSize(520,200);
 
         VBox vBoxGallery = new VBox(labelRefGallery, labelGalleryId);
-        VBox vBoxExhibitionName = new VBox(labelExhibitionName,textFieldnameExhibition);
-        VBox vBoxStartDate = new VBox(labelStartDate,datePickerstartDate);
+        VBox vBoxExhibitionName = new VBox(labelExhibitionName, textFieldNameExhibition);
+        VBox vBoxStartDate = new VBox(labelStartDate, datePickerStartDate);
         VBox vBoxEndDate = new VBox(labelEndDate,datePickerEndDate);
-        VBox vBoxDescription = new VBox(labelDescription,textFieldExdescription);
+        VBox vBoxDescription = new VBox(labelDescription, textFieldExDescription);
         VBox vBoxStatus = new VBox(statusMenu);
         HBox hBoxDate = new HBox(vBoxStartDate, vBoxEndDate);
         VBox vBoxExhibitionInfo = new VBox(vBoxExhibitionName, hBoxDate, vBoxStatus, vBoxDescription);
@@ -130,8 +152,8 @@ public class EditExhibitionView extends BorderPane {
         HBox hBoxButtons = new HBox(saveChangesButton, cancelButton);
         hBoxButtons.setSpacing(30);
         hBoxButtons.setAlignment(Pos.CENTER_RIGHT);
-        this.labelSucessMensage = new Label("");
-        VBox vBoxButtons = new VBox(hBoxButtons, labelSucessMensage);
+        this.labelSuccessMessage = new Label("");
+        VBox vBoxButtons = new VBox(hBoxButtons, labelSuccessMessage);
         vBoxButtons.setSpacing(10);
 
         HBox hBoxBottomImages = new HBox(imageViewLinkedin,imageViewGitHub);
@@ -147,6 +169,12 @@ public class EditExhibitionView extends BorderPane {
         this.setBottom(vBoxBottomLayout);
     }
 
+    /**
+     * Returns a {@link VBox} containing the header elements, including hyperlinks to various sections of the application
+     * such as Artists, Home, Galleries, Exhibitions, and Artworks.
+     *
+     * @return The {@code VBox} containing the header elements.
+     */
     private VBox getHeaderBox (){
 
         // HYPERLINKS
@@ -157,7 +185,7 @@ public class EditExhibitionView extends BorderPane {
         Hyperlink hyperLinkArtwork = new Hyperlink("Obras de Arte");
 
         // Text Fields
-        Label labelManagerInfo = new Label("Sistema de Gestão Iuvennis Art");
+        Label labelManagerInfo = new Label("Sistema de Gestão Iuvenis Artem");
         labelManagerInfo.setPrefSize(550, 30);
         labelManagerInfo.getStyleClass().add("my-center-label-6 ");
 
@@ -194,29 +222,28 @@ public class EditExhibitionView extends BorderPane {
 
     }
 
-    private void setOriginalDescription(TextField textField, String originalText){
-
-        textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue) {
-                if (textField.getText().isEmpty()) {
-                    textField.setText(originalText);
-                }
-            }
-        });
-    }
-
-    // image treatment
+    /**
+     * Sets the default size for an {@link ImageView}, adjusting the fit width and fit height.
+     *
+     * @param imageView The {@code ImageView} to set the default size for.
+     */
     public void defaultSizeIcon (ImageView imageView){
         imageView.setFitHeight(18); // Ajuste a altura conforme necessário
         imageView.setFitWidth(18);  // Ajuste a largura conforme necessário
         // imageView.setPreserveRatio(true);
     }
 
+    /**
+     * Handles the action to save changes made to the exhibition details and updates the database.
+     * Displays success or error messages accordingly.
+     *
+     * @param exhibition The {@link Exhibition} object representing the exhibition whose details are being edited.
+     */
     private void saveChangesExhibition(Exhibition exhibition) {
         //STRINGS ATTRIBUTES FOR OBJECT
-        exhibition.setNameExhibition(textFieldnameExhibition.getText());
-        exhibition.setExdescription(textFieldExdescription.getText());
-        exhibition.setStartDate(datePickerstartDate.getValue());
+        exhibition.setNameExhibition(textFieldNameExhibition.getText());
+        exhibition.setExdescription(textFieldExDescription.getText());
+        exhibition.setStartDate(datePickerStartDate.getValue());
         exhibition.setEndDate(datePickerEndDate.getValue());
         exhibition.setExstatus(statusMenu.getValue());
 
@@ -226,10 +253,10 @@ public class EditExhibitionView extends BorderPane {
                 statusMenu.getValue().trim().isEmpty() || statusMenu.getValue().isBlank() ||
                 exhibition.getStartDate() == null || exhibition.getEndDate() == null) {
             System.out.println("Campo vazio. Não é possível atualizar.");
-            labelSucessMensage.setText("Não foi possível atualizar!");
+            labelSuccessMessage.setText("Não foi possível atualizar!");
         } else {
             MainManageExhibition.updateExhibition(exhibition);
-            labelSucessMensage.setText("Alterações efetuadas com sucesso!");
+            labelSuccessMessage.setText("Alterações efetuadas com sucesso!");
             System.out.println("atualizado com sucesso");
         }
 

@@ -7,22 +7,41 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import view.*;
 
+/**
+ * The {@code LoginManagerApp} class serves as the entry point for the Iuvenis ManagerApp application. It handles user
+ * authentication through a login stage and, upon successful login, launches the main application scene.
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
+ */
 public class LoginManagerApp extends Application {
 
     private TextField usernameField;
     private PasswordField passwordField;
     private boolean loginSuccess = false;
 
+    /**
+     * The main method to launch the JavaFX application.
+     *
+     * @param args The command-line arguments.
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * Initialises the primary stage for the application and, based on the result of the login attempt, either shows
+     * the main scene or exits the application.
+     *
+     * @param primaryStage The primary stage for the application.
+     */
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Iuvenis ManagerApp");
+        primaryStage.setTitle("Iuvenis Artem ManagerApp");
         Stage loginStage = new Stage(StageStyle.UNDECORATED);
 
-        // VERIRY LOGIN BEFORE SHOW MAIN SCENE
+        // VERIFY LOGIN BEFORE SHOW MAIN SCENE
         if (performLogin(loginStage)) {
             showMainScene(primaryStage);
         } else {
@@ -30,7 +49,14 @@ public class LoginManagerApp extends Application {
         }
     }
 
+    /**
+     * Performs user authentication by displaying a login stage.
+     *
+     * @param loginStage The stage used for the login interface.
+     * @return {@code true} if the login is successful, {@code false} otherwise.
+     */
     private boolean performLogin(Stage loginStage) {
+
         GridPane grid = new GridPane();
         grid.setAlignment(javafx.geometry.Pos.CENTER);
         grid.setHgap(10);
@@ -75,21 +101,33 @@ public class LoginManagerApp extends Application {
         return loginSuccess;
     }
 
+    /**
+     * Closes the provided login stage.
+     *
+     * @param loginStage The stage to be closed.
+     */
     private void closeLoginStage(Stage loginStage) {
         loginStage.close();
     }
 
+    /**
+     * Displays the main application scene using the primary stage.
+     *
+     * @param primaryStage The primary stage for the application.
+     */
     private void showMainScene(Stage primaryStage) {
         Scene mainScene = new Scene(new ManageMainView(), 800, 600);
-        Scene sceneArtwork = new Scene(new ManageArtworkView(), 800, 600);
-        Scene sceneArtist = new Scene(new ManageArtistView(), 800, 600);
-        Scene sceneExhibition = new Scene(new ManageExhibitionView(), 800, 600);
-        Scene sceneGallery = new Scene(new ManageGalleryView(), 800, 600);
 
         primaryStage.setScene(mainScene);
         primaryStage.show();
     }
 
+    /**
+     * Displays an alert dialogue with the specified title and content.
+     *
+     * @param title   The title of the alert.
+     * @param content The content text of the alert.
+     */
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);

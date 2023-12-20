@@ -19,10 +19,29 @@ import presenter.MainManageExhibition;
 
 import java.util.List;
 
+/**
+ * The {@code ManageArtworkView} class represents the view for managing artworks in the Iuvenis Artem Management System.
+ * It extends {@link BorderPane} and provides a user interface for listing, creating, editing, and deleting artworks.
+ * Users can perform these actions through buttons and search functionalities.
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
+ */
 public class ManageArtworkView extends BorderPane {
+
     private ObservableList<Artwork> observableListArtwork;
     private ListView<Artwork> listViewArtwork;
 
+    /**
+     * Constructs a new {@code ManageArtworkView} instance.
+     * Initialises the layout, including header, center, and bottom sections,
+     * to facilitate the management of artworks.
+     * It displays a list of artworks, buttons for creating, editing, and deleting artworks,
+     * and a search bar for filtering artworks by name.
+     *
+     * @see ManageMainView
+     */
     public ManageArtworkView() {
         doLayout();
         ManageMainView manageMainView = new ManageMainView();
@@ -30,6 +49,11 @@ public class ManageArtworkView extends BorderPane {
         getStylesheets().add(cssTheme);
     }
 
+    /**
+     * Initialises the layout of the {@code ManageArtworkView} class, including header, center, and bottom sections.
+     * It displays a list of artworks, buttons for creating, editing, and deleting artworks, and a search bar for
+     * filtering artworks by name.
+     */
     private void doLayout() {
         setPadding(new Insets(20));
 
@@ -74,6 +98,11 @@ public class ManageArtworkView extends BorderPane {
         this.setBottom(getFooterBox());
     }
 
+    /**
+     * Returns a {@link HBox} containing the footer elements.
+     *
+     * @return The {@code HBox} containing the footer elements.
+     */
     private HBox getFooterBox (){
 
         // GIT IMAGE
@@ -101,6 +130,13 @@ public class ManageArtworkView extends BorderPane {
         return hBoxBottomLayout;
     }
 
+
+    /**
+     * Returns a {@link VBox} containing the header elements, including hyperlinks to various sections of the application
+     * such as Artists, Home, Galleries, Exhibitions, and Artworks.
+     *
+     * @return The {@code VBox} containing the header elements.
+     */
     private VBox getHeaderBox (){
 
         // HYPERLINKS
@@ -158,6 +194,12 @@ public class ManageArtworkView extends BorderPane {
         return  vBoxTop;
     }
 
+    /**
+     * Sets the original description for a {@link TextField} to be used as prompt text when the field loses focus.
+     *
+     * @param textField     The {@code TextField} for which to set the original description.
+     * @param originalText  The original description to be set as prompt text.
+     */
     private void setOriginalDescription(TextField textField, String originalText){
 
         textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -168,6 +210,13 @@ public class ManageArtworkView extends BorderPane {
             }
         });
     }
+
+    /**
+     * Handles the action when the search icon is selected. Filters artworks based on the entered search text
+     * and updates the list view accordingly. If no results are found, redirects to the error view.
+     *
+     * @param textFieldSearch The {@code TextField} for entering the search text.
+     */
 
     private void handleSearchIconSelection(TextField textFieldSearch ){
         String searchText = textFieldSearch.getText().trim();
@@ -185,13 +234,20 @@ public class ManageArtworkView extends BorderPane {
         }
     }
 
-    // image treatment
+    /**
+     * Sets the default size for an {@link ImageView}, adjusting the fit width and fit height.
+     *
+     * @param imageView The {@code ImageView} to set the default size for.
+     */
     public void defaultSizeIcon (ImageView imageView){
-        imageView.setFitHeight(18); // Ajuste a altura conforme necessário
-        imageView.setFitWidth(18);  // Ajuste a largura conforme necessário
-        // imageView.setPreserveRatio(true);
+        imageView.setFitHeight(18);
+        imageView.setFitWidth(18);
+
     }
 
+    /**
+     * Handles the action when the "Editar" (Edit) button is pressed. Opens the edit view for the selected artwork.
+     */
     private void editSelectedArtwork() {
         Artwork selectedArtwork = listViewArtwork.getSelectionModel().getSelectedItem();
 
@@ -201,6 +257,10 @@ public class ManageArtworkView extends BorderPane {
         }
     }
 
+    /**
+     * Handles the action when the "Apagar" (Delete) button is pressed. Prompts the user for confirmation and
+     * deletes the selected artwork from the database if confirmed.
+     */
     private void removeSelectedArtwork() {
         Artwork selectedArtwork = listViewArtwork.getSelectionModel().getSelectedItem();
 
@@ -208,7 +268,7 @@ public class ManageArtworkView extends BorderPane {
             // ALERT DELETE MESSAGE
             Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
             confirmation.setTitle("Deletar Obra de Arte");
-            confirmation.setHeaderText("Iuvennis Art - Base de Dados (Confirmar Exclusão)");
+            confirmation.setHeaderText("Iuvenis Artem - Base de Dados (Confirmar Exclusão)");
             confirmation.setContentText("Tem certeza que deseja DELETAR a obra de arte? Essa alteração não tem retorno.");
 
             ButtonType buttonYes = new ButtonType("Sim");
@@ -226,6 +286,5 @@ public class ManageArtworkView extends BorderPane {
             listViewArtwork.refresh();
         }
     }
-
 
 }

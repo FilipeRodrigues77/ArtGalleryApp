@@ -10,12 +10,31 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+/**
+ * The {@code ShowErrorView} class represents a view to be displayed when an error occurs or the desired content is not found.
+ * It extends {@link BorderPane} and provides a user-friendly message along with the option to return to the main view.
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
+ */
 public class ShowErrorView extends BorderPane {
 
+    /**
+     * Constructs a new {@code ShowErrorView} instance.
+     * Initialises the layout and displays an error message along with
+     * the application logo.
+     *
+     * @see ShowErrorView#doLayout()
+     */
     public ShowErrorView() {
         doLayout();
     }
 
+    /**
+     * Sets up the layout for the {@code ShowErrorView}, including an error message, the application logo, and a back arrow.
+     * Users can click the back arrow to return to the main view when an error occurs or the desired content is not found.
+     */
     private void doLayout() {
         setPadding(new Insets(20));
 

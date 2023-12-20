@@ -11,7 +11,8 @@ import javafx.scene.layout.BorderPane;
  * of an artwork. It extends {@code BorderPane} and provides a layout with a back arrow
  * and the full-size image of the artwork.
  *
- * @author Nuely Furtado and Filipe Alves
+ * @author Nuely Furtado
+ * @author Filipe Alves
  * @version v1.0
  */
 public class ShowFullImage extends BorderPane {

@@ -29,6 +29,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The CreateExhibitionView class represents the view for creating new exhibitions in the art management system.
+ * It extends the BorderPane class and includes various UI elements for input and interaction.
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
+ */
 public class CreateExhibitionView extends BorderPane {
 
     private TextField textFieldnameExhibition;
@@ -45,6 +53,9 @@ public class CreateExhibitionView extends BorderPane {
     private File selectedFile;
     private ImageView imageView;
 
+    /**
+     * Constructor for the CreateExhibitionView class. Initializes the layout and sets the theme.
+     */
     public CreateExhibitionView() {
         doLayout();
         ManageMainView manageMainView = new ManageMainView();
@@ -52,6 +63,9 @@ public class CreateExhibitionView extends BorderPane {
         getStylesheets().add(cssTheme);
     }
 
+    /**
+     * Sets up the layout of the CreateExhibitionView, including header, center, and bottom elements.
+     */
     private void doLayout() {
         // Vamos criar aqui o layout deste painel
         setPadding(new Insets(20));
@@ -143,6 +157,11 @@ public class CreateExhibitionView extends BorderPane {
         this.setBottom(getFooterBox());
     }
 
+    /**
+     * Generates the footer box, including buttons for creating an exhibition and canceling the operation.
+     *
+     * @return The VBox containing the footer elements.
+     */
     private VBox getFooterBox (){
         // Buttons
         Button createExhibitionButton = new Button("Criar Exposição");
@@ -194,6 +213,11 @@ public class CreateExhibitionView extends BorderPane {
         return vBoxBottomLayout;
     }
 
+    /**
+     * Generates the header box, including hyperlinks for navigation and system information.
+     *
+     * @return The VBox containing the header elements.
+     */
     private VBox getHeaderBox (){
 
         // HYPERLINKS
@@ -203,7 +227,7 @@ public class CreateExhibitionView extends BorderPane {
         Hyperlink hyperlinkExhibition = new Hyperlink("Exposições");
         Hyperlink hyperLinkArtwork = new Hyperlink("Obras de Arte");
 
-        Label labelManagerInfo = new Label("Sistema de Gestão Iuvennis Art");
+        Label labelManagerInfo = new Label("Sistema de Gestão Iuvenis Artem");
         labelManagerInfo.setPrefSize(550, 30);
         labelManagerInfo.getStyleClass().add("my-center-label-6 ");
 
@@ -251,13 +275,21 @@ public class CreateExhibitionView extends BorderPane {
         });
     }
 
-    // image treatment
+    /**
+     * Sets the default size for an ImageView to be used as an icon.
+     *
+     * @param imageView The ImageView for which to set the default size.
+     */
+
     public void defaultSizeIcon (ImageView imageView){
-        imageView.setFitHeight(18); // Ajuste a altura conforme necessário
-        imageView.setFitWidth(18);  // Ajuste a largura conforme necessário
-        // imageView.setPreserveRatio(true);
+        imageView.setFitHeight(18);
+        imageView.setFitWidth(18);
+
     }
 
+    /**
+     * Opens a file chooser dialogue to select an image file for the exhibition.
+     */
     private void openFileChooser() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Selecionar Imagem");
@@ -281,7 +313,11 @@ public class CreateExhibitionView extends BorderPane {
         }
     }
 
+    /**
+     * Displays a separate window to view the selected image.
+     */
     private void viewImage() {
+
         if (selectedFile != null) {
             ImageView viewImageView = new ImageView(new Image(selectedFile.toURI().toString()));
             javafx.scene.layout.StackPane secondaryLayout = new javafx.scene.layout.StackPane();
@@ -301,6 +337,9 @@ public class CreateExhibitionView extends BorderPane {
         }
     }
 
+    /**
+     * Saves the selected image to a specified folder and updates the reference image path.
+     */
     private void saveImage() {
         if (selectedFile != null) {
             String artistName = textFieldnameExhibition.getText().trim();
@@ -344,6 +383,9 @@ public class CreateExhibitionView extends BorderPane {
         }
     }
 
+    /**
+     * Sets the default image for the exhibition.
+     */
     private void setDefaultImage() {
         imageView.setImage(null);
         selectedFile = null;
@@ -351,6 +393,12 @@ public class CreateExhibitionView extends BorderPane {
         textFieldRefenceImage.setText(refenceImage);
     }
 
+    /**
+     * Retrieves the file extension from a given file name.
+     *
+     * @param fileName The name of the file.
+     * @return The file extension.
+     */
     private String getFileExtension(String fileName) {
         int lastDotIndex = fileName.lastIndexOf('.');
         if (lastDotIndex > 0 && lastDotIndex < fileName.length() - 1) {
@@ -359,6 +407,12 @@ public class CreateExhibitionView extends BorderPane {
         return "";
     }
 
+    /**
+     * Displays an alert dialogue with the given title and content.
+     *
+     * @param title   The title of the alert.
+     * @param content The content of the alert.
+     */
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -367,6 +421,12 @@ public class CreateExhibitionView extends BorderPane {
         alert.showAndWait();
     }
 
+    /**
+     * Checks if the selected file is a valid image based on size and dimensions.
+     *
+     * @param file The selected image file.
+     * @return True if the image is valid, false otherwise.
+     */
     private boolean isValidImage(File file) {
         long fileSize = file.length();
         if (fileSize < 100 * 1024 || fileSize > 5 * 1024 * 1024) {
@@ -377,6 +437,9 @@ public class CreateExhibitionView extends BorderPane {
         return image.getWidth() >= 400 && image.getHeight() >= 400 && image.getWidth() <= 2000 && image.getHeight() <= 2000;
     }
 
+    /**
+     * Creates a new exhibition based on user input and adds it to the database.
+     */
     private void createExhibition() {
 
         //STRINGS ATTRIBUTES FOR OBJECT
@@ -413,6 +476,15 @@ public class CreateExhibitionView extends BorderPane {
 
     }
 
+
+    /**
+     * Checks if the provided end date is before the start date.
+     *
+     * @param startDate The start date to compare.
+     * @param endDate The end date to compare.
+     * @return {@code true} if the end date is before the start date, {@code false} otherwise.
+     * @see LocalDate#isBefore(java.time.chrono.ChronoLocalDate)
+     */
     public static boolean isEndDateBeforeStartDate(LocalDate startDate, LocalDate endDate) {
         return endDate.isBefore(startDate);
     }

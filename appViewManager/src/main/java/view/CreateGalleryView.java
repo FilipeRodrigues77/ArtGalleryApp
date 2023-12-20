@@ -24,18 +24,30 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The {@code CreateGalleryView} class represents the view for creating a new gallery.
+ * It extends {@link BorderPane} and provides a user interface for entering gallery information, including a name,
+ * email, reference image, and region. Users can attach, view, and remove images, and create a new gallery.
+ * This class is part of the graphical user interface for managing galleries in the application.
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ * @version v1.0
+ */
 public class CreateGalleryView extends BorderPane {
 
     private TextField textFieldGalleryName;
     private TextField textFieldEmail;
-    private TextField textFieldRefenceImage;
+    private TextField textFieldReferenceImage;
     private ComboBox<String> statusMenu;
-    private Label labelSucessMensage;
-    private String refenceImage;
+    private Label labelSuccessMessage;
+    private String referenceImage;
     private File selectedFile;
     private ImageView imageView;
 
-
+    /**
+     * Constructor for the CreateExhibitionView class. Initializes the layout and sets the theme.
+     */
     public CreateGalleryView() {
         doLayout();
         ManageMainView manageMainView = new ManageMainView();
@@ -43,8 +55,12 @@ public class CreateGalleryView extends BorderPane {
         getStylesheets().add(cssTheme);
     }
 
+    /**
+     * Sets up the layout of the {@code CreateGalleryView} class, including header, center, and bottom sections.
+     * The layout includes elements for entering gallery information.
+     */
     private void doLayout() {
-        // Vamos criar aqui o layout deste painel
+
         setPadding(new Insets(20));
 
         //--------------------------------------------- HEADER ELEMENTS ---------------------------------------------
@@ -90,11 +106,11 @@ public class CreateGalleryView extends BorderPane {
 
         this.textFieldGalleryName = new TextField();
         this.textFieldEmail = new TextField();
-        this.textFieldRefenceImage = new TextField(refenceImage);
-        textFieldRefenceImage.setDisable(true);
+        this.textFieldReferenceImage = new TextField(referenceImage);
+        textFieldReferenceImage.setDisable(true);
 
         HBox hBoxButtonImage = new HBox(attachImageButton, viewimageButton, removeImageButton);
-        VBox vBoxRefImageLabelAndText = new VBox(labelReferenceImage,textFieldRefenceImage);
+        VBox vBoxRefImageLabelAndText = new VBox(labelReferenceImage, textFieldReferenceImage);
         VBox vBoxReferenceImage = new VBox(vBoxRefImageLabelAndText, hBoxButtonImage);
 
         VBox vBoxArtistName = new VBox(labelGalleryName,textFieldGalleryName);
@@ -120,17 +136,22 @@ public class CreateGalleryView extends BorderPane {
         this.setBottom(getFooterBox());
     }
 
+    /**
+     * Generates the footer box, including buttons for creating an exhibition and canceling the operation.
+     *
+     * @return The VBox containing the footer elements.
+     */
     private VBox getFooterBox (){
         // Buttons
         Button createGalleryButton = new Button("Criar Galleria");
         createGalleryButton.getStyleClass().add("button-modern");
 
         createGalleryButton.setOnAction(event -> {
-            if (selectedFile != null || refenceImage != null) {
+            if (selectedFile != null || referenceImage != null) {
                 saveImage();
                 createGallery();
             } else {
-                refenceImage = "Images/Gallery/DefaultGallery.jpg";
+                referenceImage = "Images/Gallery/DefaultGallery.jpg";
             }
         });
 
@@ -155,8 +176,8 @@ public class CreateGalleryView extends BorderPane {
         HBox hBoxButtons = new HBox(createGalleryButton, cancelButton);
         hBoxButtons.setSpacing(30);
         hBoxButtons.setAlignment(Pos.CENTER_RIGHT);
-        this.labelSucessMensage = new Label("");
-        VBox vBoxButtons = new VBox(hBoxButtons, labelSucessMensage);
+        this.labelSuccessMessage = new Label("");
+        VBox vBoxButtons = new VBox(hBoxButtons, labelSuccessMessage);
         vBoxButtons.setSpacing(10);
 
         HBox hBoxBottomImages = new HBox(imageViewLinkedin,imageViewGitHub);
@@ -172,6 +193,11 @@ public class CreateGalleryView extends BorderPane {
         return vBoxBottomLayout;
     }
 
+    /**
+     * Generates the header box, including hyperlinks for navigation and system information.
+     *
+     * @return The VBox containing the header elements.
+     */
     private VBox getHeaderBox (){
 
         // HYPERLINKS
@@ -182,7 +208,7 @@ public class CreateGalleryView extends BorderPane {
         Hyperlink hyperLinkArtwork = new Hyperlink("Obras de Arte");
 
         // Text Fields
-        Label labelManagerInfo = new Label("Sistema de Gestão Iuvennis Art");
+        Label labelManagerInfo = new Label("Sistema de Gestão Iuvenis Artem");
         labelManagerInfo.setPrefSize(550, 30);
         labelManagerInfo.getStyleClass().add("my-center-label-6 ");
 
@@ -230,13 +256,20 @@ public class CreateGalleryView extends BorderPane {
         });
     }
 
-    // image treatment
+    /**
+     * Sets the default size for an {@link ImageView}, adjusting the fit width and fit height.
+     *
+     * @param imageView The {@code ImageView} to set the default size for.
+     */
     public void defaultSizeIcon (ImageView imageView){
-        imageView.setFitHeight(18); // Ajuste a altura conforme necessário
-        imageView.setFitWidth(18);  // Ajuste a largura conforme necessário
-        // imageView.setPreserveRatio(true);
+        imageView.setFitHeight(18);
+        imageView.setFitWidth(18);
+
     }
 
+    /**
+     * Opens a file chooser dialogue to select an image file for the gallery.
+     */
     private void openFileChooser() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Selecionar Imagem");
@@ -252,14 +285,17 @@ public class CreateGalleryView extends BorderPane {
                 Image image = new Image(selectedFile.toURI().toString());
                 imageView.setImage(image);
 
-                refenceImage = selectedFile.toURI().toString();
-                textFieldRefenceImage.setText(refenceImage);
+                referenceImage = selectedFile.toURI().toString();
+                textFieldReferenceImage.setText(referenceImage);
             } else {
                 showAlert("Imagem Inválida", "A imagem selecionada não atende aos requisitos.");
             }
         }
     }
 
+    /**
+     * Displays a separate window to view the selected image.
+     */
     private void viewImage() {
         if (selectedFile != null) {
             ImageView viewImageView = new ImageView(new Image(selectedFile.toURI().toString()));
@@ -280,6 +316,9 @@ public class CreateGalleryView extends BorderPane {
         }
     }
 
+    /**
+     * Saves the selected image to a specified folder and updates the reference image path.
+     */
     private void saveImage() {
         if (selectedFile != null) {
             String galleryName = textFieldGalleryName.getText().trim();
@@ -322,19 +361,28 @@ public class CreateGalleryView extends BorderPane {
             }
         } else {
             // Se nenhum arquivo foi selecionado, use a imagem padrão
-            refenceImage = null;
-            textFieldRefenceImage.setText(refenceImage);
+            referenceImage = null;
+            textFieldReferenceImage.setText(referenceImage);
             showAlert("Sem Imagem", "Nenhuma imagem selecionada. Será usada a imagem padrão.");
         }
     }
 
+    /***
+     * Sets the default image for the gallery.
+     */
     private void removeImage() {
         imageView.setImage(null);
         selectedFile = null;
-        refenceImage = null;
-        textFieldRefenceImage.setText(refenceImage);
+        referenceImage = null;
+        textFieldReferenceImage.setText(referenceImage);
     }
 
+    /**
+     * Retrieves the file extension from a given file name.
+     *
+     * @param fileName The name of the file.
+     * @return The file extension.
+     */
     private String getFileExtension(String fileName) {
         int lastDotIndex = fileName.lastIndexOf('.');
         if (lastDotIndex > 0 && lastDotIndex < fileName.length() - 1) {
@@ -343,6 +391,12 @@ public class CreateGalleryView extends BorderPane {
         return "";
     }
 
+    /**
+     * Displays an alert dialogue with the given title and content.
+     *
+     * @param title   The title of the alert.
+     * @param content The content of the alert.
+     */
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -351,6 +405,12 @@ public class CreateGalleryView extends BorderPane {
         alert.showAndWait();
     }
 
+    /**
+     * Checks if the selected file is a valid image based on size and dimensions.
+     *
+     * @param file The selected image file.
+     * @return True if the image is valid, false otherwise.
+     */
     private boolean isValidImage(File file) {
         long fileSize = file.length();
         if (fileSize < 100 * 1024 || fileSize > 5 * 1024 * 1024) {
@@ -361,32 +421,34 @@ public class CreateGalleryView extends BorderPane {
         return image.getWidth() >= 400 && image.getHeight() >= 400 && image.getWidth() <= 2000 && image.getHeight() <= 2000;
     }
 
+    /**
+     * Creates a new gallery based on user input and adds it to the database.
+     */
     private void createGallery() {
         // STRINGS ATTRIBUTES FOR OBJECT
         String name = textFieldGalleryName.getText();
         String email = textFieldEmail.getText();
         String region = statusMenu.getValue();
-        refenceImage = null;
+        referenceImage = null;
 
         // CREATE NEW OBJECT
         Gallery newGallery = new Gallery();
         newGallery.setNameGallery(name);
         newGallery.setEmail(email);
         newGallery.setRegionName(region);
-        newGallery.setReferenceImage(refenceImage);
+        newGallery.setReferenceImage(referenceImage);
 
         // ADD TO DATABASE
         if (newGallery.getNameGallery() == null || newGallery.getNameGallery().trim().isEmpty()
                 || newGallery.getNameGallery().isBlank() || Objects.equals(statusMenu.getValue(), "Região")
                 || statusMenu.getValue().trim().isEmpty() || statusMenu.getValue().isBlank()) {
             System.out.println("Campo vazio. Não é possível atualizar.");
-            labelSucessMensage.setText("Não foi possível atualizar!");
+            labelSuccessMessage.setText("Não foi possível atualizar!");
         } else {
             MainManageGallery.addGallery(newGallery);
-            labelSucessMensage.setText("Alterações efetuadas com sucesso!");
+            labelSuccessMessage.setText("Alterações efetuadas com sucesso!");
             System.out.println("atualizado com sucesso");
         }
     }
-
 
 }
