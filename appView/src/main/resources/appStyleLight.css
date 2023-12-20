@@ -4,10 +4,10 @@
 }
 
 .button {
-    -fx-background-color: #f4f4f4; /* Cor de fundo */
-    -fx-text-fill: #4CAF50; /* Cor do texto */
-    -fx-font-size: 14px; /* Tamanho da fonte */
-    -fx-padding: 10px 20px; /* Preenchimento interno */
+    -fx-background-color: #f4f4f4;
+    -fx-text-fill: #4CAF50;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 20px;
 }
 
 .label {
@@ -15,55 +15,55 @@
 }
 
 .my-blue-label {
-    -fx-text-fill: #0000ff; /* Cor do texto normal */
+    -fx-text-fill: #0000ff;
 }
 
 .my-label {
     -fx-font-style: italic;
-    -fx-font-size: 14px; /* Tamanho da fonte */
+    -fx-font-size: 14px;
 }
 
 .text-field {
-    -fx-background-color: #f4f4f4; /* Cor de fundo */
-    -fx-border-color: #a0a0a0; /* Cor da borda */
-    -fx-border-width: 1; /* Largura da borda */
-    -fx-border-radius: 5; /* Raio da borda (bordas arredondadas) */
-    -fx-padding: 5; /* Preenchimento interno */
-    -fx-prompt-text-fill: #808080; /* Cor do texto padrão */
+    -fx-background-color: #f4f4f4;
+    -fx-border-color: #a0a0a0;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-padding: 5;
+    -fx-prompt-text-fill: #808080;
 }
 
 .text-field:hover {
-    -fx-background-color: #e0e0e0; /* Cor de fundo ao passar o mouse */
+    -fx-background-color: #e0e0e0;
 }
 
 .hyperlink {
-    -fx-text-fill: black; /* Cor do texto normal */
-    -fx-underline: false; /* Remover sublinhado padrão */
+    -fx-text-fill: black;
+    -fx-underline: false;
     -fx-font-style: italic;
 }
 
 .hyperlink:hover {
-    -fx-text-fill: gray; /* Cor do texto ao passar o mouse */
-    -fx-underline: true; /* Adicionar sublinhado ao passar o mouse */
+    -fx-text-fill: gray;
+    -fx-underline: true;
 }
 
 .hyperlink:focused {
-    -fx-focus-color: transparent; /* Remover contorno azul ao focar */
+    -fx-focus-color: transparent;
 }
 
 .actual-page-hyperlink {
-    -fx-text-fill: gray; /* Cor do texto normal */
-    -fx-underline: false; /* Remover sublinhado padrão */
+    -fx-text-fill: gray;
+    -fx-underline: false;
     -fx-font-style: italic;
 }
 
 .actual-page-hyperlink:hover {
-    -fx-text-fill: gray; /* Cor do texto ao passar o mouse */
-    -fx-underline: false; /* Adicionar sublinhado ao passar o mouse */
+    -fx-text-fill: gray;
+    -fx-underline: false;
 }
 
 .actual-page-hyperlink:focused {
-    -fx-focus-color: transparent; /* Remover contorno azul ao focar */
+    -fx-focus-color: transparent;
 }
 
 .m-label:focused {
@@ -94,7 +94,7 @@
 .my-center-label-4 {
     -fx-font-weight: bold;
     -fx-font-size: 24;
-    -fx-background-color: transparent; /* Cor de fundo */
+    -fx-background-color: transparent;
 }
 
 .my-center-label-5 {
@@ -134,8 +134,8 @@
 }
 
 .actual-page-label {
-    -fx-text-fill: lightgray; /* Cor do texto normal */
-    -fx-underline: false; /* Remover sublinhado padrão */
+    -fx-text-fill: lightgray;
+    -fx-underline: false;
     -fx-font-style: italic;
 }
 
@@ -144,14 +144,14 @@
 }
 
 .cell-clear-background {
-    -fx-background-color: #f4f4f4; /* Cor de fundo */
+    -fx-background-color: #f4f4f4;
     -fx-background-radius: 7 7 7 7;
 }
 
 .scroll-pane {
     -fx-background-color: transparent;
 }
-/* Estilizar a área do track (trilha) do ScrollBar vertical */
+
 .scroll-bar:vertical .track {
     -fx-background-color: #f0f0f0;
 }
