@@ -295,6 +295,7 @@ public class SceneGallery extends BorderPane {
         galleryArtworkAndEvents.setPadding(new Insets(5,0,5,0));
 
         VBox vBoxGalleryInfo = new VBox(labelGalleryName, labelGalleryRegion, labelGalleryEmail);
+        vBoxGalleryInfo.setSpacing(10);
 
         HBox hBoxImageInfo = new HBox(imageViewGallery, vBoxGalleryInfo);
         hBoxImageInfo.setSpacing(30);

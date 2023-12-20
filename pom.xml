@@ -13,6 +13,7 @@
         <module>appmodel</module>
         <module>appclient</module>
         <module>appView</module>
+        <module>appViewManager</module>
 
     </modules>
 
