@@ -28,7 +28,7 @@
     - Ensure that the back navigation logic is aware of the context and restores the appropriate state.
 
 
-5. Implementing a Unified Object Search Functionality
+5. **Implementing a Unified Object Search Functionality**
    - When users utilise the search bar, the result list will dynamically adapt to the 
     current scene, aligning with the specific data type associated with that scene. 
     For instance, if users are navigating the Artist page and employ the search bar, 

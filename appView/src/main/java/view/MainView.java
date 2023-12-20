@@ -219,11 +219,12 @@ public class MainView extends BorderPane {
         hyperlinkArtwork.getStyleClass().add("hyperlink");
 
         // Text Fields
-        String textFieldOrinalText = "Funcionalidade por aplicar";
+        String textFieldOrinalText = "Benvindo a Iuvenis Artem";
         TextField textFieldSearch = new TextField(textFieldOrinalText);
         textFieldSearch.setPrefSize(550, 30);
         setOriginalDescription(textFieldSearch,textFieldOrinalText);
         textFieldSearch.setOnMouseClicked(e -> textFieldSearch.clear());
+        textFieldSearch.setDisable(true);
 
         // Imagens
         // I~A LOGO
@@ -241,6 +242,7 @@ public class MainView extends BorderPane {
         searchIconView.setFitWidth(20);
         searchIconView.setFitHeight(20);
         searchIconView.setSmooth(true);
+        searchIconView.setDisable(true);
 
 
         // Layout Top

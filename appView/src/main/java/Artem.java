@@ -32,7 +32,7 @@ public class Artem extends Application {
     }
 
     /**
-     * Initializes and launches the primary stage of the Iuvenis Art application. Sets
+     * The method start initialises and launches the primary stage of the Iuvenis Artem application, then it sets
      * up the title, creates the main scene with the {@code MainView} as its root, and
      * displays the primary stage.
      *
