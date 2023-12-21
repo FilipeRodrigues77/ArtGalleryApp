@@ -4,6 +4,9 @@ import domain.Nationality;
 
 import java.util.List;
 
+/**
+ * Interface for accessing nationalities in the storage.
+ */
 public interface NationalityService {
 
     /**

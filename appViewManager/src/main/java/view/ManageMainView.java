@@ -361,8 +361,11 @@ public class ManageMainView extends BorderPane {
      * @param message The error message to display.
      */
     public void showError(String message) {
-        labelStatus.setText(message);
-        textExpression.getStyleClass().add("Error");
+        if(labelStatus!=null){
+            labelStatus.setText(message);
+            textExpression.getStyleClass().add("Error");
+        }
+
     }
 
 }

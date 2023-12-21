@@ -8,6 +8,9 @@ import java.util.List;
  */
 import java.util.List;
 
+/**
+ * Interface for accessing and managing artists in the storage.
+ */
 public interface ArtistService {
     /**
      * Retrieves all artists from storage.

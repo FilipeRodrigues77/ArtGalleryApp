@@ -25,6 +25,17 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The {@code MainGetRegions} class provides a method to retrieve a list of regions names
+ * from a remote service.
+ * This class uses the OkHttp library and Gson for deserialization to communicate with a web service
+ * that exposes a list of regions. It then extracts the nationality names from the response
+ * and returns them as a list of strings.
+ *
+ * @author Nuely Furtado
+ * @author Filipe Alves
+ *
+ */
 public class MainGetRegions {
 
     public static void main(String[] args) {
@@ -80,6 +91,5 @@ public class MainGetRegions {
         }
         return regionNames;
     }
-
 
 }

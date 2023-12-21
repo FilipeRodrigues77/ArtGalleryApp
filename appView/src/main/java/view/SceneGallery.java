@@ -378,7 +378,12 @@ public class SceneGallery extends BorderPane {
 
             Gallery gallery = MainGetGalleries.getGalleryById(exhibition.getIdGallery());
             String exhibitionGallery = gallery.getNameGallery();
-            Hyperlink hyperGalleryName = new Hyperlink(exhibitionGallery);
+            Hyperlink hyperGalleryName;
+            if (exhibitionGallery.length() < maxTextLength){
+                hyperGalleryName = new Hyperlink(exhibitionGallery);
+            } else{
+                hyperGalleryName = new Hyperlink(exhibitionGallery.substring(0,maxTextLength)+"...");
+            }
             VBox vBoxLabelArtwork = new VBox(hyperExhibitionName, hyperGalleryName);
             hyperGalleryName.setOnAction(e-> getScene().setRoot(new SceneGallery().doDetailsLayout(gallery)));
 

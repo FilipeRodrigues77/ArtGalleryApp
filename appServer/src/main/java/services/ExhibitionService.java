@@ -4,6 +4,9 @@ import domain.Exhibition;
 
 import java.util.List;
 
+/**
+ * Interface for accessing and managing Exhibitions in the storage.
+ */
 public interface ExhibitionService {
 
     /**

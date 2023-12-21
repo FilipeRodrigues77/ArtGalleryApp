@@ -3,6 +3,9 @@ package services;
 import domain.Artwork;
 import java.util.List;
 
+/**
+ * Interface for accessing and managing artwork in the storage.
+ */
 public interface ArtworkService {
     /**
      * Retrieves all artworks from the database.

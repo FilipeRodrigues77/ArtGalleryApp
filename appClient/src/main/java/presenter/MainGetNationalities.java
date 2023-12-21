@@ -17,13 +17,13 @@ import java.util.List;
 /**
  * The {@code MainGetNationalities} class provides a method to retrieve a list of nationality names
  * from a remote service.
- *
  * This class uses the OkHttp library and Gson for deserialization to communicate with a web service
  * that exposes a list of nationalities. It then extracts the nationality names from the response
  * and returns them as a list of strings.
  *
  * @author Nuely Furtado
  * @author Filipe Alves
+ *
  */
 public class MainGetNationalities {
 

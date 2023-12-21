@@ -5,6 +5,9 @@ import domain.Region;
 
 import java.util.List;
 
+/**
+ * Interface for accessing regions in the storage.
+ */
 public interface RegionService {
 
     /**
